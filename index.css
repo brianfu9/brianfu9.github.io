@@ -24,6 +24,6 @@ body {
 }
 
 h1 {
-    font-family: 'Courgette', 'Coiny', Arial;
+    font-family: 'Courgette', 'Coiny', -apple-system, BlinkMacSystemFont,"Segoe UI", SFMono-Regular, sans-serif;
     font-size: 54px;
 }
