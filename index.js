@@ -1,6 +1,7 @@
-
 var gradient_on = false;
-
+var step = 0;
+var colorIndices = [0, 1, 2, 3];
+var gradientSpeed = 0.002;
 var colors = new Array(
     [62, 35, 255],
     [60, 255, 60],
@@ -9,22 +10,10 @@ var colors = new Array(
     [255, 0, 255],
     [255, 128, 0]);
 
-var step = 0;
-//color table indices for: 
-// current color left
-// next color left
-// current color right
-// next color right
-var colorIndices = [0, 1, 2, 3];
-
-//transition speed
-var gradientSpeed = 0.002;
-
 document.getElementById('gradient').addEventListener("mouseover", mouseOver);
 document.getElementById('gradient').addEventListener("mouseout", mouseOut);
 
 function updateGradient() {
-
     if ($ === undefined) return;
     if (gradient_on) {
         var c0_0 = colors[colorIndices[0]];
@@ -55,18 +44,15 @@ function updateGradient() {
             colorIndices[0] = colorIndices[1];
             colorIndices[2] = colorIndices[3];
 
-            //pick two new target color indices
-            //do not pick the same as the current one
             colorIndices[1] = (colorIndices[1] + Math.floor(1 + Math.random() * (colors.length - 1))) % colors.length;
             colorIndices[3] = (colorIndices[3] + Math.floor(1 + Math.random() * (colors.length - 1))) % colors.length;
-
         }
     } else {
-        $('#gradient').css({ transition: "1s", background: "black" });
+        $('#gradient').css({ background: "black" });
     }
 }
 
-function update_stuff() {
+function updateStuff() {
     updateGradient();
 }
 
@@ -79,5 +65,5 @@ function mouseOut() {
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
-    setInterval(update_stuff, 10);
+    setInterval(updateStuff, 10);
 });
