@@ -1,29 +1,27 @@
 body {
-    background-color: #000000;
-    padding: 0px;
-    margin: 0px;
+  background-color: #000000;
+  padding: 0px;
+  margin: 0px;
+}
+body .outer {
+  display: table;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+body .outer .middle {
+  display: table-cell;
+  vertical-align: middle;
+}
+body .outer .middle .inner {
+  margin-left: auto;
+  margin-right: auto;
+  width: 800px;
+  text-align: center;
+}
+body .outer .middle .inner h1 {
+  font-family: "Courgette", "Coiny", "Segoe UI";
+  font-size: 54px;
 }
 
-h1 {
-    font-family: 'Courgette', 'Coiny', 'Segoe UI';
-    font-size: 54px;
-}
-
-.outer {
-    display: table;
-    position: absolute;
-    height: 100%;
-    width: 100%;
-}
-
-.middle {
-    display: table-cell;
-    vertical-align: middle;
-}
-
-.inner {
-    margin-left: auto;
-    margin-right: auto;
-    width: 800px;
-    text-align: center;
-}
+/*# sourceMappingURL=index.css.map */
