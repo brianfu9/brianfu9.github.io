@@ -2,76 +2,32 @@
 
 const TWO_PI = Math.PI * 2;
 
-var images = [],
-    imageIndex = 0;
-
-var image,
-    imageWidth = 768,
-    imageHeight = 485;
-
 var vertices = [],
     indices = [],
     fragments = [];
 
 var container = document.getElementById('container');
+var div = document.getElementsByClassName("middle")[0];
+var button = document.getElementById('gradient');
 
-var clickPosition = [imageWidth * 0.5, imageHeight * 0.5];
+var divWidth = div.getBoundingClientRect()['width'];
+var divHeight = div.getBoundingClientRect()['height'];
+
+var img = new Image();
+img.src='black.jpg';
+
+var epicenter = [divWidth * 0.5, divHeight * 0.5];
 
 window.onload = function() {
     TweenMax.set(container, {perspective:500});
-
-    // images from reddit/r/wallpapers
-    var urls = [
-            'https://s3-us-west-2.amazonaws.com/s.cdpn.io/175711/crayon.jpg',
-            'https://s3-us-west-2.amazonaws.com/s.cdpn.io/175711/spaceship.jpg',
-            'https://s3-us-west-2.amazonaws.com/s.cdpn.io/175711/dj.jpg',
-            'https://s3-us-west-2.amazonaws.com/s.cdpn.io/175711/chicken.jpg'
-        ],
-        image,
-        loaded = 0;
-    // very quick and dirty hack to load and display the first image asap
-    images[0] = image = new Image();
-    image.onload = function() {
-        if (++loaded === 1) {
-            imagesLoaded();
-            for (var i = 1; i < 4; i++) {
-                images[i] = image = new Image();
-
-                image.src = urls[i];
-            }
-        }
-    };
-    image.src = urls[0];
+    button.addEventListener('click', divClickHandler);
+    container.appendChild(div);
 };
 
-function imagesLoaded() {
-    placeImage(false);
-    triangulate();
-    shatter();
-}
-
-function placeImage(transitionIn) {
-    image = images[imageIndex];
-
-    if (++imageIndex === images.length) imageIndex = 0;
-
-    image.addEventListener('click', imageClickHandler);
-    container.appendChild(image);
-
-    if (transitionIn !== false) {
-        TweenMax.fromTo(image, 0.75, {y:-1000}, {y:0, ease:Back.easeOut});
-    }
-}
-
-
-
-function imageClickHandler(event) {
-    var box = image.getBoundingClientRect(),
+function divClickHandler(event) {
+    var box = div.getBoundingClientRect(),
         top = box.top,
         left = box.left;
-
-    clickPosition[0] = event.clientX - left;
-    clickPosition[1] = event.clientY - top;
 
     triangulate();
     shatter();
@@ -79,15 +35,17 @@ function imageClickHandler(event) {
 
 function triangulate() {
     var rings = [
-            {r:50, c:12},
-            {r:150, c:12},
-            {r:300, c:12},
-            {r:1200, c:12} // very large in case of corner clicks
+            {r:50, c:8},
+            {r:150, c:8},
+            {r:300, c:8},
+            {r:800, c:8},
+            {r:1600, c:8},
+            {r:4800, c:8} // very large in case of corner clicks
         ],
         x,
         y,
-        centerX = clickPosition[0],
-        centerY = clickPosition[1];
+        centerX = epicenter[0],
+        centerY = epicenter[1];
 
     vertices.push([centerX, centerY]);
 
@@ -104,8 +62,8 @@ function triangulate() {
     });
 
     vertices.forEach(function(v) {
-        v[0] = clamp(v[0], 0, imageWidth);
-        v[1] = clamp(v[1], 0, imageHeight);
+        v[0] = clamp(v[0], 0, divWidth);
+        v[1] = clamp(v[1], 0, divHeight);
     });
 
     indices = Delaunay.triangulate(vertices);
@@ -124,8 +82,8 @@ function shatter() {
 
         fragment = new Fragment(p0, p1, p2);
 
-        var dx = fragment.centroid[0] - clickPosition[0],
-            dy = fragment.centroid[1] - clickPosition[1],
+        var dx = fragment.centroid[0] - epicenter[0],
+            dy = fragment.centroid[1] - epicenter[1],
             d = Math.sqrt(dx * dx + dy * dy),
             rx = 30 * sign(dy),
             ry = 90 * -sign(dx),
@@ -149,8 +107,8 @@ function shatter() {
         container.appendChild(fragment.canvas);
     }
 
-    container.removeChild(image);
-    image.removeEventListener('click', imageClickHandler);
+    container.removeChild(div);
+    button.removeEventListener('click', divClickHandler);
 }
 
 function shatterCompleteHandler() {
@@ -162,7 +120,7 @@ function shatterCompleteHandler() {
     vertices.length = 0;
     indices.length = 0;
 
-    placeImage();
+    window.location.href='https://github.com/brianfu9';
 }
 
 //////////////
@@ -233,6 +191,6 @@ Fragment.prototype = {
         this.ctx.lineTo(this.v2[0], this.v2[1]);
         this.ctx.closePath();
         this.ctx.clip();
-        this.ctx.drawImage(image, 0, 0);
+        this.ctx.drawImage(img, 0, 0);
     }
 };

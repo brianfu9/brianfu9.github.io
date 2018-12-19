@@ -29,6 +29,12 @@ h1 {
   font-size: 54px;
 }
 
+img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: fill;  
+}
+
 canvas {
   position: absolute;
   backface-visibility: hidden;
