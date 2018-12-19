@@ -63,6 +63,8 @@ function placeImage(transitionIn) {
     }
 }
 
+
+
 function imageClickHandler(event) {
     var box = image.getBoundingClientRect(),
         top = box.top,
