@@ -3,65 +3,27 @@ body {
   padding: 0px;
   margin: 0px;
 }
-body .navbar {
-  background: #444;
-  -o-transition: all 0.6s;
-  -moz-transition: all 0.6s;
-  -webkit-transition: all 0.6s;
-  -ms-transition: all 0.6s;
-  transition: all 0.6s;
-  backface-visibility: hidden;
-}
-body .navbar.navbar-no-bg {
-  background: #444;
-  background: rgba(0, 0, 0, 0.2);
-}
-body .navbar-dark .navbar-nav {
-  font-size: 15px;
-  color: #fff;
-  font-weight: 600;
-}
-body .navbar-dark .navbar-nav .nav-link {
-  color: #fff;
-  color: rgba(255, 255, 255, 0.8);
-  border: 0;
-}
-body .navbar-dark .navbar-nav .nav-link:hover {
-  color: #fff;
-}
-body .navbar-dark .navbar-nav .nav-link:focus {
-  color: #fff;
-  outline: 0;
-}
-body .navbar-expand-md .navbar-nav .nav-link {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-body .navbar-brand {
-  width: 136px;
-  background: url(../img/logo.png) left center no-repeat;
-  border: 0;
-  text-indent: -99999px;
-}
-body .outer {
+
+.outer {
   display: table;
   position: absolute;
   height: 100%;
   width: 100%;
 }
-body .outer .middle {
+
+.middle {
   display: table-cell;
   vertical-align: middle;
 }
-body .outer .middle .inner {
+
+.inner {
   margin-left: auto;
   margin-right: auto;
   width: 800px;
   text-align: center;
 }
-body .outer .middle .inner h1 {
-  font-family: "Courgette", "Coiny", "Segoe UI";
+
+h1 {
+  font-family: 'Courgette', 'Coiny', 'Segoe UI';
   font-size: 54px;
 }
-
-/*# sourceMappingURL=index.css.map */
