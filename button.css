@@ -1,0 +1,66 @@
+.button-wrapper {
+    width: 100%;
+    text-align: center;
+}
+
+.button {
+    margin: auto;
+    border-radius: 2px;
+    background-color: #FFFFFF;
+    border: none;
+    text-align: center;
+    font-size: 28px;
+    padding: 20px;
+    height: 100px;
+    transition: all 2s;
+    cursor: default;
+}
+
+.button span {
+    cursor: default;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.button span:before {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    color: white;
+    padding-top: 3px;
+    top: 0;
+    left: -20px;
+    transition: 2s ;
+}
+
+.button span:after {
+    content: '\00ab';
+    position: absolute;
+    opacity: 0;
+    color: white;
+    padding-top: 3px;
+    top: 0;
+    right: -20px;
+    transition: 2s;
+}
+
+.button:hover span {
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.button:hover span:before {
+    opacity: 1;
+    left: 0px;
+}
+
+.button:hover span:after {
+    opacity: 1;
+    right: 0px;
+}
+
+.button:hover h1 {
+    color: white;
+    transition: 2s;
+}
