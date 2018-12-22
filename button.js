@@ -12,6 +12,7 @@ var colors = new Array(
 
 document.getElementById('gradient').addEventListener("mouseover", mouseOver);
 document.getElementById('gradient').addEventListener("mouseout", mouseOut);
+$('#gradient').css({ width: document.getElementsByTagName('table')[0].getBoundingClientRect().width});
 
 function updateGradient() {
     if ($ === undefined) return;
@@ -48,7 +49,7 @@ function updateGradient() {
             colorIndices[3] = (colorIndices[3] + Math.floor(1 + Math.random() * (colors.length - 1))) % colors.length;
         }
     } else {
-        $('#gradient').css({ background: "black" });
+        $('#gradient').css({ background: "white" });
     }
 }
 

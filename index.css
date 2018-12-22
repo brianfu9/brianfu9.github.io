@@ -1,29 +1,123 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,800);
+@import url('https://fonts.googleapis.com/css?family=Courgette');
+
 body {
-  background-color: #000000;
+  background-color: #FFFFFF;
   padding: 0px;
   margin: 0px;
 }
 
-.outer {
-  display: table;
-  position: absolute;
-  height: 100%;
+h1 {
+  font-family: 'Courgette', cursive;
+  font-size: 54px;
+  color: #000000;
+  transition: 2s;
+}
+
+table {
+  margin: auto;
+}
+
+.tile {
+  background-color: #000000;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+  color: #ffffff;
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6em;
+  margin: 10px;
+  max-width: 310px;
+  min-width: 250px;
+  overflow: hidden;
+  position: relative;
+  text-align: left;
   width: 100%;
 }
 
-.middle {
-  display: table-cell;
-  vertical-align: middle;
+.tile * {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
 }
 
-.inner {
-  margin-left: auto;
-  margin-right: auto;
-  width: 800px;
+.tile img {
+  max-width: 100%;
+  object-fit: contain;
+  vertical-align: top;
+  position: relative;
+  opacity: 0.5;
+}
+
+.tile figcaption {
+  padding: 25px 20px 25px;
+  position: absolute;
+  bottom: 0;
+  z-index: 1;
+}
+
+.tile .date {
+  background-color: #fff;
+  color: #333;
+  font-size: 18px;
+  font-weight: 800;
+  min-height: 48px;
+  min-width: 48px;
+  padding: 10px 0;
+  position: absolute;
+  right: 15px;
   text-align: center;
+  text-transform: uppercase;
+  top: 0;
 }
 
-h1 {
-  font-family: 'Courgette', 'Coiny';
-  font-size: 54px;
+.tile .date span {
+  display: block;
+  line-height: 14px;
+}
+
+.tile .date .month {
+  font-size: 14px;
+}
+
+.tile .date .year {
+  font-size: 10px;
+}
+
+.tile .date .other {
+  font-size: 10px;
+  padding: 1px;
+}
+
+.tile h3,
+.tile p {
+  margin: 0;
+  padding: 0;
+}
+
+.tile h3 {
+  font-weight: 800;
+  letter-spacing: -0.4px;
+}
+
+.tile a {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.tile:hover img {
+  opacity: 1;
+}
+
+.tile:hover figcaption {
+  opacity: 0;
+}
+
+.tile:hover .date {
+  -webkit-transform: translateY(-100%);
+  transform: translateY(-100%);
 }
