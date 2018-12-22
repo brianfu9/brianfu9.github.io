@@ -1,44 +1,126 @@
-body {
-  background-color: #FFFFFF;
-  padding: 0px;
-  margin: 0px;
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,800);
+@import url(https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css);
+
+table {
+  margin: auto;
 }
 
-.outer {
-  display: table;
-  position: absolute;
-  height: 100%;
+.tile {
+  background-color: #000000;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+  color: #ffffff;
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6em;
+  margin: 10px;
+  max-width: 310px;
+  min-width: 250px;
+  overflow: hidden;
+  position: relative;
+  text-align: left;
   width: 100%;
 }
 
-.middle {
-  display: table-cell;
-  vertical-align: middle;
-  background-color: #000000;
+.tile * {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
 }
 
-.inner {
-  margin-left: auto;
-  margin-right: auto;
-  width: 800px;
-  text-align: center;
-}
-
-h1 {
-  font-family: 'Courgette', 'Coiny', 'Segoe UI';
-  font-size: 54px;
-}
-
-img {
-  max-height: 100%;
+.tile img {
   max-width: 100%;
-  object-fit: fill;  
+  vertical-align: top;
+  position: relative;
+  opacity: 0.75;
 }
 
-canvas {
+.tile figcaption {
+  padding: 25px 20px 25px;
   position: absolute;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
+  bottom: 0;
+  z-index: 1;
+}
+
+.tile .date {
+  background-color: #fff;
+  color: #333;
+  font-size: 18px;
+  font-weight: 800;
+  min-height: 48px;
+  min-width: 48px;
+  padding: 10px 0;
+  position: absolute;
+  right: 15px;
+  text-align: center;
+  text-transform: uppercase;
+  top: 0;
+}
+
+.tile .date span {
+  display: block;
+  line-height: 14px;
+}
+
+.tile .date .month {
+  font-size: 11px;
+}
+
+.tile h3,
+.tile p {
+  margin: 0;
+  padding: 0;
+}
+
+.tile h3 {
+  font-weight: 800;
+  letter-spacing: -0.4px;
+}
+
+.tile .hover {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  align-items: center;
+  background-color: rgba(236, 188, 46, 0.75);
+  display: flex;
+  font-size: 65px;
+  justify-content: center;
+  opacity: 0;
+}
+
+.tile a {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.tile:hover .hover,
+.tile.hover .hover {
+  -webkit-transition-delay: 0.1s;
+  transition-delay: 0.1s;
+  opacity: 1;
+}
+
+.tile:hover figcaption,
+.tile.hover figcaption {
+  opacity: 0;
+}
+
+.tile:hover .date,
+.tile.hover .date {
+  -webkit-transform: translateY(-100%);
+  transform: translateY(-100%);
+}
+
+
+/* Demo purposes only */
+
+body {
+  background-color: #212121;
 }
