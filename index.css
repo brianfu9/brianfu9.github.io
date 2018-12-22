@@ -2,15 +2,29 @@
 @import url('https://fonts.googleapis.com/css?family=Courgette');
 
 body {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   padding: 0px;
   margin: 0px;
+}
+
+.outer {
+  display: table;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.middle {
+  display: table-cell;
+  vertical-align: middle;
 }
 
 h1 {
   font-family: 'Courgette', cursive;
   font-size: 54px;
-  color: #000000;
+  color: #000;
   transition: 2s;
 }
 
@@ -26,8 +40,8 @@ table {
   font-size: 16px;
   line-height: 1.6em;
   margin: 10px;
-  max-width: 310px;
-  min-width: 250px;
+  max-width: 290px;
+  min-width: 200px;
   overflow: hidden;
   position: relative;
   text-align: left;
@@ -46,7 +60,7 @@ table {
   object-fit: contain;
   vertical-align: top;
   position: relative;
-  opacity: 0.5;
+  opacity: 0.2;
 }
 
 .tile figcaption {

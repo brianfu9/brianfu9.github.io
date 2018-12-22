@@ -3,12 +3,13 @@ var step = 0;
 var colorIndices = [0, 1, 2, 3];
 var gradientSpeed = 0.002;
 var colors = new Array(
-    [62, 35, 255],
-    [60, 255, 60],
-    [255, 35, 98],
     [45, 175, 230],
     [255, 0, 255],
-    [255, 128, 0]);
+    [255, 128, 0],
+    [62, 35, 255],
+    [60, 255, 60],
+    [255, 35, 98]
+);
 
 document.getElementById('gradient').addEventListener("mouseover", mouseOver);
 document.getElementById('gradient').addEventListener("mouseout", mouseOut);
@@ -49,12 +50,8 @@ function updateGradient() {
             colorIndices[3] = (colorIndices[3] + Math.floor(1 + Math.random() * (colors.length - 1))) % colors.length;
         }
     } else {
-        $('#gradient').css({ background: "white" });
+        $('#gradient').css({ background: document.getElementsByTagName('body')[0].style.backgroundColor });
     }
-}
-
-function updateStuff() {
-    updateGradient();
 }
 
 function mouseOver() {
@@ -66,5 +63,5 @@ function mouseOut() {
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
-    setInterval(updateStuff, 10);
+    setInterval(updateGradient, 10);
 });
