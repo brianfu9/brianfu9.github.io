@@ -16,6 +16,13 @@
     cursor: default;
 }
 
+.button h1 {
+    font-family: 'Courgette', cursive;
+    font-size: 54px;
+    color: #000;
+    transition: 2s;
+}
+
 .button span {
     cursor: default;
     display: inline-block;

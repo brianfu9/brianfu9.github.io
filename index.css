@@ -16,16 +16,9 @@ body {
   width: 100%;
 }
 
-.middle {
+.inner {
   display: table-cell;
   vertical-align: middle;
-}
-
-h1 {
-  font-family: 'Courgette', cursive;
-  font-size: 54px;
-  color: #000;
-  transition: 2s;
 }
 
 table {
@@ -103,7 +96,7 @@ table {
   padding: 1px;
 }
 
-.tile h3,
+.tile h3, 
 .tile p {
   margin: 0;
   padding: 0;
@@ -144,4 +137,5 @@ table {
   text-align: center;
   text-decoration: none;
   font-size: 12px;
+  margin-bottom: 2px;
 }
