@@ -117,6 +117,10 @@ table {
   z-index: 1;
 }
 
+.tile:hover {
+  background-color: #000;
+}
+
 .tile:hover img {
   opacity: 1;
 }
