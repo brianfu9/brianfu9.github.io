@@ -21,6 +21,17 @@ body {
   vertical-align: middle;
 }
 
+h1 {
+  font-family: 'Courgette', cursive;
+  font-size: 64px;
+  color: #000000;
+}
+
+h3 {
+  font-family: 'Open Sans';
+  margin-bottom: 20px;
+}
+
 table {
   margin: auto;
 }
@@ -32,7 +43,7 @@ table {
   font-family: 'Open Sans', Arial, sans-serif;
   font-size: 16px;
   line-height: 1.6em;
-  margin: 10px;
+  margin: 5px;
   max-width: 310px;
   min-width: 250px;
   overflow: hidden;
@@ -143,4 +154,9 @@ table {
   text-decoration: none;
   font-size: 12px;
   margin-bottom: 2px;
+}
+
+.github-button-div {
+  float:right;
+  margin-right: 4px;
 }
