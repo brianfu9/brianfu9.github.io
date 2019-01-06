@@ -16,9 +16,14 @@ body {
   width: 100%;
 }
 
-.inner {
+.middle {
   display: table-cell;
   vertical-align: middle;
+}
+
+.inner {
+  width: fit-content; 
+  margin:auto;
 }
 
 h1 {
@@ -32,8 +37,9 @@ h3 {
   margin-bottom: 20px;
 }
 
-table {
-  margin: auto;
+.bio {
+  padding:8px;
+  padding-bottom: 0;
 }
 
 .tile {
