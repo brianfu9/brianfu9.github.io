@@ -158,3 +158,9 @@ table {
   margin-top: 4px;
   margin-left: 236px;
 }
+
+@media (min-width: 1200px){
+  .container {
+      max-width: 960px;
+  }
+}
