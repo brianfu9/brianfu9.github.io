@@ -44,12 +44,10 @@ table {
   font-size: 16px;
   line-height: 1.6em;
   margin: 5px;
-  max-width: 310px;
-  min-width: 250px;
+  width:310px;
   overflow: hidden;
   position: relative;
   text-align: left;
-  width: 100%;
 }
 
 .tile * {
@@ -157,6 +155,6 @@ table {
 }
 
 .github-button-div {
-  float:right;
-  margin-right: 4px;
+  margin-top: 4px;
+  margin-left: 236px;
 }
