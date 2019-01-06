@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,800);
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,800');
 @import url('https://fonts.googleapis.com/css?family=Courgette');
 
 body {
@@ -157,6 +157,24 @@ table {
 .github-button-div {
   margin-top: 4px;
   margin-left: 236px;
+}
+
+@media (min-width: 310px){
+  .container {
+      max-width: 310px;
+  }
+}
+
+@media (min-width: 576px){
+  .container {
+      max-width: 340px;
+  }
+}
+
+@media (min-width: 768px){
+  .container {
+      max-width: 650px;
+  }
 }
 
 @media (min-width: 1200px){
