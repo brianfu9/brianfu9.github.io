@@ -25,8 +25,8 @@ $(document).ready(function() {
         } else if (response2["value"] == "lose") {
             $('.btn2').css("background-color", "green");
         }
-        $('.btn1').html(response1['board']);
-        $('.btn2').html(response2['board']);
+        // $('.btn1').html(response1['board']);
+        // $('.btn2').html(response2['board']);
     });
 });
 
@@ -43,7 +43,7 @@ $('.btn1').click(function(){
         } else if (response1["value"] == "lose") {
             $('.btn1').css("background-color", "green");
         }
-        $('.btn1').html(response1['board']);
+        // $('.btn1').html(response1['board']);
         response2 = result['response'][1];
         $('.btn2').css("background-color", "black");
         if (response2["value"] == "win"){
@@ -51,7 +51,7 @@ $('.btn1').click(function(){
         } else if (response2["value"] == "lose") {
             $('.btn2').css("background-color", "green");
         }
-        $('.btn2').html(response2['board']);
+        // $('.btn2').html(response2['board']);
     });
 });
 
@@ -68,7 +68,7 @@ $('.btn2').click(function(){
         } else if (response1["value"] == "lose") {
             $('.btn1').css("background-color", "green");
         }
-        $('.btn1').html(response1['board']);
+        // $('.btn1').html(response1['board']);
         response2 = result['response'][1];
         $('.btn2').css("background-color", "black");
         if (response2["value"] == "win"){
@@ -76,7 +76,7 @@ $('.btn2').click(function(){
         } else if (response2["value"] == "lose") {
             $('.btn2').css("background-color", "green");
         }
-        $('.btn2').html(response2['board']);
+        // $('.btn2').html(response2['board']);
     });
 });
 
@@ -102,7 +102,7 @@ $('.restart').click(function(){
         } else if (response2["value"] == "lose") {
             $('.btn2').css("background-color", "green");
         }     
-        $('.btn1').html(response1['board']);
-        $('.btn2').html(response2['board']);
+        // $('.btn1').html(response1['board']);
+        // $('.btn2').html(response2['board']);
     });
 });
