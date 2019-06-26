@@ -20,11 +20,11 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var output_ = document.querySelector(outputContainer);
 
     const CMDS_ = [
-        'about', 'clear', 'contact', 'github', 'help', 'projects', 'resume'
+        'about', 'clear', 'contact', 'github', 'help', 'portfolio', 'resume'
     ];
 
     const CMDS_ADVANCED = [
-        'date', 'echo', 'su'
+        'cd', 'date', 'dir', 'echo', 'emacs', 'ls', 'man', 'su', 'vim'
     ]
 
     var fs_ = null;
@@ -41,12 +41,10 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     cmdLine_.addEventListener('keydown', historyHandler_, true);
     cmdLine_.addEventListener('keydown', processNewCommand_, true);
 
-    //
     function inputTextClick_(e) {
         this.value = this.value;
     }
 
-    //
     function historyHandler_(e) {
         if (history_.length) {
             if (e.keyCode == 38 || e.keyCode == 40) {
@@ -76,7 +74,6 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
         }
     }
 
-    //
     function processNewCommand_(e) {
         if (e.keyCode == 9) { // tab
             e.preventDefault();
@@ -108,9 +105,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 }
             }
             switch (cmd) {
-                // 'about', 'contact', 'github', 'help', 'projects', 'resume'
                 case 'about':
-                    output(`<p>Hello! I'm Brian Fu, a third year student at the University of California, Berkeley.</p>`);
+                    output(`<p>Hello there! Welcome to my terminal. You've probably seen one before in a 90's hacker movie. Feel free to hack around and take a look at some of my projects! If you're looking for somewhere to start, click <a onclick="triggerCommand(this.textContent);">help</a>.</p> <p>I'm Brian Fu, a third year student at the University of California, Berkeley. Go Bears!</p>`);
                     break;
                 case 'clear':
                     output_.innerHTML = '';
@@ -139,10 +135,10 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         cmdslst += '</div><br><p>SECRETS uwu:</p><div class="ls-files">' + '<a onclick="triggerCommand(this.textContent);">' + CMDS_ADVANCED.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
                         output('<p>Wow you\'re an advanced user! Here\'s a list of secret commands:</p><div class="ls-files">' + cmdslst + '</div>');
                     } else {
-                        output('<p>This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + '</div>');
+                        output('<p>This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + '</div><p>If you\'d like a more in-depth explanation, try "<a onclick="triggerCommand(this.textContent);">man help</a>".</p>');
                     }
                     break;
-                case 'projects':
+                case 'portfolio':
                         output_.insertAdjacentHTML('beforeEnd', `<div class="projects-card">
                         <div class="row" style="width:fit-content">
                             <div class="col-sm-">
@@ -321,6 +317,58 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     var root = 'root';
                     if (args[0]) root = args[0];
                     $('#input-line .prompt').html(`[${root}@brianfu.me] > `);
+                    break;
+                case 'vim':
+                    output(`try > <a onclick="triggerCommand(this.textContent);">emacs</a> instead`);
+                    break;
+                case 'emacs':
+                    output(`try > <a onclick="triggerCommand(this.textContent);">vim</a> instead`);
+                    break;
+                case 'man':
+                    switch (args[0]) {
+                        // 'about', 'clear', 'contact', 'github', 'help', 'portfolio', 'resume', 'date', 'echo', 'man', 'su', 'cd'
+                        case 'about':
+                            output('usage: <br> > about <br> displays the about me introduction message.');
+                            break;
+                        case 'clear':
+                            output('usage: <br> > clear <br> clears the terminal.');
+                            break;
+                        case 'contact':
+                            output('usage: <br> > contact <br> displays my contact info. Clicking the email copies it to clipboard.');
+                            break;
+                        case 'github':
+                            output('usage: <br> > github <br> Opens my github profile in a new tab.');
+                            break;
+                        case 'ls':
+                        case 'dir':
+                        case 'help':
+                            output(`usage: <br> > ${args[0]} <br> > ${args[0]} -all <br> shows a list of commands`);
+                            break;
+                        case 'portfolio':
+                            output('usage: <br> > portfolio <br> shows my portfolio.');
+                            break;
+                        case 'resume':
+                            output('usage: <br> > resume <br> Opens my resume in a new tab.');
+                            break;
+                        case 'date':
+                            output('usage: <br> > date <br> Displays the date');
+                            break;
+                        case 'echo':
+                            output('usage: <br> > echo [text] <br> prints out the [text] in the terminal');
+                            break;
+                        case 'man':
+                            output('usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">ERROR STACK OVERFLOW</div></div></div></div><br>jk man explains what [command] does');
+                            break;
+                        case 'su':
+                            output(`usage: <br> > su <br> > su [name] <br> changes the user's name`);
+                            break;
+                        case 'cd':
+                            output(`usage: <br> > cd [command] <br> runs the [command] <br> yeah I know this one doesn't really make sense but I don't have a file system either`);
+                            break;
+                        default:
+                            if (args[0]) output(args[0] + ': command not found');
+                            else output('man: no arguments found');
+                    }
                     break;
                 default:
                     if (cmd) {
