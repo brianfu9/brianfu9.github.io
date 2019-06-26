@@ -1,3 +1,4 @@
+var term;
 var util = util || {};
 util.toArray = function (list) {
     return Array.prototype.slice.call(list || [], 0);
@@ -23,7 +24,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     ];
 
     const CMDS_ADVANCED = [
-        'date', 'echo'
+        'date', 'echo', 'su'
     ]
 
     var fs_ = null;
@@ -37,8 +38,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     }, false);
 
     cmdLine_.addEventListener('click', inputTextClick_, false);
-    cmdLine_.addEventListener('keydown', historyHandler_, false);
-    cmdLine_.addEventListener('keydown', processNewCommand_, false);
+    cmdLine_.addEventListener('keydown', historyHandler_, true);
+    cmdLine_.addEventListener('keydown', processNewCommand_, true);
 
     //
     function inputTextClick_(e) {
@@ -77,7 +78,6 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
     //
     function processNewCommand_(e) {
-
         if (e.keyCode == 9) { // tab
             e.preventDefault();
             // Implement tab suggest.
@@ -90,7 +90,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
             // Duplicate current input and append to output section.
             var line = this.parentNode.parentNode.cloneNode(true);
-            line.removeAttribute('id')
+            line.removeAttribute('id');
             line.classList.add('line');
             var input = line.querySelector('input.cmdline');
             input.autofocus = false;
@@ -110,7 +110,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             switch (cmd) {
                 // 'about', 'contact', 'github', 'help', 'projects', 'resume'
                 case 'about':
-                    output(`<p>Hello! I'm Brian Fu, a third year student at the University of California, Berkeley double majoring in Computer Science and Data Science.</p>`);
+                    output(`<p>Hello! I'm Brian Fu, a third year student at the University of California, Berkeley.</p>`);
                     break;
                 case 'clear':
                     output_.innerHTML = '';
@@ -128,24 +128,188 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     );
                     break;
                 case 'github':
+                    window.open('https://github.com/brianfu9', '_blank');
                     output('<p><a href="https://github.com/brianfu9" target="_blank">https://github.com/brianfu9</a></p>');
                     break;
                 case 'ls':
                 case 'dir':
                 case 'help':
-                    var cmdslst = CMDS_.join('<br>');
+                    var cmdslst = '<a onclick="triggerCommand(this.textContent);">' + CMDS_.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
                     if (args[0] && args[0].toLowerCase() == '-all') {
-                        cmdslst += '</div><br><p>SECRETS uwu:</p><div class="ls-files">' + CMDS_ADVANCED.join('<br>');
+                        cmdslst += '</div><br><p>SECRETS uwu:</p><div class="ls-files">' + '<a onclick="triggerCommand(this.textContent);">' + CMDS_ADVANCED.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
                         output('<p>Wow you\'re an advanced user! Here\'s a list of secret commands:</p><div class="ls-files">' + cmdslst + '</div>');
                     } else {
-                        output('<p>Hello! This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + '</div>');
+                        output('<p>This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + '</div>');
                     }
                     break;
                 case 'projects':
-                    output(cmd + ': command coming soon!');
+                        output_.insertAdjacentHTML('beforeEnd', `<div class="projects-card">
+                        <div class="row" style="width:fit-content">
+                            <div class="col-sm-">
+                                <figure class="tile">
+                                    <img src="../images/map.png" width="310" height="394" alt="GCWeb" />
+                                    <div class="date"><span class="year">2019</span><span class="month">May</span></div>
+                                    <figcaption>
+                                        <h3>Man Maps</h3>
+                                        <h6>Minimal Navigation App</h6>
+                                        <p>A minimalist navigation platform that doesn't show you where your
+                                            destination is, where you are, or anything in between. Man maps simply points
+                                            you in the right direction and tells you how far you need to go.</p>
+                                        <button class="tags">Mobile</button>
+                                        <button class="tags">Android</button>
+                                        <button class="tags">Java</button>
+                                        <button class="tags">Geocoding</button>
+                                    </figcaption>
+                                    <a href="https://github.com/brianfu9/manmaps/releases" target="_blank"></a>
+                                </figure>
+                            </div>
+                            <div class="col-sm-">
+                                <figure class="tile">
+                                    <img src="../images/gcweb.png" width="310" height="394" alt="GCWeb" />
+                                    <div class="date"><span class="year">2018</span><span class="year">2019</span></div>
+                                    <figcaption>
+                                        <h3>Gamesman Web</h3>
+                                        <h6>Undergraduate Research</h6>
+                                        <p>Combinatorial game theory led by Dr. Dan Garcia. Strongly solving
+                                            perfect-information abstract strategy games.</p>
+                                        <button class="tags">Game Theory</button>
+                                        <button class="tags">C</button>
+                                        <button class="tags">Hashing</button>
+                                        <button class="tags">Unix</button>
+                                    </figcaption>
+                                    <a href="http://gamescrafters.berkeley.edu/" target="_blank"></a>
+                                </figure>
+                            </div>
+                            <div class="col-sm-">
+                                <figure class="tile">
+                                    <img src="../images/slowly.png" width="310" height="394" alt="$lowly" />
+                                    <div class="date"><span class="year">2019</span><span class="month">Mar</span></div>
+                                    <figcaption>
+                                        <h3>$lowly</h3>
+                                        <h6>LA Hacks</h6>
+                                        <p>Gamification of driving to encourage safe driving behavior. Utilizes Smartcar API
+                                            to extrapolate driving characteristics and intelligently assign a driving score.
+                                        </p>
+                                        <button class="tags">Smartcar API</button>
+                                        <button class="tags">OAuth 2</button>
+                                        <button class="tags">Node</button>
+                                        <button class="tags">Express</button>
+                                        <button class="tags">Bootstrap</button>
+                                    </figcaption>
+                                    <a href="https://devpost.com/software/lowly" target="_blank"></a>
+                                </figure>
+                            </div>
+                            <div class="col-sm-">
+                                <figure class="tile">
+                                    <img src="../images/lifework.png" width="310" height="394" alt="LifeworkOnline" />
+                                    <div class="date"><span class="year">2019</span><span class="month">Mar</span></div>
+                                    <figcaption>
+                                        <h3>Lifework Online</h3>
+                                        <h6>Launchathon</h6>
+                                        <p>Developed MVP escrow service for guarteeing payments to freelance workers though
+                                            the Stripe api.</p>
+                                        <button class="tags">Node</button>
+                                        <button class="tags">Express</button>
+                                        <button class="tags">Sessions</button>
+                                        <button class="tags">Stripe API</button>
+                                        <button class="tags">Bootstrap</button>
+                                    </figcaption>
+                                    <a href="https://www.lifeworkonline.com/" target="_blank"></a>
+                                </figure>
+                            </div>
+                            <div class="col-sm-">
+                                <figure class="tile">
+                                    <img src="../images/bear.png" width="310" height="394" alt="Bear Faced" />
+                                    <div class="date"><span class="year">2018</span><span class="month">Nov</span></div>
+                                    <figcaption>
+                                        <h3>Bear Faced</h3>
+                                        <h6>Cal Hacks</h6>
+                                        <p>Utilizes emotion detection and image labeling neural networks to paste an image
+                                            of a bear's face with your emotion on your face.</p>
+                                        <button class="tags">Flask</button>
+                                        <button class="tags">Google Cloud Vision</button>
+                                        <button class="tags">Python</button>
+                                        <button class="tags">REST API</button>
+                                        <button class="tags">Pillow</button>
+                                        <button class="tags">Google CSE</button>
+                                    </figcaption>
+                                    <a href="https://calhacks5.hackerearth.com/sprints/cal-hacks-50/dashboard/96567fd/submission/"
+                                        target="_blank"></a>
+                                </figure>
+                            </div>
+                            <div class="col-sm-">
+                                <figure class="tile"><img src="../images/isho.png" width="310" height="394" alt="iSho" />
+                                    <div class="date"><span class="year">2018</span><span class="month">Sep</span></div>
+                                    <figcaption>
+                                        <h3>iSho</h3>
+                                        <h6>HackMIT</h6>
+                                        <p>Interactive force graph of interconnected global financial markets.</p>
+                                        <button class="tags">Kensho</button>
+                                        <button class="tags">Javascript</button>
+                                        <button class="tags">D3JS</button>
+                                        <button class="tags">Flask</button>
+                                        <button class="tags">Beautiful Soup</button>
+                                    </figcaption>
+                                    <a href="https://devpost.com/software/isho-2mv59n" target="_blank"></a>
+                                </figure>
+                            </div>
+                            <div class="col-sm-">
+                                <figure class="tile"><img src="../images/briefly.jpg" width="310" height="394" alt="Briefly" />
+                                    <div class="date"><span class="year">2018</span><span class="month">Sep</span></div>
+                                    <figcaption>
+                                        <h3>Briefly</h3>
+                                        <h6>HackMIT</h6>
+                                        <p>Summarizes a lecture or podcast in written form.</p>
+                                        <button class="tags">Rev.ai</button>
+                                        <button class="tags">Algorithmia</button>
+                                        <button class="tags">REST API</button>
+                                        <button class="tags">MySQL</button>
+                                        <button class="tags">Natural language processing</button>
+                                    </figcaption>
+                                    <a href="https://devpost.com/software/briefly-wpbi0u" target="_blank"></a>
+                                </figure>
+                            </div>
+                            <div class="col-sm-">
+                                <figure class="tile"><img src="../images/calamp.jpg" width="310" height="394" alt="CalAmp" />
+                                    <div class="date"><span class="year">2018</span><span class="other">SUMMER</span></div>
+                                    <figcaption>
+                                        <h3>Software Engineering Internship</h3>
+                                        <h6>CalAmp Corp.</h6>
+                                        <p>Used deep learning neural networks to classify make/model/year of vehicles.
+                                            Developed microservice to snap geocoordinates to mapped streets.</p>
+                                        <button class="tags">Tensorflow</button>
+                                        <button class="tags">REST API</button>
+                                        <button class="tags">AWS</button>
+                                        <button class="tags">Lambda</button>
+                                        <button class="tags">DynamoDB</button>
+                                        <button class="tags">A* Graph Search</button>
+                                    </figcaption>
+                                    <a href="https://www.calamp.com/" target="_blank"></a>
+                                </figure>
+                            </div>
+                            <div class="col-sm-">
+                                <figure class="tile">
+                                    <img src="../images/bibo.png" width="310" height="394" alt="BiBo" />
+                                    <div class="date"><span class="year">2018</span><span class="month">Apr</span></div>
+                                    <figcaption>
+                                        <h3>BiBo</h3>
+                                        <h6>LA Hacks</h6>
+                                        <p>Scans for numbers or text and automatically creates a phone contact.</p>
+                                        <button class="tags">Mobile</button>
+                                        <button class="tags">Android</button>
+                                        <button class="tags">Java</button>
+                                        <button class="tags">Google mobile vision</button>
+                                    </figcaption>
+                                    <a href="https://devpost.com/software/bibo" target="_blank"></a>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>`);
+                    // output(cmd + ': command coming soon!');
                     break;
                 case 'resume':
-                    output(`<p><a href="../images/BrianFu_resume-color.pdf" target="_blank" download>Resumé</a><p>`);
+                    window.open('../images/BrianFu_resume-color.pdf', '_blank');
+                    output(`<p><a href="../images/BrianFu_resume-color.pdf" target="_blank">Resumé</a><p>`);
                     break;
                 case 'date':
                     output(new Date());
@@ -153,12 +317,16 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 case 'echo':
                     output(args.join(' '));
                     break;
+                case 'su':
+                    var root = 'root';
+                    if (args[0]) root = args[0];
+                    $('#input-line .prompt').html(`[${root}@brianfu.me] > `);
+                    break;
                 default:
                     if (cmd) {
                         output(cmd + ': command not found');
                     }
             }
-
             window.scrollTo(0, getDocHeight_());
             this.value = ''; // Clear/setup line for next input.
         }
@@ -184,7 +352,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
     //
     function output(html) {
-        output_.insertAdjacentHTML('beforeEnd', '<div style="width:100%;margin-left:40px"><p>' + html + '</p></div>');
+        output_.insertAdjacentHTML('beforeEnd', '<div style="width:90%;margin-left:40px;"><p>' + html + '</p></div>');
     }
 
     // Cross-browser impl to get document's height.
@@ -197,21 +365,41 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
         );
     }
 
-    //
     return {
+        init: function() {
+            document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Enter "<a onclick="triggerCommand(this.textContent);">help</a>" for more information.</p>');
+            triggerCommand('about');
+        },
         output: output
     }
 };
-
 
 $(function () {
 
     // Set the command-line prompt to include the user's IP Address
     //$('.prompt').html('[' + codehelper_ip["IP"] + '@HTML5] # ');
-    $('.prompt').html('[user@brianfu.me] > ');
+    $('.prompt').html(`[user@brianfu.me] > `);
 
     // Initialize a new terminal object
-    var term = new Terminal('#input-line .cmdline', '#container output');
+    term = new Terminal('#input-line .cmdline', '#container output');
     term.init();
 
 });
+
+function triggerCommand(command) {
+    var typed = new Typed("#input-line .cmdline", {
+        strings: [command],
+        typeSpeed: 100
+    });
+    setTimeout(function () {
+        var el = document.querySelector("#input-line .cmdline");
+        var eventObj = document.createEventObject ?
+            document.createEventObject() : document.createEvent("Events");
+        if (eventObj.initEvent) {
+            eventObj.initEvent("keydown", true, true);
+        }
+        eventObj.keyCode = 13;
+        eventObj.which = 13;
+        el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent("onkeydown", eventObj);
+    }, command.length * 200);
+}
