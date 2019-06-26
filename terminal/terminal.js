@@ -19,11 +19,11 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var output_ = document.querySelector(outputContainer);
 
     const CMDS_ = [
-        'about', 'contact', 'github', 'help', 'projects', 'resume'
+        'about', 'clear', 'contact', 'github', 'help', 'projects', 'resume'
     ];
 
     const CMDS_ADVANCED = [
-        'clear', 'date', 'echo'
+        'date', 'echo'
     ]
 
     var fs_ = null;
@@ -103,58 +103,60 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 });
                 var cmd = args[0].toLowerCase();
                 args = args.splice(1); // Remove cmd from arg list.
+                if (cmd == 'cd') {
+                    cmd = args[0]
+                }
             }
-
-            if (CMDS_.includes(cmd)) {
-
-                switch (cmd) {
-                    // 'about', 'contact', 'github', 'help', 'projects', 'resume'
-                    case 'about':
-                        output(cmd + ': command coming soon!');
-                        break;
-                    case 'contact':
-                        output('<p>You can contact me here!</p><ul><li>Phone: (510)833-7002</li><li>Email: <a href="#" onclick="copyToClipboard(\'brianfu9@gmail.com\')">brianfu9@gmail.com</a></li></ul>');
-                        break;
-                    case 'github':
-                        output('<p><a href="https://github.com/brianfu9" target="_blank">https://github.com/brianfu9</a></p>');
-                        break;
-                    case 'help':
-                        var cmdslst = CMDS_.join('<br>');
-                        if (args[0] && args[0].toLowerCase() == '-all') {
-                            cmdslst += '<br>' + CMDS_ADVANCED.join('<br>');
-                            output('<p>Wow you\'re an advanced user! Here\'s a list of secret commands:</p><div class="ls-files">' + cmdslst + '</div>');
-                        } else {
-                            output('<p>Hello! This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + '</div>');
-                        }
-                        break;
-                    case 'projects':
-                        output(cmd + ': command coming soon!');
-                        break;
-                    case 'resume':
-                        output(cmd + ': command coming soon!');
-                        break;
-                    default:
-                        if (cmd) {
-                            output(cmd + ': command coming soon!');
-                        }
-                }
-            } else {
-                switch (cmd) {
-                    case 'clear':
-                        output_.innerHTML = '';
-                        this.value = '';
-                        return;
-                    case 'date':
-                        output(new Date());
-                        break;
-                    case 'echo':
-                        output(args.join(' '));
-                        break;
-                    default:
-                        if (cmd) {
-                            output(cmd + ': command not found');
-                        }
-                }
+            switch (cmd) {
+                // 'about', 'contact', 'github', 'help', 'projects', 'resume'
+                case 'about':
+                    output(`<p>Hello! I'm Brian Fu, a third year student at the University of California, Berkeley double majoring in Computer Science and Data Science.</p>`);
+                    break;
+                case 'clear':
+                    output_.innerHTML = '';
+                    this.value = '';
+                    return;
+                case 'contact':
+                    output(
+                        `<p>You can contact me here!</p>
+                            <ul>
+                                <li>Phone: (510)833-7002</li>
+                                <li>Email: <a id="email${history_.length}" tabindex="0" 
+                                    onclick="copyToClipboard(\'brianfu9@gmail.com\');$('#email${history_.length}').popover('show');setTimeout(function(){ $('#email${history_.length}').popover('hide'); }, 1500);" 
+                                    data-container="body" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="coppied to clipboard">brianfu9@gmail.com</a></li>
+                            </ul>`
+                    );
+                    break;
+                case 'github':
+                    output('<p><a href="https://github.com/brianfu9" target="_blank">https://github.com/brianfu9</a></p>');
+                    break;
+                case 'ls':
+                case 'dir':
+                case 'help':
+                    var cmdslst = CMDS_.join('<br>');
+                    if (args[0] && args[0].toLowerCase() == '-all') {
+                        cmdslst += '</div><br><p>SECRETS uwu:</p><div class="ls-files">' + CMDS_ADVANCED.join('<br>');
+                        output('<p>Wow you\'re an advanced user! Here\'s a list of secret commands:</p><div class="ls-files">' + cmdslst + '</div>');
+                    } else {
+                        output('<p>Hello! This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + '</div>');
+                    }
+                    break;
+                case 'projects':
+                    output(cmd + ': command coming soon!');
+                    break;
+                case 'resume':
+                    output(`<p><a href="../images/BrianFu_resume-color.pdf" target="_blank" download>Resumé</a><p>`);
+                    break;
+                case 'date':
+                    output(new Date());
+                    break;
+                case 'echo':
+                    output(args.join(' '));
+                    break;
+                default:
+                    if (cmd) {
+                        output(cmd + ': command not found');
+                    }
             }
 
             window.scrollTo(0, getDocHeight_());
@@ -182,7 +184,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
     //
     function output(html) {
-        output_.insertAdjacentHTML('beforeEnd', '<p>' + html + '</p>');
+        output_.insertAdjacentHTML('beforeEnd', '<div style="width:100%;margin-left:40px"><p>' + html + '</p></div>');
     }
 
     // Cross-browser impl to get document's height.
