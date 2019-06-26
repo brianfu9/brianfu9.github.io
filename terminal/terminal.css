@@ -46,6 +46,13 @@
   #container output pre {
     margin: 0;
   }
+  .projects-card {
+    margin: 10px 40px 10px 10px;
+    width:fit-content;
+    background-color:#eee8d5;
+    padding:20px 30px 20px 30px;
+    border-radius:5%;
+  }
   .input-line {
     display: -webkit-box;
     -webkit-box-orient: horizontal;
