@@ -8,9 +8,30 @@
   }
   body {
     font-size: 14pt;
-    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;;
-    color: white;
-    background-color: black;
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+    color: #93a1a1;
+    background-color: #002b36	;
+  }
+  p {
+    color: #93a1a1;
+  }
+  pre {
+    color: #eee8d5;
+  }
+  a {
+    text-decoration: none;
+    color: #268bd2;
+  }
+  a:hover {
+    background-color: transparent;
+    text-decoration: none;
+  }
+  a:not([href]):not([tabindex]) {
+    color: #dc322f;
+  }
+  a:not([href]):not([tabindex]):hover{
+    color: #dc322f;
+    background-color: transparent;
   }
   #container {
     padding: 1.5em 1.5em 5em 5em;
@@ -44,7 +65,7 @@
   }
   .prompt {
     white-space: nowrap;
-    color: #96b38a;
+    color: #6c71c4	;
     margin-right: 7px;
     display: -webkit-box;
     -webkit-box-pack: center;

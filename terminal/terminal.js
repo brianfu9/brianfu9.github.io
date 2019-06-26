@@ -37,8 +37,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     }, false);
 
     cmdLine_.addEventListener('click', inputTextClick_, false);
-    cmdLine_.addEventListener('keydown', historyHandler_, false);
-    cmdLine_.addEventListener('keydown', processNewCommand_, false);
+    cmdLine_.addEventListener('keydown', historyHandler_, true);
+    cmdLine_.addEventListener('keydown', processNewCommand_, true);
 
     //
     function inputTextClick_(e) {
@@ -77,7 +77,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
     //
     function processNewCommand_(e) {
-
+        console.log('evaluating event');
+        console.log(e);
         if (e.keyCode == 9) { // tab
             e.preventDefault();
             // Implement tab suggest.
@@ -90,7 +91,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
             // Duplicate current input and append to output section.
             var line = this.parentNode.parentNode.cloneNode(true);
-            line.removeAttribute('id')
+            line.removeAttribute('id');
             line.classList.add('line');
             var input = line.querySelector('input.cmdline');
             input.autofocus = false;
@@ -110,7 +111,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             switch (cmd) {
                 // 'about', 'contact', 'github', 'help', 'projects', 'resume'
                 case 'about':
-                    output(`<p>Hello! I'm Brian Fu, a third year student at the University of California, Berkeley double majoring in Computer Science and Data Science.</p>`);
+                    output(`<p>Hello! I'm Brian Fu, a third year student at the University of California, Berkeley.</p>`);
                     break;
                 case 'clear':
                     output_.innerHTML = '';
@@ -145,7 +146,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     output(cmd + ': command coming soon!');
                     break;
                 case 'resume':
-                    output(`<p><a href="../images/BrianFu_resume-color.pdf" target="_blank" download>Resumé</a><p>`);
+                    output(`<p><a href="../images/BrianFu_resume-color.pdf" target="_blank">Resumé</a><p>`);
                     break;
                 case 'date':
                     output(new Date());
@@ -184,7 +185,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
     //
     function output(html) {
-        output_.insertAdjacentHTML('beforeEnd', '<div style="width:100%;margin-left:40px"><p>' + html + '</p></div>');
+        output_.insertAdjacentHTML('beforeEnd', '<div style="width:90%;margin-left:40px;"><p>' + html + '</p></div>');
     }
 
     // Cross-browser impl to get document's height.
@@ -197,12 +198,29 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
         );
     }
 
-    //
+    function triggerCommand(command) {
+        var typed = new Typed("#input-line .cmdline", {
+            strings: [command],
+            typeSpeed: 100
+        });
+        setTimeout(function () {
+            var el = document.querySelector(cmdLineContainer);
+            var eventObj = document.createEventObject ?
+                document.createEventObject() : document.createEvent("Events");
+            if (eventObj.initEvent) {
+                eventObj.initEvent("keydown", true, true);
+            }
+            eventObj.keyCode = 13;
+            eventObj.which = 13;
+            el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent("onkeydown", eventObj);
+        }, 1200);
+    }
+
     return {
+        init: triggerCommand('about'),
         output: output
     }
 };
-
 
 $(function () {
 
