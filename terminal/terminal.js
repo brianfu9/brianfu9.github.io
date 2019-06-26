@@ -1,3 +1,4 @@
+var term;
 var util = util || {};
 util.toArray = function (list) {
     return Array.prototype.slice.call(list || [], 0);
@@ -23,7 +24,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     ];
 
     const CMDS_ADVANCED = [
-        'date', 'echo'
+        'date', 'echo', 'su'
     ]
 
     var fs_ = null;
@@ -77,8 +78,6 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
     //
     function processNewCommand_(e) {
-        console.log('evaluating event');
-        console.log(e);
         if (e.keyCode == 9) { // tab
             e.preventDefault();
             // Implement tab suggest.
@@ -129,23 +128,25 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     );
                     break;
                 case 'github':
+                    window.open('https://github.com/brianfu9', '_blank');
                     output('<p><a href="https://github.com/brianfu9" target="_blank">https://github.com/brianfu9</a></p>');
                     break;
                 case 'ls':
                 case 'dir':
                 case 'help':
-                    var cmdslst = CMDS_.join('<br>');
+                    var cmdslst = '<a onclick="triggerCommand(this.textContent);">' + CMDS_.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
                     if (args[0] && args[0].toLowerCase() == '-all') {
-                        cmdslst += '</div><br><p>SECRETS uwu:</p><div class="ls-files">' + CMDS_ADVANCED.join('<br>');
+                        cmdslst += '</div><br><p>SECRETS uwu:</p><div class="ls-files">' + '<a onclick="triggerCommand(this.textContent);">' + CMDS_ADVANCED.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
                         output('<p>Wow you\'re an advanced user! Here\'s a list of secret commands:</p><div class="ls-files">' + cmdslst + '</div>');
                     } else {
-                        output('<p>Hello! This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + '</div>');
+                        output('<p>This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + '</div>');
                     }
                     break;
                 case 'projects':
                     output(cmd + ': command coming soon!');
                     break;
                 case 'resume':
+                    window.open('../images/BrianFu_resume-color.pdf', '_blank');
                     output(`<p><a href="../images/BrianFu_resume-color.pdf" target="_blank">Resumé</a><p>`);
                     break;
                 case 'date':
@@ -154,12 +155,16 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 case 'echo':
                     output(args.join(' '));
                     break;
+                case 'su':
+                    var root = 'root';
+                    if (args[0]) root = args[0];
+                    $('#input-line .prompt').html(`[${root}@brianfu.me] > `);
+                    break;
                 default:
                     if (cmd) {
                         output(cmd + ': command not found');
                     }
             }
-
             window.scrollTo(0, getDocHeight_());
             this.value = ''; // Clear/setup line for next input.
         }
@@ -198,26 +203,11 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
         );
     }
 
-    function triggerCommand(command) {
-        var typed = new Typed("#input-line .cmdline", {
-            strings: [command],
-            typeSpeed: 100
-        });
-        setTimeout(function () {
-            var el = document.querySelector(cmdLineContainer);
-            var eventObj = document.createEventObject ?
-                document.createEventObject() : document.createEvent("Events");
-            if (eventObj.initEvent) {
-                eventObj.initEvent("keydown", true, true);
-            }
-            eventObj.keyCode = 13;
-            eventObj.which = 13;
-            el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent("onkeydown", eventObj);
-        }, 1200);
-    }
-
     return {
-        init: triggerCommand('about'),
+        init: function() {
+            document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Enter "<a onclick="triggerCommand(this.textContent);">help</a>" for more information.</p>');
+            triggerCommand('about');
+        },
         output: output
     }
 };
@@ -226,10 +216,28 @@ $(function () {
 
     // Set the command-line prompt to include the user's IP Address
     //$('.prompt').html('[' + codehelper_ip["IP"] + '@HTML5] # ');
-    $('.prompt').html('[user@brianfu.me] > ');
+    $('.prompt').html(`[user@brianfu.me] > `);
 
     // Initialize a new terminal object
-    var term = new Terminal('#input-line .cmdline', '#container output');
+    term = new Terminal('#input-line .cmdline', '#container output');
     term.init();
 
 });
+
+function triggerCommand(command) {
+    var typed = new Typed("#input-line .cmdline", {
+        strings: [command],
+        typeSpeed: 100
+    });
+    setTimeout(function () {
+        var el = document.querySelector("#input-line .cmdline");
+        var eventObj = document.createEventObject ?
+            document.createEventObject() : document.createEvent("Events");
+        if (eventObj.initEvent) {
+            eventObj.initEvent("keydown", true, true);
+        }
+        eventObj.keyCode = 13;
+        eventObj.which = 13;
+        el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent("onkeydown", eventObj);
+    }, command.length * 200);
+}

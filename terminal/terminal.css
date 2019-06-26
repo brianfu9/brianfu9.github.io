@@ -27,10 +27,10 @@
     text-decoration: none;
   }
   a:not([href]):not([tabindex]) {
-    color: #dc322f;
+    color: #b58900;
   }
   a:not([href]):not([tabindex]):hover{
-    color: #dc322f;
+    color: #b58900;
     background-color: transparent;
   }
   #container {
