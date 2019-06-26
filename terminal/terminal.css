@@ -1,5 +1,5 @@
 ::selection {
-    background: #FF5E99;
+    background: #d33682;
   }
   html, body {
     width: 100%;
@@ -32,6 +32,7 @@
   a:not([href]):not([tabindex]):hover{
     color: #b58900;
     background-color: transparent;
+    cursor: pointer;
   }
   #container {
     padding: 1.5em 1.5em 5em 5em;
@@ -103,4 +104,5 @@
     -moz-column-width: 100px;
     -o-column-width: 100px;
     column-width: 100px;
+    margin-bottom: 10px;
   }
