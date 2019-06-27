@@ -1,3 +1,12 @@
+/*!
+ *   Forked from:
+ *      HTML5 Web Terminal
+ *      Author: Andrew M Barfield
+ *      Url: https://codepen.io/AndrewBarfield/pen/qEqWMq
+ *      License(s): MIT
+ * 
+ */
+
 var term;
 var util = util || {};
 util.toArray = function (list) {
