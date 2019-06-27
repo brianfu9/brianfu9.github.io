@@ -158,7 +158,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         `You can contact me here!
                         <ul>
                             <li>Snapchat: brian.fu</li>
-                            <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu-449881128/">https://www.linkedin.com/in/brian-fu-449881128/</a></li>
+                            <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu-449881128/" target="_blank">https://www.linkedin.com/in/brian-fu-449881128/</a></li>
                             <li>Email: <a id="email${history_.length}" tabindex="0" 
                                 onclick="copyToClipboard(\'brianfu9@gmail.com\');
                                 $('#email${history_.length}').popover('show');
@@ -179,13 +179,14 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 case 'help':
                     var cmdslst = '<a onclick="triggerCommand(this.textContent);">' + CMDS_.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
                     if (args[0] && args[0].toLowerCase() == '-all') {
-                        cmdslst += '</div><br><p>SECRETS uwu:</p><div class="ls-files">' + 
+                        cmdslst += '</div><br><p>many secret. much hidden. wow:</p><div class="ls-files">' + 
                         '<a onclick="triggerCommand(this.textContent);">' + 
                         CMDS_ADVANCED.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
-                        output('<p>Wow you\'re an advanced user! Here\'s a list of secret commands:</p><div class="ls-files">' + cmdslst + '</div>');
+                        output(`<p>Wow you\'re an advanced user! If you want to learn what each command does, use <a onclick="triggerCommand(this.textContent);">man</a> followed by a command.</p>
+                        <div class="ls-files">` + cmdslst + '</div>');
                     } else {
-                        output('<p>This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + 
-                        '</div><p>If you\'d like a more in-depth explanation, try "<a onclick="triggerCommand(this.textContent);">man help</a>" or any other command.</p>');
+                        output('<p>Here is a list of commands:</p><div class="ls-files">' + cmdslst + 
+                        '</div><p>If you\'d like to see the complete list, try out "<a onclick="triggerCommand(this.textContent);">help -all</a>"</p>');
                     }
                     break;
                 case 'ifconfig':
