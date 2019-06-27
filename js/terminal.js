@@ -1,8 +1,8 @@
 /*!
- *   Forked from:
+ *   "Forked" from:
  *      HTML5 Web Terminal
  *      Author: Andrew M Barfield
- *      Url: https://codepen.io/AndrewBarfield/pen/qEqWMq
+ *      Url: https://codepen.io/AndrewBarfield/pen/LEbPJx.js
  *      License(s): MIT
  * 
  */
@@ -137,7 +137,17 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             }
             switch (cmd) {
                 case 'about':
-                    output(`<p>Hello there! Welcome to my terminal. You've probably seen one before in a 90's hacker movie. Please hack around and take a look at some of my projects. If you're looking for somewhere to start, click <a onclick="triggerCommand(this.textContent);">help</a>.</p> <p>I'm Brian Fu, a third year student at the University of California, Berkeley. Go Bears!</p>`);
+                    output(
+                        `<p>Hello there, welcome to my terminal! 
+                        You may have seen one before in a 90's hacker movie with green scrolling text and lots of progress bars. 
+                        Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
+                        Feel free to hack around or take a look at my <a onclick="triggerCommand(this.textContent);">portfolio</a>. 
+                        If you're looking for somewhere to start, click <a onclick="triggerCommand(this.textContent);">help</a>.</p> 
+                        <p>I'm Brian Fu, a third year Computer Science student at the University of California, Berkeley. Go Bears!</p>
+                        <p>My hobbies include attending hackathons and listening to music. 
+                        I am a classical pianist of 13 years but dream of improv jazz riffs and anime ost's. 
+                        If you've got any music, food or life recommendations, shoot me a message at <a onclick="triggerCommand(this.textContent);">contact</a>.</p>`
+                        );
                     break;
                 case 'clear':
                     output_.innerHTML = '';
@@ -145,13 +155,19 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     return;
                 case 'contact':
                     output(
-                        `<p>You can contact me here!</p>
-                            <ul>
-                                <li>Phone: (510)833-7002</li>
-                                <li>Email: <a id="email${history_.length}" tabindex="0" 
-                                    onclick="copyToClipboard(\'brianfu9@gmail.com\');$('#email${history_.length}').popover('show');setTimeout(function(){ $('#email${history_.length}').popover('hide'); }, 1500);" 
-                                    data-container="body" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="coppied to clipboard">brianfu9@gmail.com</a></li>
-                            </ul>`
+                        `You can contact me here!
+                        <ul>
+                            <li>Snapchat: brian.fu</li>
+                            <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu-449881128/">https://www.linkedin.com/in/brian-fu-449881128/</a></li>
+                            <li>Email: <a id="email${history_.length}" tabindex="0" 
+                                onclick="copyToClipboard(\'brianfu9@gmail.com\');
+                                $('#email${history_.length}').popover('show');
+                                setTimeout(function(){ $('#email${history_.length}').popover('hide'); }, 1500);" 
+                                data-container="body" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="coppied to clipboard">
+                                brianfu9@gmail.com</a></li>
+                        </ul>
+                        Email probably works best. click the email to copy to clipboard`
+                            
                     );
                     break;
                 case 'github':
@@ -163,10 +179,13 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 case 'help':
                     var cmdslst = '<a onclick="triggerCommand(this.textContent);">' + CMDS_.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
                     if (args[0] && args[0].toLowerCase() == '-all') {
-                        cmdslst += '</div><br><p>SECRETS uwu:</p><div class="ls-files">' + '<a onclick="triggerCommand(this.textContent);">' + CMDS_ADVANCED.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
+                        cmdslst += '</div><br><p>SECRETS uwu:</p><div class="ls-files">' + 
+                        '<a onclick="triggerCommand(this.textContent);">' + 
+                        CMDS_ADVANCED.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
                         output('<p>Wow you\'re an advanced user! Here\'s a list of secret commands:</p><div class="ls-files">' + cmdslst + '</div>');
                     } else {
-                        output('<p>This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + '</div><p>If you\'d like a more in-depth explanation, try "<a onclick="triggerCommand(this.textContent);">man help</a>" or any other command.</p>');
+                        output('<p>This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + 
+                        '</div><p>If you\'d like a more in-depth explanation, try "<a onclick="triggerCommand(this.textContent);">man help</a>" or any other command.</p>');
                     }
                     break;
                 case 'ifconfig':
@@ -341,7 +360,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             </div>
                         </div>
                     </div>`);
-                    output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="triggerCommand(this.textContent);">github</a>!`)
+                    output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="triggerCommand(this.textContent);">github</a>! 
+                    p.s. please help me get rid of the space on the right of the portfolio. css is going to be the end of me.`)
                     break;
                 case 'resume':
                     window.open('documents/BrianFu_resume-color.pdf', '_blank');
@@ -400,7 +420,9 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             output('usage: <br> > echo [text] <br> prints out the [text] in the terminal');
                             break;
                         case 'man':
-                            output('usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">ERROR STACK OVERFLOW</div></div></div></div><br>jk man explains what [command] does');
+                            output(`usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> 
+                            <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">ERROR STACK OVERFLOW</div></div></div></div><br>
+                            jk man explains what [command] does`);
                             break;
                         case 'su':
                             output(`usage: <br> > su <br> > su [name] <br> changes the user's name`);
