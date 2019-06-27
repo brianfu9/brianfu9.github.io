@@ -1,8 +1,8 @@
 /*!
- *   Forked from:
+ *   "Forked" from:
  *      HTML5 Web Terminal
  *      Author: Andrew M Barfield
- *      Url: https://codepen.io/AndrewBarfield/pen/qEqWMq
+ *      Url: https://codepen.io/AndrewBarfield/pen/LEbPJx.js
  *      License(s): MIT
  * 
  */
@@ -159,8 +159,11 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             <ul>
                                 <li>Phone: (510)833-7002</li>
                                 <li>Email: <a id="email${history_.length}" tabindex="0" 
-                                    onclick="copyToClipboard(\'brianfu9@gmail.com\');$('#email${history_.length}').popover('show');setTimeout(function(){ $('#email${history_.length}').popover('hide'); }, 1500);" 
-                                    data-container="body" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="coppied to clipboard">brianfu9@gmail.com</a></li>
+                                    onclick="copyToClipboard(\'brianfu9@gmail.com\');
+                                    $('#email${history_.length}').popover('show');
+                                    setTimeout(function(){ $('#email${history_.length}').popover('hide'); }, 1500);" 
+                                    data-container="body" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="coppied to clipboard">
+                                    brianfu9@gmail.com</a></li>
                             </ul>`
                     );
                     break;
@@ -173,10 +176,13 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 case 'help':
                     var cmdslst = '<a onclick="triggerCommand(this.textContent);">' + CMDS_.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
                     if (args[0] && args[0].toLowerCase() == '-all') {
-                        cmdslst += '</div><br><p>SECRETS uwu:</p><div class="ls-files">' + '<a onclick="triggerCommand(this.textContent);">' + CMDS_ADVANCED.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
+                        cmdslst += '</div><br><p>SECRETS uwu:</p><div class="ls-files">' + 
+                        '<a onclick="triggerCommand(this.textContent);">' + 
+                        CMDS_ADVANCED.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
                         output('<p>Wow you\'re an advanced user! Here\'s a list of secret commands:</p><div class="ls-files">' + cmdslst + '</div>');
                     } else {
-                        output('<p>This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + '</div><p>If you\'d like a more in-depth explanation, try "<a onclick="triggerCommand(this.textContent);">man help</a>" or any other command.</p>');
+                        output('<p>This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + 
+                        '</div><p>If you\'d like a more in-depth explanation, try "<a onclick="triggerCommand(this.textContent);">man help</a>" or any other command.</p>');
                     }
                     break;
                 case 'ifconfig':
@@ -351,7 +357,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             </div>
                         </div>
                     </div>`);
-                    output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="triggerCommand(this.textContent);">github</a>!`)
+                    output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="triggerCommand(this.textContent);">github</a>! 
+                    p.s. please help me get rid of the space on the right of the portfolio. css is going to be the end of me.`)
                     break;
                 case 'resume':
                     window.open('documents/BrianFu_resume-color.pdf', '_blank');
@@ -410,7 +417,9 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             output('usage: <br> > echo [text] <br> prints out the [text] in the terminal');
                             break;
                         case 'man':
-                            output('usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">ERROR STACK OVERFLOW</div></div></div></div><br>jk man explains what [command] does');
+                            output(`usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> 
+                            <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">ERROR STACK OVERFLOW</div></div></div></div><br>
+                            jk man explains what [command] does`);
                             break;
                         case 'su':
                             output(`usage: <br> > su <br> > su [name] <br> changes the user's name`);
