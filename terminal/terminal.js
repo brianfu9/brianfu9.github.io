@@ -1,3 +1,12 @@
+/*!
+ *   Forked from:
+ *      HTML5 Web Terminal
+ *      Author: Andrew M Barfield
+ *      Url: https://codepen.io/AndrewBarfield/pen/qEqWMq
+ *      License(s): MIT
+ * 
+ */
+
 var term;
 var util = util || {};
 util.toArray = function (list) {
@@ -24,8 +33,17 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     ];
 
     const CMDS_ADVANCED = [
-        'cd', 'date', 'dir', 'echo', 'emacs', 'ls', 'man', 'su', 'vim'
-    ]
+        'cd', 'date', 'dir', 'echo', 'emacs', 'ifconfig', 'ls', 'man', 'su', 'vim'
+    ];
+
+    var cmds_to_trie = [];
+    CMDS_.forEach((a) => { cmds_to_trie.push({ cmd: a }) });
+    CMDS_ADVANCED.forEach((a) => { cmds_to_trie.push({ cmd: a }) });
+
+    const trie = createTrie(cmds_to_trie, 'cmd');
+
+    var latest_command = '';
+    var matches = []
 
     var fs_ = null;
     var cwd_ = null;
@@ -77,7 +95,20 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     function processNewCommand_(e) {
         if (e.keyCode == 9) { // tab
             e.preventDefault();
-            // Implement tab suggest.
+
+            if (latest_command == this.value) {
+                matches.push(matches.shift());
+            } else {
+                matches = trie.getMatches(this.value);
+            }
+
+            if (matches) {
+                this.value = matches[0]['cmd'];
+            } else {
+                this.value = this.value;
+            }
+            latest_command = this.value;
+
         } else if (e.keyCode == 13) { // enter
             // Save shell history.
             if (this.value) {
@@ -106,7 +137,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             }
             switch (cmd) {
                 case 'about':
-                    output(`<p>Hello there! Welcome to my terminal. You've probably seen one before in a 90's hacker movie. Feel free to hack around and take a look at some of my projects! If you're looking for somewhere to start, click <a onclick="triggerCommand(this.textContent);">help</a>.</p> <p>I'm Brian Fu, a third year student at the University of California, Berkeley. Go Bears!</p>`);
+                    output(`<p>Hello there! Welcome to my terminal. You've probably seen one before in a 90's hacker movie. Please hack around and take a look at some of my projects. If you're looking for somewhere to start, click <a onclick="triggerCommand(this.textContent);">help</a>.</p> <p>I'm Brian Fu, a third year student at the University of California, Berkeley. Go Bears!</p>`);
                     break;
                 case 'clear':
                     output_.innerHTML = '';
@@ -135,12 +166,21 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         cmdslst += '</div><br><p>SECRETS uwu:</p><div class="ls-files">' + '<a onclick="triggerCommand(this.textContent);">' + CMDS_ADVANCED.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
                         output('<p>Wow you\'re an advanced user! Here\'s a list of secret commands:</p><div class="ls-files">' + cmdslst + '</div>');
                     } else {
-                        output('<p>This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + '</div><p>If you\'d like a more in-depth explanation, try "<a onclick="triggerCommand(this.textContent);">man help</a>".</p>');
+                        output('<p>This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + '</div><p>If you\'d like a more in-depth explanation, try "<a onclick="triggerCommand(this.textContent);">man help</a>" or any other command.</p>');
                     }
                     break;
+                case 'ifconfig':
+                    $.getJSON('https://json.geoiplookup.io/', function (data) {
+                        delete data.premium;
+                        delete data.success;
+                        delete data.cached;
+                        output(JSON.stringify(data).slice(1, -1).replace(/,"/g, '<br>"').replace(/"/g, ' '));
+                    });
+                    break;
                 case 'portfolio':
-                        output_.insertAdjacentHTML('beforeEnd', `<div class="projects-card">
-                        <div class="row" style="width:fit-content">
+                    output_.insertAdjacentHTML('beforeEnd',
+                        `<div class="projects-card">
+                        <div class="row" style="align-content: center;">
                             <div class="col-sm-">
                                 <figure class="tile">
                                     <img src="../images/map.png" width="310" height="394" alt="GCWeb" />
@@ -301,7 +341,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             </div>
                         </div>
                     </div>`);
-                    // output(cmd + ': command coming soon!');
+                    output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="triggerCommand(this.textContent);">github</a>!`)
                     break;
                 case 'resume':
                     window.open('../images/BrianFu_resume-color.pdf', '_blank');
@@ -346,6 +386,9 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             break;
                         case 'portfolio':
                             output('usage: <br> > portfolio <br> shows my portfolio.');
+                            break;
+                        case 'ifconfig':
+                            output(`usage: <br> > ifconfig <br> displays the user's ip information`);
                             break;
                         case 'resume':
                             output('usage: <br> > resume <br> Opens my resume in a new tab.');
@@ -414,7 +457,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     }
 
     return {
-        init: function() {
+        init: function () {
             document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Enter "<a onclick="triggerCommand(this.textContent);">help</a>" for more information.</p>');
             triggerCommand('about');
         },
