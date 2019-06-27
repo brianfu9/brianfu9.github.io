@@ -183,7 +183,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         <div class="row" style="align-content: center;">
                             <div class="col-sm-">
                                 <figure class="tile">
-                                    <img src="../images/map.png" width="310" height="394" alt="GCWeb" />
+                                    <img src="images/map.png" width="310" height="394" alt="GCWeb" />
                                     <div class="date"><span class="year">2019</span><span class="month">May</span></div>
                                     <figcaption>
                                         <h3>Man Maps</h3>
@@ -201,7 +201,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             </div>
                             <div class="col-sm-">
                                 <figure class="tile">
-                                    <img src="../images/gcweb.png" width="310" height="394" alt="GCWeb" />
+                                    <img src="images/gcweb.png" width="310" height="394" alt="GCWeb" />
                                     <div class="date"><span class="year">2018</span><span class="year">2019</span></div>
                                     <figcaption>
                                         <h3>Gamesman Web</h3>
@@ -218,7 +218,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             </div>
                             <div class="col-sm-">
                                 <figure class="tile">
-                                    <img src="../images/slowly.png" width="310" height="394" alt="$lowly" />
+                                    <img src="images/slowly.png" width="310" height="394" alt="$lowly" />
                                     <div class="date"><span class="year">2019</span><span class="month">Mar</span></div>
                                     <figcaption>
                                         <h3>$lowly</h3>
@@ -237,7 +237,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             </div>
                             <div class="col-sm-">
                                 <figure class="tile">
-                                    <img src="../images/lifework.png" width="310" height="394" alt="LifeworkOnline" />
+                                    <img src="images/lifework.png" width="310" height="394" alt="LifeworkOnline" />
                                     <div class="date"><span class="year">2019</span><span class="month">Mar</span></div>
                                     <figcaption>
                                         <h3>Lifework Online</h3>
@@ -255,7 +255,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             </div>
                             <div class="col-sm-">
                                 <figure class="tile">
-                                    <img src="../images/bear.png" width="310" height="394" alt="Bear Faced" />
+                                    <img src="images/bear.png" width="310" height="394" alt="Bear Faced" />
                                     <div class="date"><span class="year">2018</span><span class="month">Nov</span></div>
                                     <figcaption>
                                         <h3>Bear Faced</h3>
@@ -274,7 +274,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                                 </figure>
                             </div>
                             <div class="col-sm-">
-                                <figure class="tile"><img src="../images/isho.png" width="310" height="394" alt="iSho" />
+                                <figure class="tile"><img src="images/isho.png" width="310" height="394" alt="iSho" />
                                     <div class="date"><span class="year">2018</span><span class="month">Sep</span></div>
                                     <figcaption>
                                         <h3>iSho</h3>
@@ -290,7 +290,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                                 </figure>
                             </div>
                             <div class="col-sm-">
-                                <figure class="tile"><img src="../images/briefly.jpg" width="310" height="394" alt="Briefly" />
+                                <figure class="tile"><img src="images/briefly.jpg" width="310" height="394" alt="Briefly" />
                                     <div class="date"><span class="year">2018</span><span class="month">Sep</span></div>
                                     <figcaption>
                                         <h3>Briefly</h3>
@@ -306,7 +306,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                                 </figure>
                             </div>
                             <div class="col-sm-">
-                                <figure class="tile"><img src="../images/calamp.jpg" width="310" height="394" alt="CalAmp" />
+                                <figure class="tile"><img src="images/calamp.jpg" width="310" height="394" alt="CalAmp" />
                                     <div class="date"><span class="year">2018</span><span class="other">SUMMER</span></div>
                                     <figcaption>
                                         <h3>Software Engineering Internship</h3>
@@ -325,7 +325,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             </div>
                             <div class="col-sm-">
                                 <figure class="tile">
-                                    <img src="../images/bibo.png" width="310" height="394" alt="BiBo" />
+                                    <img src="images/bibo.png" width="310" height="394" alt="BiBo" />
                                     <div class="date"><span class="year">2018</span><span class="month">Apr</span></div>
                                     <figcaption>
                                         <h3>BiBo</h3>
@@ -344,8 +344,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="triggerCommand(this.textContent);">github</a>!`)
                     break;
                 case 'resume':
-                    window.open('../images/BrianFu_resume-color.pdf', '_blank');
-                    output(`<p><a href="../images/BrianFu_resume-color.pdf" target="_blank">Resumé</a><p>`);
+                    window.open('documents/BrianFu_resume-color.pdf', '_blank');
+                    output(`<p><a href="documents/BrianFu_resume-color.pdf" target="_blank">Resumé</a><p>`);
                     break;
                 case 'date':
                     output(new Date());
