@@ -137,7 +137,17 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             }
             switch (cmd) {
                 case 'about':
-                    output(`<p>Hello there! Welcome to my terminal. You've probably seen one before in a 90's hacker movie. Please hack around and take a look at some of my projects. If you're looking for somewhere to start, click <a onclick="triggerCommand(this.textContent);">help</a>.</p> <p>I'm Brian Fu, a third year student at the University of California, Berkeley. Go Bears!</p>`);
+                    output(
+                        `<p>Hello there, welcome to my terminal! 
+                        You may have seen one before in a 90's hacker movie with green scrolling text and lots of progress bars. 
+                        Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
+                        Feel free to hack around or take a look at my <a onclick="triggerCommand(this.textContent);">portfolio</a>. 
+                        If you're looking for somewhere to start, click <a onclick="triggerCommand(this.textContent);">help</a>.</p> 
+                        <p>I'm Brian Fu, a third year Computer Science student at the University of California, Berkeley. Go Bears!</p>
+                        <p>My hobbies include attending hackathons and listening to music. 
+                        I am a classical pianist of 13 years but dream of improv jazz riffs and anime ost's. 
+                        If you've got any music, food or life recommendations, shoot me a message at <a onclick="triggerCommand(this.textContent);">contact</a>.</p>`
+                        );
                     break;
                 case 'clear':
                     output_.innerHTML = '';
