@@ -33,12 +33,12 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     ];
 
     const CMDS_ADVANCED = [
-        'cd', 'date', 'dir', 'echo', 'emacs', 'ls', 'man', 'su', 'vim'
+        'cd', 'date', 'dir', 'echo', 'emacs', 'ifconfig', 'ls', 'man', 'su', 'vim'
     ];
 
     var cmds_to_trie = [];
-    CMDS_.forEach((a) => {cmds_to_trie.push({cmd: a})});
-    CMDS_ADVANCED.forEach((a) => {cmds_to_trie.push({cmd: a})});
+    CMDS_.forEach((a) => { cmds_to_trie.push({ cmd: a }) });
+    CMDS_ADVANCED.forEach((a) => { cmds_to_trie.push({ cmd: a }) });
 
     const trie = createTrie(cmds_to_trie, 'cmd');
 
@@ -108,7 +108,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 this.value = this.value;
             }
             latest_command = this.value;
-            
+
         } else if (e.keyCode == 13) { // enter
             // Save shell history.
             if (this.value) {
@@ -169,9 +169,17 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         output('<p>This is a command-line style profile. To get started, try out some of these commands:</p><div class="ls-files">' + cmdslst + '</div><p>If you\'d like a more in-depth explanation, try "<a onclick="triggerCommand(this.textContent);">man help</a>" or any other command.</p>');
                     }
                     break;
+                case 'ifconfig':
+                    $.getJSON('https://json.geoiplookup.io/', function (data) {
+                        delete data.premium;
+                        delete data.success;
+                        delete data.cached;
+                        output(JSON.stringify(data).slice(1, -1).replace(/,"/g, '<br>"').replace(/"/g, ' '));
+                    });
+                    break;
                 case 'portfolio':
-                    output_.insertAdjacentHTML('beforeEnd', 
-                    `<div class="projects-card">
+                    output_.insertAdjacentHTML('beforeEnd',
+                        `<div class="projects-card">
                         <div class="row" style="align-content: center;">
                             <div class="col-sm-">
                                 <figure class="tile">
@@ -378,6 +386,9 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             break;
                         case 'portfolio':
                             output('usage: <br> > portfolio <br> shows my portfolio.');
+                            break;
+                        case 'ifconfig':
+                            output(`usage: <br> > ifconfig <br> displays the user's ip information`);
                             break;
                         case 'resume':
                             output('usage: <br> > resume <br> Opens my resume in a new tab.');
