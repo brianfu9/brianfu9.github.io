@@ -155,16 +155,19 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     return;
                 case 'contact':
                     output(
-                        `<p>You can contact me here!</p>
-                            <ul>
-                                <li>Phone: (510)833-7002</li>
-                                <li>Email: <a id="email${history_.length}" tabindex="0" 
-                                    onclick="copyToClipboard(\'brianfu9@gmail.com\');
-                                    $('#email${history_.length}').popover('show');
-                                    setTimeout(function(){ $('#email${history_.length}').popover('hide'); }, 1500);" 
-                                    data-container="body" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="coppied to clipboard">
-                                    brianfu9@gmail.com</a></li>
-                            </ul>`
+                        `You can contact me here!
+                        <ul>
+                            <li>Snapchat: brian.fu</li>
+                            <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu-449881128/">https://www.linkedin.com/in/brian-fu-449881128/</a></li>
+                            <li>Email: <a id="email${history_.length}" tabindex="0" 
+                                onclick="copyToClipboard(\'brianfu9@gmail.com\');
+                                $('#email${history_.length}').popover('show');
+                                setTimeout(function(){ $('#email${history_.length}').popover('hide'); }, 1500);" 
+                                data-container="body" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="coppied to clipboard">
+                                brianfu9@gmail.com</a></li>
+                        </ul>
+                        Email probably works best. click the email to copy to clipboard`
+                            
                     );
                     break;
                 case 'github':
