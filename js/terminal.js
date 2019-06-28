@@ -21,6 +21,8 @@ function copyToClipboard(element) {
     $temp.remove();
 }
 
+var ipinfo;
+
 var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     window.URL = window.URL || window.webkitURL;
     window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
@@ -33,7 +35,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     ];
 
     const CMDS_ADVANCED = [
-        'cd', 'date', 'dir', 'echo', 'emacs', 'ifconfig', 'ls', 'man', 'su', 'vim'
+        'cd', 'date', 'dir', 'echo', 'emacs', 'ifconfig', 'ls', 'man', 'ping', 'su', 'vim'
     ];
 
     var cmds_to_trie = [];
@@ -111,6 +113,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
         } else if (e.keyCode == 13) { // enter
             // Save shell history.
+            e.preventDefault();
             if (this.value) {
                 history_[history_.length] = this.value;
                 histpos_ = history_.length;
@@ -144,10 +147,10 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         Feel free to hack around or take a look at my <a onclick="triggerCommand(this.textContent);">portfolio</a>. 
                         If you're looking for somewhere to start, click <a onclick="triggerCommand(this.textContent);">help</a>.</p> 
                         <p>I'm Brian Fu, a third year Computer Science student at the University of California, Berkeley. Go Bears!</p>
-                        <p>My hobbies include attending hackathons and listening to music. 
+                        <p>I grew up in the sunny suburbia of Orange County but have always wanted to visit ${ipinfo.city}. My hobbies include attending hackathons and listening to music. 
                         I am a classical pianist of 13 years but dream of improv jazz riffs and anime ost's. 
                         If you've got any music, food or life recommendations, shoot me a message at <a onclick="triggerCommand(this.textContent);">contact</a>.</p>`
-                        );
+                    );
                     break;
                 case 'clear':
                     output_.innerHTML = '';
@@ -167,7 +170,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                                 brianfu9@gmail.com</a></li>
                         </ul>
                         Email probably works best. click the email to copy to clipboard`
-                            
+
                     );
                     break;
                 case 'github':
@@ -179,22 +182,29 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 case 'help':
                     var cmdslst = '<a onclick="triggerCommand(this.textContent);">' + CMDS_.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
                     if (args[0] && args[0].toLowerCase() == '-all') {
-                        cmdslst += '</div><br><p>many secret. much hidden. wow:</p><div class="ls-files">' + 
-                        '<a onclick="triggerCommand(this.textContent);">' + 
-                        CMDS_ADVANCED.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
+                        cmdslst += '</div><br><p>many secret. much hidden. wow:</p><div class="ls-files">' +
+                            '<a onclick="triggerCommand(this.textContent);">' +
+                            CMDS_ADVANCED.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
                         output(`<p>Wow you\'re an advanced user! If you want to learn what each command does, use <a onclick="triggerCommand(this.textContent);">man</a> followed by a command.</p>
                         <div class="ls-files">` + cmdslst + '</div>');
                     } else {
-                        output('<p>Here is a list of commands:</p><div class="ls-files">' + cmdslst + 
-                        '</div><p>If you\'d like to see the complete list, try out "<a onclick="triggerCommand(this.textContent);">help -all</a>"</p>');
+                        output('<p>Here is a list of commands:</p><div class="ls-files">' + cmdslst +
+                            '</div><p>If you\'d like to see the complete list, try out "<a onclick="triggerCommand(this.textContent);">help -all</a>"</p>');
                     }
                     break;
+                case 'ping':
                 case 'ifconfig':
-                    $.getJSON('https://json.geoiplookup.io/', function (data) {
-                        delete data.premium;
-                        delete data.success;
-                        delete data.cached;
-                        output(JSON.stringify(data).slice(1, -1).replace(/,"/g, '<br>"').replace(/"/g, ' '));
+                    output_.insertAdjacentHTML('beforeEnd', `<div id="loading${history_.length}" style="width:90%;margin-left:40px;"></div>`);
+                    var typed = new Typed(`#loading${history_.length}`, {
+                        strings: ['ping ... ping?^300', 'ping ... pang?^300', 'ping ... pong?^300', 'ping ... ^300pung!^700'],
+                        typeSpeed: 50,
+                        showCursor: false,
+                        backSpeed: 50,
+                        onComplete: () => {
+                            delete ipinfo.success;
+                            $(`#loading${history_.length}`).html(JSON.stringify(ipinfo).slice(1, -1).replace(/,"/g, '<br>"').replace(/"/g, ' '));
+                            window.scrollTo(0, getDocHeight_());
+                        }
                     });
                     break;
                 case 'portfolio':
@@ -377,7 +387,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 case 'su':
                     var root = 'root';
                     if (args[0]) root = args[0];
-                    $('#input-line .prompt').html(`[${root}@brianfu.me] > `);
+                    $('#input-line .prompt').html(`[<span class="user">${root}</span>@brianfu.me] > `);
                     break;
                 case 'vim':
                     output(`try > <a onclick="triggerCommand(this.textContent);">emacs</a> instead`);
@@ -408,8 +418,9 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         case 'portfolio':
                             output('usage: <br> > portfolio <br> shows my portfolio.');
                             break;
+                        case 'ping':
                         case 'ifconfig':
-                            output(`usage: <br> > ifconfig <br> displays the user's ip information`);
+                            output(`usage: <br> > ${args[0]} <br> displays the user's ip information`);
                             break;
                         case 'resume':
                             output('usage: <br> > resume <br> Opens my resume in a new tab.');
@@ -482,28 +493,18 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     return {
         init: function () {
             document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Enter "<a onclick="triggerCommand(this.textContent);">help</a>" for more information.</p>');
-            triggerCommand('about');
+            // setTimeout(() => {triggerCommand('about')}, 400);
+            triggerCommand('about')
+            
         },
         output: output
     }
 };
 
-$(function () {
-
-    // Set the command-line prompt to include the user's IP Address
-    //$('.prompt').html('[' + codehelper_ip["IP"] + '@HTML5] # ');
-    $('.prompt').html(`[user@brianfu.me] > `);
-
-    // Initialize a new terminal object
-    term = new Terminal('#input-line .cmdline', '#container output');
-    term.init();
-
-});
-
 function triggerCommand(command) {
     var typed = new Typed("#input-line .cmdline", {
         strings: [command],
-        typeSpeed: 100
+        typeSpeed: 75
     });
     setTimeout(function () {
         var el = document.querySelector("#input-line .cmdline");
@@ -515,5 +516,21 @@ function triggerCommand(command) {
         eventObj.keyCode = 13;
         eventObj.which = 13;
         el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent("onkeydown", eventObj);
-    }, command.length * 200);
+    }, command.length * 150);
 }
+
+$(function () {
+
+    $.getJSON('https://json.geoiplookup.io/', function (data) {
+        delete data.premium;
+        delete data.cached;
+        ipinfo = data;
+        $('.prompt').html(`[<span class="user">${ipinfo.ip}</span>@brianfu.me] > `);
+    });
+    // Set the command-line prompt to include the user's IP Address
+    $('.prompt').html(`[<span class="user">user</span>@brianfu.me] > `);
+
+    // Initialize a new terminal object
+    term = new Terminal('#input-line .cmdline', '#container output');
+    term.init();
+});
