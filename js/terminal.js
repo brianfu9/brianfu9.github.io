@@ -516,7 +516,7 @@ function triggerCommand(command) {
         eventObj.keyCode = 13;
         eventObj.which = 13;
         el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent("onkeydown", eventObj);
-    }, command.length * 150);
+    }, command.length * 155);
 }
 
 $(function () {
