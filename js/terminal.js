@@ -503,22 +503,10 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     }
 };
 
-$(function () {
-
-    // Set the command-line prompt to include the user's IP Address
-    //$('.prompt').html('[' + codehelper_ip["IP"] + '@HTML5] # ');
-    $('.prompt').html(`[user@brianfu.me] > `);
-
-    // Initialize a new terminal object
-    term = new Terminal('#input-line .cmdline', '#container output');
-    term.init();
-
-});
-
 function triggerCommand(command) {
     var typed = new Typed("#input-line .cmdline", {
         strings: [command],
-        typeSpeed: 100
+        typeSpeed: 75
     });
     setTimeout(function () {
         var el = document.querySelector("#input-line .cmdline");
@@ -530,5 +518,17 @@ function triggerCommand(command) {
         eventObj.keyCode = 13;
         eventObj.which = 13;
         el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent("onkeydown", eventObj);
-    }, command.length * 200);
+    }, command.length * 150);
 }
+
+$(function () {
+
+    // Set the command-line prompt to include the user's IP Address
+    //$('.prompt').html('[' + codehelper_ip["IP"] + '@HTML5] # ');
+    $('.prompt').html(`[user@brianfu.me] > `);
+
+    // Initialize a new terminal object
+    term = new Terminal('#input-line .cmdline', '#container output');
+    term.init();
+
+});
