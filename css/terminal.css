@@ -26,10 +26,10 @@
     background-color: transparent;
     text-decoration: none;
   }
-  a:not([href]):not([tabindex]) {
+  a:not([href]) {
     color: #b58900;
   }
-  a:not([href]):not([tabindex]):hover{
+  a:not([href]):hover{
     color: #b58900;
     background-color: transparent;
     cursor: pointer;
