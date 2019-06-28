@@ -33,7 +33,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     ];
 
     const CMDS_ADVANCED = [
-        'cd', 'date', 'dir', 'echo', 'emacs', 'ifconfig', 'ls', 'man', 'su', 'vim'
+        'cd', 'date', 'dir', 'echo', 'emacs', 'ifconfig', 'ls', 'man', 'ping', 'su', 'vim'
     ];
 
     var cmds_to_trie = [];
@@ -111,6 +111,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
         } else if (e.keyCode == 13) { // enter
             // Save shell history.
+            e.preventDefault();
             if (this.value) {
                 history_[history_.length] = this.value;
                 histpos_ = history_.length;
@@ -189,12 +190,25 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         '</div><p>If you\'d like to see the complete list, try out "<a onclick="triggerCommand(this.textContent);">help -all</a>"</p>');
                     }
                     break;
+                case 'ping':
                 case 'ifconfig':
+                    output_.insertAdjacentHTML('beforeEnd', `<div id="loading${history_.length}" style="width:90%;margin-left:40px;"></div>`);
+                    var ipinfo;
+                    var typed = new Typed(`#loading${history_.length}`, {
+                        strings: ['ping ... ping?^300', 'ping ... pang?^300', 'ping ... pong?^300', 'ping ... ^300pung!^700'],
+                        typeSpeed: 50,
+                        showCursor: false,
+                        backSpeed: 50,
+                        onComplete: ()=>{
+                            $(`#loading${history_.length}`).html(ipinfo);
+                            window.scrollTo(0, getDocHeight_());
+                        }
+                    });
                     $.getJSON('https://json.geoiplookup.io/', function (data) {
                         delete data.premium;
                         delete data.success;
                         delete data.cached;
-                        output(JSON.stringify(data).slice(1, -1).replace(/,"/g, '<br>"').replace(/"/g, ' '));
+                        ipinfo = JSON.stringify(data).slice(1, -1).replace(/,"/g, '<br>"').replace(/"/g, ' ');
                     });
                     break;
                 case 'portfolio':
@@ -408,8 +422,9 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         case 'portfolio':
                             output('usage: <br> > portfolio <br> shows my portfolio.');
                             break;
+                        case 'ping':
                         case 'ifconfig':
-                            output(`usage: <br> > ifconfig <br> displays the user's ip information`);
+                            output(`usage: <br> > ${args[0]} <br> displays the user's ip information`);
                             break;
                         case 'resume':
                             output('usage: <br> > resume <br> Opens my resume in a new tab.');
