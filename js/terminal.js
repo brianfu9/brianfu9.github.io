@@ -144,12 +144,13 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         `<p>Hello there, welcome to my terminal! 
                         You may have seen one before in a 90's hacker movie with green scrolling text and lots of progress bars. 
                         Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
-                        Feel free to hack around or take a look at my <a onclick="triggerCommand(this.textContent);">portfolio</a>. 
-                        If you're looking for somewhere to start, click <a onclick="triggerCommand(this.textContent);">help</a>.</p> 
+                        Feel free to hack around or take a look at my <a onclick="term.triggerCommand(this.textContent);">portfolio</a>. 
+                        If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">help</a>.</p> 
                         <p>I'm Brian Fu, a third year Computer Science student at the University of California, Berkeley. Go Bears!</p>
-                        <p>I grew up in the sunny suburbia of Orange County but have always wanted to visit ${ipinfo.city}. My hobbies include attending hackathons and listening to music. 
+                        <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.city : 'spend most of my time in the Bay Area'}. 
+                        My hobbies include attending hackathons and listening to music. 
                         I am a classical pianist of 13 years but dream of improv jazz riffs and anime ost's. 
-                        If you've got any music, food or life recommendations, shoot me a message at <a onclick="triggerCommand(this.textContent);">contact</a>.</p>`
+                        If you've got any music, food or life recommendations, shoot me a message at <a onclick="term.triggerCommand(this.textContent);">contact</a>.</p>`
                     );
                     break;
                 case 'clear':
@@ -180,23 +181,23 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 case 'ls':
                 case 'dir':
                 case 'help':
-                    var cmdslst = '<a onclick="triggerCommand(this.textContent);">' + CMDS_.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
+                    var cmdslst = '<a onclick="term.triggerCommand(this.textContent);">' + CMDS_.join('</a><br><a onclick="term.triggerCommand(this.textContent);">') + '</a>';
                     if (args[0] && args[0].toLowerCase() == '-all') {
                         cmdslst += '</div><br><p>many secret. much hidden. wow:</p><div class="ls-files">' +
-                            '<a onclick="triggerCommand(this.textContent);">' +
-                            CMDS_ADVANCED.join('</a><br><a onclick="triggerCommand(this.textContent);">') + '</a>';
-                        output(`<p>Wow you\'re an advanced user! If you want to learn what each command does, use <a onclick="triggerCommand(this.textContent);">man</a> followed by a command.</p>
+                            '<a onclick="term.triggerCommand(this.textContent);">' +
+                            CMDS_ADVANCED.join('</a><br><a onclick="term.triggerCommand(this.textContent);">') + '</a>';
+                        output(`<p>Wow you\'re an advanced user! If you want to learn what each command does, use <a onclick="term.triggerCommand(this.textContent);">man</a> followed by a command.</p>
                         <div class="ls-files">` + cmdslst + '</div>');
                     } else {
                         output('<p>Here is a list of commands:</p><div class="ls-files">' + cmdslst +
-                            '</div><p>If you\'d like to see the complete list, try out "<a onclick="triggerCommand(this.textContent);">help -all</a>"</p>');
+                            '</div><p>If you\'d like to see the complete list, try out "<a onclick="term.triggerCommand(this.textContent);">help -all</a>"</p>');
                     }
                     break;
                 case 'ping':
                 case 'ifconfig':
                     output_.insertAdjacentHTML('beforeEnd', `<div id="loading${history_.length}" style="width:90%;margin-left:40px;"></div>`);
                     var typed = new Typed(`#loading${history_.length}`, {
-                        strings: ['ping ... ping?^300', 'ping ... pang?^300', 'ping ... pong?^300', 'ping ... ^300pung!^700'],
+                        strings: ['ping ... ping?^300', 'ping ... pong?^300', 'ping ... ^300pung!^700'],
                         typeSpeed: 50,
                         showCursor: false,
                         backSpeed: 50,
@@ -210,7 +211,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 case 'portfolio':
                     output_.insertAdjacentHTML('beforeEnd',
                         `<div class="projects-card">
-                        <div class="row" style="align-content: center;">
+                        <div class="row">
                             <div class="col-sm-">
                                 <figure class="tile">
                                     <img src="images/map.png" width="310" height="394" alt="GCWeb" />
@@ -371,8 +372,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             </div>
                         </div>
                     </div>`);
-                    output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="triggerCommand(this.textContent);">github</a>! 
-                    p.s. please help me get rid of the space on the right of the portfolio. css is going to be the end of me.`)
+                    output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
                     break;
                 case 'resume':
                     window.open('documents/BrianFu_resume-color.pdf', '_blank');
@@ -390,10 +390,10 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     $('#input-line .prompt').html(`[<span class="user">${root}</span>@brianfu.me] > `);
                     break;
                 case 'vim':
-                    output(`try > <a onclick="triggerCommand(this.textContent);">emacs</a> instead`);
+                    output(`try > <a onclick="term.triggerCommand(this.textContent);">emacs</a> instead`);
                     break;
                 case 'emacs':
-                    output(`try > <a onclick="triggerCommand(this.textContent);">vim</a> instead`);
+                    output(`try > <a onclick="term.triggerCommand(this.textContent);">vim</a> instead`);
                     break;
                 case 'man':
                     switch (args[0]) {
@@ -454,7 +454,30 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             }
             window.scrollTo(0, getDocHeight_());
             this.value = ''; // Clear/setup line for next input.
+            console.log(`${history_.length} > executed [${cmd}]`);
         }
+    }
+
+    function triggerCommand(command) {
+        var typed = new Typed("#input-line .cmdline", {
+            strings: [command],
+            typeSpeed: 75,
+            onDestroy: () => {
+                var el = document.querySelector("#input-line .cmdline");
+                el.value = command;
+                var eventObj = document.createEventObject ?
+                    document.createEventObject() : document.createEvent("Events");
+                if (eventObj.initEvent) {
+                    eventObj.initEvent("keydown", true, true);
+                }
+                eventObj.keyCode = 13;
+                eventObj.which = 13;
+                el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent("onkeydown", eventObj);
+            }
+        });
+        setTimeout(function () {
+            typed.destroy();
+        }, command.length * 150);
     }
 
     function formatColumns_(entries) {
@@ -492,32 +515,15 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
     return {
         init: function () {
-            document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Enter "<a onclick="triggerCommand(this.textContent);">help</a>" for more information.</p>');
-            // setTimeout(() => {triggerCommand('about')}, 400);
-            triggerCommand('about')
+            document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Enter "<a onclick="term.triggerCommand(this.textContent);">help</a>" for more information.</p>');
+            // setTimeout(() => {term.triggerCommand('about')}, 400);
+            term.triggerCommand('about')
             
         },
+        triggerCommand: triggerCommand,
         output: output
     }
 };
-
-function triggerCommand(command) {
-    var typed = new Typed("#input-line .cmdline", {
-        strings: [command],
-        typeSpeed: 75
-    });
-    setTimeout(function () {
-        var el = document.querySelector("#input-line .cmdline");
-        var eventObj = document.createEventObject ?
-            document.createEventObject() : document.createEvent("Events");
-        if (eventObj.initEvent) {
-            eventObj.initEvent("keydown", true, true);
-        }
-        eventObj.keyCode = 13;
-        eventObj.which = 13;
-        el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent("onkeydown", eventObj);
-    }, command.length * 150);
-}
 
 $(function () {
 
@@ -525,7 +531,7 @@ $(function () {
         delete data.premium;
         delete data.cached;
         ipinfo = data;
-        $('.prompt').html(`[<span class="user">${ipinfo.ip}</span>@brianfu.me] > `);
+        $('.prompt').html(`[<span class="user">${ipinfo.ip.length < 16 ? ipinfo.ip : 'user'}</span>@brianfu.me] > `);
     });
     // Set the command-line prompt to include the user's IP Address
     $('.prompt').html(`[<span class="user">user</span>@brianfu.me] > `);

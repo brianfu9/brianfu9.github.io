@@ -35,7 +35,7 @@
     cursor: pointer;
   }
   #container {
-    padding: 1.5em 1.5em 5em 5em;
+    padding: 2% 2% 10% 10%;
   }
   #container output {
     clear: both;
@@ -49,9 +49,9 @@
   }
   .projects-card {
     margin: 10px 40px 10px 10px;
-    width:fit-content;
+    width:100%;
     background-color:#eee8d5;
-    padding:20px 30px 20px 30px;
+    padding:30px 30px 30px 30px;
     border-radius:5%;
   }
   .user {
