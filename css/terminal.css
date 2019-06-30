@@ -49,10 +49,11 @@
   }
   .projects-card {
     margin: 10px 10% 10px 10px;
-    width:100%;
+    width: 100%;
     background-color:#eee8d5;
-    padding:30px 30px 30px 30px;
-    border-radius:5%;
+    padding:15px 15px 15px 0px;
+    border-radius:15px;
+    overflow-x: auto;
   }
   .user {
     color: #6c71c4;
