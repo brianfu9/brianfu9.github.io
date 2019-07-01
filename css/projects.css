@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,800');
 @import url('https://fonts.googleapis.com/css?family=Courgette');
-
 body {
   background-color: #ffffff;
   padding: 0px;
@@ -22,8 +21,8 @@ body {
 }
 
 .inner {
-  width: fit-content; 
-  margin:auto;
+  width: fit-content;
+  margin: auto;
 }
 
 h1 {
@@ -41,14 +40,14 @@ h3 {
   margin-left: 15px;
   margin-right: 0px;
   flex-wrap: nowrap;
-  float:left;
+  float: left;
 }
 
 .bio {
-  padding:8px;
+  padding: 8px;
   padding-bottom: 0;
-  margin-top:30px;
-  margin-bottom:50px;
+  margin-top: 30px;
+  margin-bottom: 50px;
 }
 
 .tile {
@@ -59,7 +58,7 @@ h3 {
   font-size: 16px;
   line-height: 1.6em;
   margin: 5px;
-  width:310px;
+  width: 310px;
   overflow: hidden;
   position: relative;
   text-align: left;
@@ -120,8 +119,7 @@ h3 {
   padding: 1px;
 }
 
-.tile h3, 
-.tile p {
+.tile h3, .tile p {
   margin: 0;
   padding: 0;
   margin-bottom: 4px;
@@ -173,26 +171,26 @@ h3 {
   margin-left: 6px;
 }
 
-@media (min-width: 310px){
+@media (min-width: 310px) {
   .container {
-      max-width: 310px;
+    max-width: 310px;
   }
 }
 
-@media (min-width: 576px){
+@media (min-width: 576px) {
   .container {
-      max-width: 340px;
+    max-width: 340px;
   }
 }
 
-@media (min-width: 768px){
+@media (min-width: 768px) {
   .container {
-      max-width: 650px;
+    max-width: 650px;
   }
 }
 
-@media (min-width: 1200px){
+@media (min-width: 1200px) {
   .container {
-      max-width: 960px;
+    max-width: 960px;
   }
 }

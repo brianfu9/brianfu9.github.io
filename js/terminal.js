@@ -1,10 +1,9 @@
 /*!
- *   "Forked" from:
+ *   modified from:
  *      HTML5 Web Terminal
  *      Author: Andrew M Barfield
  *      Url: https://codepen.io/AndrewBarfield/pen/LEbPJx.js
  *      License(s): MIT
- * 
  */
 
 var term;
@@ -53,9 +52,9 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var histpos_ = 0;
     var histtemp_ = 0;
 
-    window.addEventListener('click', function (e) {
-        cmdLine_.focus();
-    }, false);
+    // window.addEventListener('click', function (e) {
+    //     cmdLine_.focus();
+    // }, false);
 
     cmdLine_.addEventListener('click', inputTextClick_, false);
     cmdLine_.addEventListener('keydown', historyHandler_, true);
@@ -163,7 +162,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         <ul>
                             <li>Snapchat: brian.fu</li>
                             <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu-449881128/" target="_blank">https://www.linkedin.com/in/brian-fu-449881128/</a></li>
-                            <li>Email: <a id="email${history_.length}" tabindex="0" title="copy to clipboard"
+                            <li>Email: <a id="email${history_.length}" tabindex="0"
                                 onclick="copyToClipboard(\'brianfu9@gmail.com\');
                                 $('#email${history_.length}').popover('show');
                                 setTimeout(function(){ $('#email${history_.length}').popover('hide'); }, 1500);" 
@@ -213,8 +212,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
                     break;
                 case 'resume':
-                    window.open('documents/BrianFu_resume-color.pdf', '_blank');
-                    output(`<p><a href="documents/BrianFu_resume-color.pdf" target="_blank">Resumé</a><p>`);
+                    window.open('assets/documents/BrianFu_resume-color.pdf', '_blank');
+                    output(`<p><a href="assets/documents/BrianFu_resume-color.pdf" target="_blank">Resumé</a><p>`);
                     break;
                 case 'date':
                     output(new Date());
