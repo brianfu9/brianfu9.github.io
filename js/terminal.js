@@ -139,18 +139,27 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             }
             switch (cmd) {
                 case 'about':
-                    output(
-                        `<p>Hello there, welcome to my terminal! 
-                        You may have seen one before in a 90's hacker movie with green scrolling text and lots of progress bars. 
-                        Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
-                        Feel free to hack around or take a look at my <a onclick="term.triggerCommand(this.textContent);">portfolio</a>. 
-                        If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">help</a>.</p> 
-                        <p>I'm Brian Fu, a third year Computer Science student at the University of California, Berkeley. Go Bears!</p>
-                        <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.city : 'spend most of my time in the Bay Area'}. 
-                        My hobbies include attending hackathons and listening to music. 
-                        I am a classical pianist of 13 years but dream of improv jazz riffs and anime ost's. 
-                        If you've got any music, food or travel recommendations, please shoot me a message at <a onclick="term.triggerCommand(this.textContent);">contact</a>!</p>`
-                    );
+                    if (args[0] == '-t' || args[0] == '-terminal') {
+                        output(
+                            `<p>So, you're interested in learing more about this website! 
+                            brianfu.me is hosted as a static page on Github Pages so every terminal command is executed as a browser-side script. 
+                            This includes each implemented command, the up and down arrow keys to navigate the commands history, tab for autocompletion and the animated typing sequence. 
+                            Since there isn't a backend server to do the heavy lifting, many of these scripts are optimized for speed and efficency to improve browser performance.</p>`
+                        )
+                    } else {
+                        output(
+                            `<p>Hello there, welcome to my terminal! 
+                            You may have seen one before in a 90's hacker movie with green scrolling text and lots of progress bars. 
+                            Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
+                            Feel free to hack around or take a look at my <a onclick="term.triggerCommand(this.textContent);">portfolio</a>. 
+                            If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">help</a>.</p> 
+                            <p>I'm Brian Fu, a third year Computer Science student at the University of California, Berkeley. Go Bears!</p>
+                            <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.city : 'spend most of my time in the Bay Area'}. 
+                            My hobbies include attending hackathons and listening to music. 
+                            I am a classical pianist of 13 years but dream of improv jazz riffs and anime ost's. 
+                            If you've got any music, food or travel recommendations, please shoot me a message at <a onclick="term.triggerCommand(this.textContent);">contact</a>!</p>`
+                        );
+                    }
                     break;
                 case 'clear':
                     output_.innerHTML = '';
@@ -236,7 +245,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     switch (args[0]) {
                         // 'about', 'clear', 'contact', 'github', 'help', 'portfolio', 'resume', 'date', 'echo', 'man', 'su', 'cd'
                         case 'about':
-                            output('usage: <br> > about <br> displays the about me introduction message.');
+                            output('usage: <br> > about <br> displays the about me introduction message. <br> > about -terminal <br> displays information about how the terminal works.');
                             break;
                         case 'clear':
                             output('usage: <br> > clear <br> clears the terminal.');
@@ -250,7 +259,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         case 'ls':
                         case 'dir':
                         case 'help':
-                            output(`usage: <br> > ${args[0]} <br> > ${args[0]} -all <br> shows a list of commands`);
+                            output(`usage: <br> > ${args[0]} <br> shows a list of simple commands <br> > ${args[0]} -all <br> shows a list of all commands`);
                             break;
                         case 'portfolio':
                             output('usage: <br> > portfolio <br> shows my portfolio.');
