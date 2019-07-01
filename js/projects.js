@@ -53,7 +53,7 @@ const projectsHtmlString =
         <div class="row" id="projects-content">
             <div class="col-sm-">
                 <figure class="tile">
-                    <img src="images/map.png" width="310" height="394" alt="GCWeb" />
+                    <img src="assets/images/map.png" width="310" height="394" alt="GCWeb" />
                     <div class="date"><span class="year">2019</span><span class="month">May</span></div>
                     <figcaption>
                         <h3>Man Maps</h3>
@@ -75,7 +75,7 @@ const projectsHtmlString =
             </div>
             <div class="col-sm-">
                 <figure class="tile">
-                    <img src="images/gcweb.png" width="310" height="394" alt="GCWeb" />
+                    <img src="assets/images/gcweb.png" width="310" height="394" alt="GCWeb" />
                     <div class="date"><span class="year">2018</span><span class="year">2019</span></div>
                     <figcaption>
                         <h3>Gamesman Web</h3>
@@ -96,7 +96,7 @@ const projectsHtmlString =
             </div>
             <div class="col-sm-">
                 <figure class="tile">
-                    <img src="images/slowly.png" width="310" height="394" alt="$lowly" />
+                    <img src="assets/images/slowly.png" width="310" height="394" alt="$lowly" />
                     <div class="date"><span class="year">2019</span><span class="month">Mar</span></div>
                     <figcaption>
                         <h3>$lowly</h3>
@@ -119,7 +119,7 @@ const projectsHtmlString =
             </div>
             <div class="col-sm-">
                 <figure class="tile">
-                    <img src="images/lifework.png" width="310" height="394" alt="LifeworkOnline" />
+                    <img src="assets/images/lifework.png" width="310" height="394" alt="LifeworkOnline" />
                     <div class="date"><span class="year">2019</span><span class="month">Mar</span></div>
                     <figcaption>
                         <h3>Lifework Online</h3>
@@ -141,7 +141,7 @@ const projectsHtmlString =
             </div>
             <div class="col-sm-">
                 <figure class="tile">
-                    <img src="images/bear.png" width="310" height="394" alt="Bear Faced" />
+                    <img src="assets/images/bear.png" width="310" height="394" alt="Bear Faced" />
                     <div class="date"><span class="year">2018</span><span class="month">Nov</span></div>
                     <figcaption>
                         <h3>Bear Faced</h3>
@@ -164,7 +164,7 @@ const projectsHtmlString =
                 </div>
             </div>
             <div class="col-sm-">
-                <figure class="tile"><img src="images/isho.png" width="310" height="394" alt="iSho" />
+                <figure class="tile"><img src="assets/images/isho.png" width="310" height="394" alt="iSho" />
                     <div class="date"><span class="year">2018</span><span class="month">Sep</span></div>
                     <figcaption>
                         <h3>iSho</h3>
@@ -184,7 +184,7 @@ const projectsHtmlString =
                 </div>
             </div>
             <div class="col-sm-">
-                <figure class="tile"><img src="images/briefly.jpg" width="310" height="394" alt="Briefly" />
+                <figure class="tile"><img src="assets/images/briefly.jpg" width="310" height="394" alt="Briefly" />
                     <div class="date"><span class="year">2018</span><span class="month">Sep</span></div>
                     <figcaption>
                         <h3>Briefly</h3>
@@ -204,7 +204,7 @@ const projectsHtmlString =
                 </div>
             </div>
             <div class="col-sm-">
-                <figure class="tile"><img src="images/calamp.jpg" width="310" height="394" alt="CalAmp" />
+                <figure class="tile"><img src="assets/images/calamp.jpg" width="310" height="394" alt="CalAmp" />
                     <div class="date"><span class="year">2018</span><span class="other">SUMMER</span></div>
                     <figcaption>
                         <h3>Software Engineering Internship</h3>
@@ -223,7 +223,7 @@ const projectsHtmlString =
             </div>
             <div class="col-sm-">
                 <figure class="tile">
-                    <img src="images/bibo.png" width="310" height="394" alt="BiBo" />
+                    <img src="assets/images/bibo.png" width="310" height="394" alt="BiBo" />
                     <div class="date"><span class="year">2018</span><span class="month">Apr</span></div>
                     <figcaption>
                         <h3>BiBo</h3>
