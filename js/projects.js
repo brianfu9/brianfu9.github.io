@@ -1,6 +1,7 @@
 var Projects = Projects || function (output_) {
 
     output_.insertAdjacentHTML('beforeEnd', projectsHtmlString);
+    buttonify();
 
     // ~~~~~ scrolling implementation ~~~~~
     // var nav = document.getElementById('projects-card');
@@ -67,6 +68,10 @@ const projectsHtmlString =
                     </figcaption>
                     <a href="https://github.com/brianfu9/manmaps/releases" target="_blank"></a>
                 </figure>
+                <div class="github-button-div">
+                    <a class="github-button" href="https://github.com/brianfu9/manmaps"
+                        data-size="large">Man Maps</a>
+                </div>
             </div>
             <div class="col-sm-">
                 <figure class="tile">
@@ -84,6 +89,10 @@ const projectsHtmlString =
                     </figcaption>
                     <a href="http://gamescrafters.berkeley.edu/" target="_blank"></a>
                 </figure>
+                <div class="github-button-div">
+                    <a class="github-button" href="https://github.com/GamesCrafters"
+                        data-size="large">Gamescrafters</a>
+                </div>
             </div>
             <div class="col-sm-">
                 <figure class="tile">
@@ -103,6 +112,10 @@ const projectsHtmlString =
                     </figcaption>
                     <a href="https://devpost.com/software/lowly" target="_blank"></a>
                 </figure>
+                <div class="github-button-div">
+                    <a class="github-button" href="https://github.com/brianfu9/pastapasta"
+                        data-size="large">Slowly</a>
+                </div>
             </div>
             <div class="col-sm-">
                 <figure class="tile">
@@ -121,6 +134,10 @@ const projectsHtmlString =
                     </figcaption>
                     <a href="https://www.lifeworkonline.com/" target="_blank"></a>
                 </figure>
+                <div class="github-button-div">
+                    <a class="github-button" href="https://github.com/brianfu9/lifework"
+                        data-size="large">Lifework</a>
+                </div>
             </div>
             <div class="col-sm-">
                 <figure class="tile">
@@ -141,6 +158,10 @@ const projectsHtmlString =
                     <a href="https://calhacks5.hackerearth.com/sprints/cal-hacks-50/dashboard/96567fd/submission/"
                         target="_blank"></a>
                 </figure>
+                <div class="github-button-div">
+                    <a class="github-button" href="https://github.com/brianfu9/refrigerator"
+                        data-size="large">Bear Faced</a>
+                </div>
             </div>
             <div class="col-sm-">
                 <figure class="tile"><img src="images/isho.png" width="310" height="394" alt="iSho" />
@@ -157,6 +178,10 @@ const projectsHtmlString =
                     </figcaption>
                     <a href="https://devpost.com/software/isho-2mv59n" target="_blank"></a>
                 </figure>
+                <div class="github-button-div">
+                    <a class="github-button" href="https://github.com/magittan/iSho"
+                        data-size="large">iSho</a>
+                </div>
             </div>
             <div class="col-sm-">
                 <figure class="tile"><img src="images/briefly.jpg" width="310" height="394" alt="Briefly" />
@@ -173,6 +198,10 @@ const projectsHtmlString =
                     </figcaption>
                     <a href="https://devpost.com/software/briefly-wpbi0u" target="_blank"></a>
                 </figure>
+                <div class="github-button-div">
+                    <a class="github-button" href="https://github.com/joeb15/mithacks2018"
+                        data-size="large">Briefly</a>
+                </div>
             </div>
             <div class="col-sm-">
                 <figure class="tile"><img src="images/calamp.jpg" width="310" height="394" alt="CalAmp" />
@@ -207,6 +236,10 @@ const projectsHtmlString =
                     </figcaption>
                     <a href="https://devpost.com/software/bibo" target="_blank"></a>
                 </figure>
+                <div class="github-button-div">
+                    <a class="github-button" href="https://github.com/DanielTatarkin/BiBo2/tree/Janky"
+                        data-size="large">BiBo</a>
+                </div>
             </div>
-        </div>  
+        </div>
     </div>`;
