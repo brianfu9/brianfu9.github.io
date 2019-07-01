@@ -1,112 +1,146 @@
+/* general */
+
 ::selection {
-    background: #d33682;
-  }
-  html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-  }
-  body {
-    font-size: 14pt;
-    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
-    color: #93a1a1;
-    background-color: #002b36	;
-  }
-  p {
-    color: #93a1a1;
-  }
-  pre {
-    color: #eee8d5;
-  }
-  a {
-    text-decoration: none;
-    color: #268bd2;
-  }
-  a:hover {
-    background-color: transparent;
-    text-decoration: none;
-  }
-  a:not([href]):not([tabindex]) {
-    color: #b58900;
-  }
-  a:not([href]):not([tabindex]):hover{
-    color: #b58900;
-    background-color: transparent;
-    cursor: pointer;
-  }
-  #container {
-    padding: 2% 2% 8% 8%;
-  }
-  #container output {
-    clear: both;
-    width: 100%;
-  }
-  #container output h3 {
-    margin: 0;
-  }
-  #container output pre {
-    margin: 0;
-  }
-  .projects-card {
-    margin: 10px 10% 10px 10px;
-    width: 100%;
-    background-color:#eee8d5;
-    padding:15px 15px 15px 0px;
-    border-radius:15px;
-    overflow-x: auto;
-  }
-  .user {
-    color: #6c71c4;
-  }
-  .input-line {
-    display: -webkit-box;
-    -webkit-box-orient: horizontal;
-    -webkit-box-align: stretch;
-    display: -moz-box;
-    -moz-box-orient: horizontal;
-    -moz-box-align: stretch;
-    display: box;
-    box-orient: horizontal;
-    box-align: stretch;
-    clear: both;
-  }
-  .input-line > div:nth-child(2) {
-    -webkit-box-flex: 1;
-    -moz-box-flex: 1;
-    box-flex: 1;
-  }
-  .prompt {
-    white-space: nowrap;
-    color: #6c71c4	;
-    margin-right: 7px;
-    display: -webkit-box;
-    -webkit-box-pack: center;
-    -webkit-box-orient: vertical;
-    display: -moz-box;
-    -moz-box-pack: center;
-    -moz-box-orient: vertical;
-    display: box;
-    box-pack: center;
-    box-orient: vertical;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-  }
-  .cmdline {
-    outline: none;
-    background-color: transparent;
-    margin: 0;
-    width: 100%;
-    font: inherit;
-    border: none;
-    color: inherit;
-  }
-  .ls-files {
-    height: 70px;
-    line-height: 35px;
-    -webkit-column-width: 100px;
-    -moz-column-width: 100px;
-    -o-column-width: 100px;
-    column-width: 100px;
-    margin-bottom: 10px;
-  }
+  background: #d33682;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-size: 14pt;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  color: #93a1a1;
+  background-color: #002b36;
+}
+
+p {
+  color: #93a1a1;
+}
+
+pre {
+  color: #eee8d5;
+}
+
+a {
+  text-decoration: none;
+  color: #268bd2;
+}
+
+a:hover {
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:not([href]):not([tabindex]) {
+  color: #b58900;
+}
+
+a:not([href]):not([tabindex]):hover {
+  color: #b58900;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+/* top */
+
+.headshot {
+  width: 150;
+  height: 200;
+  padding: 0px 10px 20px 0px;
+  border-radius: 50px;
+}
+
+#container {
+  padding: 2% 2% 8% 8%;
+}
+
+#container output {
+  clear: both;
+  width: 100%;
+}
+
+#container output h3 {
+  margin: 0;
+}
+
+#container output pre {
+  margin: 0;
+}
+
+/* Command line */
+
+.input-line {
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  clear: both;
+}
+
+.input-line>div:nth-child(2) {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+}
+
+.user {
+  color: #6c71c4;
+}
+
+.prompt {
+  white-space: nowrap;
+  color: #6c71c4;
+  margin-right: 7px;
+  display: -webkit-box;
+  -webkit-box-pack: center;
+  -webkit-box-orient: vertical;
+  display: -moz-box;
+  -moz-box-pack: center;
+  -moz-box-orient: vertical;
+  display: box;
+  box-pack: center;
+  box-orient: vertical;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.cmdline {
+  outline: none;
+  background-color: transparent;
+  margin: 0;
+  width: 100%;
+  font: inherit;
+  border: none;
+  color: inherit;
+}
+
+/* Output */
+
+.ls-files {
+  height: 70px;
+  line-height: 35px;
+  -webkit-column-width: 100px;
+  -moz-column-width: 100px;
+  -o-column-width: 100px;
+  column-width: 100px;
+  margin-bottom: 10px;
+}
+
+.projects-card {
+  margin: 10px 10% 10px 10px;
+  width: 100%;
+  background-color: #eee8d5;
+  padding: 15px 15px 15px 0px;
+  border-radius: 15px;
+  overflow-x: auto;
+}
