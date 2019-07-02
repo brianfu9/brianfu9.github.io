@@ -305,6 +305,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     }
 
     function triggerCommand(command) {
+        cmdLine_.focus();
         var typed = new Typed("#input-line .cmdline", {
             strings: [command],
             typeSpeed: 75,
