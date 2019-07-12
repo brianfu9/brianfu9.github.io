@@ -169,7 +169,6 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     output(
                         `You can contact me here!
                         <ul>
-                            <li>Snapchat: brian.fu</li>
                             <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu-449881128/" target="_blank">https://www.linkedin.com/in/brian-fu-449881128/</a></li>
                             <li>Email: <a id="email${history_.length}" tabindex="0"
                                 onclick="copyToClipboard(\'brianfu9@gmail.com\');
