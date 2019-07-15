@@ -34,7 +34,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     ];
 
     const CMDS_ADVANCED = [
-        'cd', 'date', 'dir', 'echo', 'emacs', 'ifconfig', 'ls', 'man', 'ping', 'su', 'vim'
+        'date', 'echo', 'emacs', 'ifconfig', 'man', 'ping', 'su', 'vim'
     ];
 
     var cmds_to_trie = [];
@@ -187,6 +187,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     break;
                 case 'ls':
                 case 'dir':
+                case 'menu':
                 case 'help':
                     var cmdslst = '<a onclick="term.triggerCommand(this.textContent);">' + CMDS_.join('</a><br><a onclick="term.triggerCommand(this.textContent);">') + '</a>';
                     if (args[0] && args[0].toLowerCase() == '-all') {
@@ -257,6 +258,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             break;
                         case 'ls':
                         case 'dir':
+                        case 'menu':
                         case 'help':
                             output(`usage: <br> > ${args[0]} <br> shows a list of simple commands <br> > ${args[0]} -all <br> shows a list of all commands`);
                             break;
@@ -361,7 +363,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
     return {
         init: function (command) {
-            document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Enter "<a onclick="term.triggerCommand(this.textContent);">help</a>" for more information.</p>');
+            document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Click "<a onclick="term.triggerCommand(this.textContent);">about</a>" for more information or "<a onclick="term.triggerCommand(this.textContent);">menu</a>" for a list of commands.</p>');
             // setTimeout(() => {term.triggerCommand('about')}, 400);
             term.triggerCommand(command)
             
