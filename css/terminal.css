@@ -48,9 +48,9 @@ a:not([href]):not([tabindex]):hover {
 /* top */
 
 .headshot {
-  width: 150;
-  height: 200;
-  padding: 0px 10px 20px 0px;
+  width: 150px;
+  height: 200px;
+  margin: 0px 10px 20px 0px;
   border-radius: 50px;
 }
 
