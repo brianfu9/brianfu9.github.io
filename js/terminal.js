@@ -30,7 +30,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var output_ = document.querySelector(outputContainer);
 
     const CMDS_ = [
-        'about', 'clear', 'contact', 'github', 'help', 'portfolio', 'resume'
+        'about', 'clear', 'contact', 'github', 'menu', 'portfolio', 'resume'
     ];
 
     const CMDS_ADVANCED = [
@@ -152,7 +152,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             You may have seen one before in a 90's hacker movie with green scrolling text and lots of progress bars. 
                             Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
                             Feel free to hack around or take a look at my <a onclick="term.triggerCommand(this.textContent);">portfolio</a>. 
-                            If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">help</a>.</p> 
+                            If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">menu</a>.</p> 
                             <p>I'm Brian Fu, a third year Computer Science student at the University of California, Berkeley. Go Bears!</p>
                             <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.city : 'spend most of my time in the Bay Area'}. 
                             My hobbies include attending hackathons and listening to music. 
@@ -187,8 +187,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     break;
                 case 'ls':
                 case 'dir':
-                case 'menu':
                 case 'help':
+                case 'menu':
                     var cmdslst = '<a onclick="term.triggerCommand(this.textContent);">' + CMDS_.join('</a><br><a onclick="term.triggerCommand(this.textContent);">') + '</a>';
                     if (args[0] && args[0].toLowerCase() == '-all') {
                         cmdslst += '</div><br><p>many secret. much hidden. wow:</p><div class="ls-files">' +
@@ -198,7 +198,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         <div class="ls-files">` + cmdslst + '</div>');
                     } else {
                         output('<p>Here is a list of commands:</p><div class="ls-files">' + cmdslst +
-                            '</div><p>If you\'d like to see the complete list, try out "<a onclick="term.triggerCommand(this.textContent);">help -all</a>"</p>');
+                            '</div><p>If you\'d like to see the complete list, try out "<a onclick="term.triggerCommand(this.textContent);">menu -all</a>"</p>');
                     }
                     break;
                 case 'ping':
@@ -243,7 +243,6 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     break;
                 case 'man':
                     switch (args[0]) {
-                        // 'about', 'clear', 'contact', 'github', 'help', 'portfolio', 'resume', 'date', 'echo', 'man', 'su', 'cd'
                         case 'about':
                             output('usage: <br> > about <br> displays the about me introduction message. <br> > about -terminal <br> displays information about how the terminal works.');
                             break;
@@ -258,8 +257,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             break;
                         case 'ls':
                         case 'dir':
-                        case 'menu':
                         case 'help':
+                        case 'menu':
                             output(`usage: <br> > ${args[0]} <br> shows a list of simple commands <br> > ${args[0]} -all <br> shows a list of all commands`);
                             break;
                         case 'portfolio':
