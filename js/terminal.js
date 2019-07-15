@@ -169,7 +169,6 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     output(
                         `You can contact me here!
                         <ul>
-                            <li>Snapchat: brian.fu</li>
                             <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu-449881128/" target="_blank">https://www.linkedin.com/in/brian-fu-449881128/</a></li>
                             <li>Email: <a id="email${history_.length}" tabindex="0"
                                 onclick="copyToClipboard(\'brianfu9@gmail.com\');
@@ -361,10 +360,10 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     }
 
     return {
-        init: function () {
+        init: function (command) {
             document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Enter "<a onclick="term.triggerCommand(this.textContent);">help</a>" for more information.</p>');
             // setTimeout(() => {term.triggerCommand('about')}, 400);
-            term.triggerCommand('about')
+            term.triggerCommand(command)
             
         },
         triggerCommand: triggerCommand,
@@ -385,5 +384,9 @@ $(function () {
 
     // Initialize a new terminal object
     term = new Terminal('#input-line .cmdline', '#container output');
-    term.init();
+    if (window.location.hash) {
+        var command = window.location.hash;
+        term.init(command.slice(1));
+    } else term.init('about');
+    
 });
