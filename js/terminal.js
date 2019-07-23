@@ -30,7 +30,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var output_ = document.querySelector(outputContainer);
 
     const CMDS_ = [
-        'about', 'clear', 'contact', 'github', 'menu', 'portfolio', 'resume'
+        'about', 'bearfaced', 'clear', 'contact', 'github', 'menu', 'portfolio', 'resume'
     ];
 
     const CMDS_ADVANCED = [
@@ -38,8 +38,16 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     ];
 
     var cmds_to_trie = [];
-    CMDS_.forEach((a) => { cmds_to_trie.push({ cmd: a }) });
-    CMDS_ADVANCED.forEach((a) => { cmds_to_trie.push({ cmd: a }) });
+    CMDS_.forEach((a) => {
+        cmds_to_trie.push({
+            cmd: a
+        })
+    });
+    CMDS_ADVANCED.forEach((a) => {
+        cmds_to_trie.push({
+            cmd: a
+        })
+    });
 
     const trie = createTrie(cmds_to_trie, 'cmd');
 
@@ -160,6 +168,18 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             If you've got any music, food or travel recommendations, please shoot me a message at <a onclick="term.triggerCommand(this.textContent);">contact</a>!</p>`
                         );
                     }
+                    break;
+                case 'bearfaced':
+                    window.open('https://bearfaced.brianfu.me', '_blank');
+                    output(
+                        `<p><a href="https://bearfaced.brianfu.me" target="_blank">Bear Faced</a> 
+                        is the CalHacks 2018 project by Brian Fu and Bryant Bettencourt.
+                        <div class="github-button-div">
+                            <a class="github-button" href="https://github.com/brianfu9/refrigerator"
+                            data-size="large">Bear Faced</a>
+                        </div></p>`
+                    );
+                    buttonify();
                     break;
                 case 'clear':
                     output_.innerHTML = '';
@@ -342,7 +362,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
         var colWidth = maxName.length * 5;
 
         return ['<div class="ls-files" style="-webkit-column-width:',
-            colWidth, 'px;', height, '">'];
+            colWidth, 'px;', height, '">'
+        ];
     }
 
     //
@@ -365,7 +386,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Click "<a onclick="term.triggerCommand(this.textContent);">about</a>" for more information or "<a onclick="term.triggerCommand(this.textContent);">menu</a>" for a list of commands.</p>');
             // setTimeout(() => {term.triggerCommand('about')}, 400);
             term.triggerCommand(command)
-            
+
         },
         triggerCommand: triggerCommand,
         output: output
@@ -389,5 +410,5 @@ $(function () {
         var command = window.location.hash;
         term.init(command.slice(1));
     } else term.init('about');
-    
+
 });
