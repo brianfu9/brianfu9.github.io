@@ -195,7 +195,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                                 onclick="copyToClipboard(\'brianfu9@gmail.com\');
                                 $('#email${history_.length}').popover('show');
                                 setTimeout(function(){ $('#email${history_.length}').popover('hide'); }, 1500);" 
-                                data-container="body" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="coppied to clipboard">
+                                data-container="body" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="copied to clipboard">
                                 brianfu9@gmail.com</a></li>
                         </ul>
                         Email probably works best.`

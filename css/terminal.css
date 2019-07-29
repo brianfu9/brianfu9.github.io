@@ -27,12 +27,13 @@ pre {
 
 a {
   text-decoration: none;
-  color: #4183c4;
+  color: #42aaee;
 }
 
 a:hover {
   background-color: transparent;
   text-decoration: none;
+  color: #3b88bb;
 }
 
 a:not([href]):not([tabindex]) {
