@@ -30,7 +30,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var output_ = document.querySelector(outputContainer);
 
     const CMDS_ = [
-        'about', 'clear', 'contact', 'github', 'menu', 'portfolio', 'resume'
+        'about', 'bearfaced', 'clear', 'contact', 'github', 'menu', 'portfolio', 'resume'
     ];
 
     const CMDS_ADVANCED = [
@@ -38,8 +38,16 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     ];
 
     var cmds_to_trie = [];
-    CMDS_.forEach((a) => { cmds_to_trie.push({ cmd: a }) });
-    CMDS_ADVANCED.forEach((a) => { cmds_to_trie.push({ cmd: a }) });
+    CMDS_.forEach((a) => {
+        cmds_to_trie.push({
+            cmd: a
+        })
+    });
+    CMDS_ADVANCED.forEach((a) => {
+        cmds_to_trie.push({
+            cmd: a
+        })
+    });
 
     const trie = createTrie(cmds_to_trie, 'cmd');
 
@@ -154,12 +162,25 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             Feel free to hack around or take a look at my <a onclick="term.triggerCommand(this.textContent);">portfolio</a>. 
                             If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">menu</a>.</p> 
                             <p>I'm Brian Fu, a third year Computer Science student at the University of California, Berkeley. Go Bears!</p>
-                            <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.city : 'spend most of my time in the Bay Area'}. 
+                            <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.city + ' 😉': 'spend most of my time in the Bay Area'}. 
                             My hobbies include attending hackathons and listening to music. 
                             I am a classical pianist of 13 years but dream of improv jazz riffs and anime ost's. 
                             If you've got any music, food or travel recommendations, please shoot me a message at <a onclick="term.triggerCommand(this.textContent);">contact</a>!</p>`
                         );
                     }
+                    break;
+                case 'bearfaced':
+                    window.open('https://bearfaced.brianfu.me', '_blank');
+                    output(
+                        `<p>ʕ •ᴥ•ʔ</br>Bear Faced is the CalHacks 2018 project by Brian Fu and Bryant Bettencourt. 
+                        Uses facial and emotion detection to paste a picture of an emotive bear's face over the same emotion on your face. 
+                        Try it out <a href="https://bearfaced.brianfu.me" target="_blank">here</a> via repl.it! (may take a minute to load)
+                        <div class="github-button-div">
+                            <a class="github-button" href="https://github.com/brianfu9/refrigerator"
+                            data-size="large">Bear Faced</a>
+                        </div></p>`
+                    );
+                    buttonify();
                     break;
                 case 'clear':
                     output_.innerHTML = '';
@@ -174,7 +195,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                                 onclick="copyToClipboard(\'brianfu9@gmail.com\');
                                 $('#email${history_.length}').popover('show');
                                 setTimeout(function(){ $('#email${history_.length}').popover('hide'); }, 1500);" 
-                                data-container="body" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="coppied to clipboard">
+                                data-container="body" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="copied to clipboard">
                                 brianfu9@gmail.com</a></li>
                         </ul>
                         Email probably works best.`
@@ -216,6 +237,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         }
                     });
                     break;
+                case 'projects':
                 case 'portfolio':
                     proj = new Projects(output_);
                     output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
@@ -342,7 +364,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
         var colWidth = maxName.length * 5;
 
         return ['<div class="ls-files" style="-webkit-column-width:',
-            colWidth, 'px;', height, '">'];
+            colWidth, 'px;', height, '">'
+        ];
     }
 
     //
@@ -365,7 +388,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Click "<a onclick="term.triggerCommand(this.textContent);">about</a>" for more information or "<a onclick="term.triggerCommand(this.textContent);">menu</a>" for a list of commands.</p>');
             // setTimeout(() => {term.triggerCommand('about')}, 400);
             term.triggerCommand(command)
-            
+
         },
         triggerCommand: triggerCommand,
         output: output
@@ -389,5 +412,5 @@ $(function () {
         var command = window.location.hash;
         term.init(command.slice(1));
     } else term.init('about');
-    
+
 });
