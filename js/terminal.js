@@ -172,8 +172,9 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 case 'bearfaced':
                     window.open('https://bearfaced.brianfu.me', '_blank');
                     output(
-                        `<p><a href="https://bearfaced.brianfu.me" target="_blank">Bear Faced</a> 
-                        is the CalHacks 2018 project by Brian Fu and Bryant Bettencourt.
+                        `<p>ʕ •ᴥ•ʔ</br>Bear Faced is the CalHacks 2018 project by Brian Fu and Bryant Bettencourt. 
+                        Uses facial and emotion detection to paste a picture of an emotive bear's face over the same emotion on your face. 
+                        Try it out <a href="https://bearfaced.brianfu.me" target="_blank">here</a> via repl.it! (may take a minute to load)
                         <div class="github-button-div">
                             <a class="github-button" href="https://github.com/brianfu9/refrigerator"
                             data-size="large">Bear Faced</a>
@@ -236,6 +237,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         }
                     });
                     break;
+                case 'projects':
                 case 'portfolio':
                     proj = new Projects(output_);
                     output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
