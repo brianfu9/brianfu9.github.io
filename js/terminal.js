@@ -255,13 +255,20 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 case 'su':
                     var root = 'root';
                     if (args[0]) root = args[0];
-                    $('#input-line .prompt').html(`[<span class="user">${root}</span>@brianfu.me] > `);
+                    if (root.match(/[-[\]'"`{}()<>*+?.,\\^$|#\s]/g)) {
+                        output(`<p>HEY, STOP! DON'T DO THAT</p>`);
+                    } else {
+                        $('#input-line .prompt').html(`[<span class="user">${root}</span>@brianfu.me] > `);
+                    }
                     break;
                 case 'vim':
                     output(`try > <a onclick="term.triggerCommand(this.textContent);">emacs</a> instead`);
                     break;
                 case 'emacs':
                     output(`try > <a onclick="term.triggerCommand(this.textContent);">vim</a> instead`);
+                    break;
+                case 'sudo':
+                    output(`sudo: permission denied`);
                     break;
                 case 'man':
                     switch (args[0]) {
