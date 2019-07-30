@@ -255,7 +255,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 case 'su':
                     var root = 'root';
                     if (args[0]) root = args[0];
-                    if (root.match(/[-[\]'"`{}()<>*+?.,\\^$|#\s]/g)) {
+                    if (root.match(/[-[\]'"`{}()<>*+?%,\\^$|#\s]/g)) {
                         output(`<p>HEY, STOP! DON'T DO THAT</p>`);
                     } else {
                         $('#input-line .prompt').html(`[<span class="user">${root}</span>@brianfu.me] > `);
