@@ -135,6 +135,14 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             input.readOnly = true;
             output_.appendChild(line);
 
+            if (this.value.match(/['"`{}()<>*+?%,\\^$|#]/g)) {
+                output(`<p>THATS NOT SANITARY >:(</p>`);
+                window.scrollTo(0, getDocHeight_());
+                this.value = ''; // Clear/setup line for next input.
+                console.log(`${history_.length} : executed > [${cmd}]`);
+                return;
+            }
+
             if (this.value && this.value.trim()) {
                 var args = this.value.split(' ').filter(function (val, i) {
                     return val;
@@ -255,8 +263,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 case 'su':
                     var root = 'root';
                     if (args[0]) root = args[0];
-                    if (root.match(/[-[\]'"`{}()<>*+?%,\\^$|#\s]/g)) {
-                        output(`<p>HEY, STOP! DON'T DO THAT</p>`);
+                    if (root.match(/[-[\]'"`{}()<>*+?%,\\^$|#]/g)) {
+                        output(`<p>THATS NOT SANITARY >:(</p>`);
                     } else {
                         $('#input-line .prompt').html(`[<span class="user">${root}</span>@brianfu.me] > `);
                     }
