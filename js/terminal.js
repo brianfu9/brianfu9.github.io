@@ -121,6 +121,14 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
         } else if (e.keyCode == 13) { // enter
             // Save shell history.
             e.preventDefault();
+
+            if (this.value.match(/['"`{}()<>*+?%,\\^$|#]/g)) {
+                output(`<p>THATS NOT SANITARY >:(</p>`);
+                window.scrollTo(0, getDocHeight_());
+                this.value = ''; // Clear/setup line for next input.
+                return;
+            }
+
             if (this.value) {
                 history_[history_.length] = this.value;
                 histpos_ = history_.length;
@@ -134,14 +142,6 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             input.autofocus = false;
             input.readOnly = true;
             output_.appendChild(line);
-
-            if (this.value.match(/['"`{}()<>*+?%,\\^$|#]/g)) {
-                output(`<p>THATS NOT SANITARY >:(</p>`);
-                window.scrollTo(0, getDocHeight_());
-                this.value = ''; // Clear/setup line for next input.
-                console.log(`${history_.length} : executed > [${cmd}]`);
-                return;
-            }
 
             if (this.value && this.value.trim()) {
                 var args = this.value.split(' ').filter(function (val, i) {
@@ -337,7 +337,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             }
             window.scrollTo(0, getDocHeight_());
             this.value = ''; // Clear/setup line for next input.
-            console.log(`${history_.length} : executed > [${cmd}]`);
+            console.log(`${history_.length} : executed > [${history_[history_.length - 1]}]`);
         }
     }
 
