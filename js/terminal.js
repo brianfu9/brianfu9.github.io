@@ -122,8 +122,17 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             // Save shell history.
             e.preventDefault();
 
-            if (this.value.match(/['"`{}()<>*+?%,\\^$|#]/g)) {
-                output(`<p>THATS NOT SANITARY >:(</p>`);
+            // Duplicate current input and append to output section.
+            var line = this.parentNode.parentNode.cloneNode(true);
+            line.removeAttribute('id');
+            line.classList.add('line');
+            var input = line.querySelector('input.cmdline');
+            input.autofocus = false;
+            input.readOnly = true;
+            output_.appendChild(line);
+
+            if (this.value.match(/['"`{}<>\\]/g)) {
+                output(`<p>THAT'S NOT SANITARY >:(</p>`);
                 window.scrollTo(0, getDocHeight_());
                 this.value = ''; // Clear/setup line for next input.
                 return;
@@ -133,15 +142,6 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 history_[history_.length] = this.value;
                 histpos_ = history_.length;
             }
-
-            // Duplicate current input and append to output section.
-            var line = this.parentNode.parentNode.cloneNode(true);
-            line.removeAttribute('id');
-            line.classList.add('line');
-            var input = line.querySelector('input.cmdline');
-            input.autofocus = false;
-            input.readOnly = true;
-            output_.appendChild(line);
 
             if (this.value && this.value.trim()) {
                 var args = this.value.split(' ').filter(function (val, i) {
@@ -264,7 +264,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     var root = 'root';
                     if (args[0]) root = args[0];
                     if (root.match(/[-[\]'"`{}()<>*+?%,\\^$|#]/g)) {
-                        output(`<p>THATS NOT SANITARY >:(</p>`);
+                        output(`<p>THAT'S NOT SANITARY >:(</p>`);
                     } else {
                         $('#input-line .prompt').html(`[<span class="user">${root}</span>@brianfu.me] > `);
                     }
