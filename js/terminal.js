@@ -251,8 +251,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
                     break;
                 case 'resume':
-                    window.open('assets/documents/BrianFu_resume-color.pdf', '_blank');
-                    output(`<p><a href="assets/documents/BrianFu_resume-color.pdf" target="_blank">Resumé</a><p>`);
+                    window.open('assets/documents/BrianFu_resume.pdf', '_blank');
+                    output(`<p><a href="assets/documents/BrianFu_resume.pdf" target="_blank">Resumé</a><p>`);
                     break;
                 case 'date':
                     output(new Date());
