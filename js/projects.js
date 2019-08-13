@@ -113,7 +113,7 @@ const projectsHtmlString =
                     <a href="https://devpost.com/software/lowly" target="_blank"></a>
                 </figure>
                 <div class="github-button-div">
-                    <a class="github-button" href="https://github.com/brianfu9/pastapasta"
+                    <a class="github-button" href="https://github.com/brianfu9/slowly"
                         data-size="large">Slowly</a>
                 </div>
             </div>
@@ -159,7 +159,7 @@ const projectsHtmlString =
                         target="_blank"></a>
                 </figure>
                 <div class="github-button-div">
-                    <a class="github-button" href="https://github.com/brianfu9/refrigerator"
+                    <a class="github-button" href="https://github.com/brianfu9/bearfaced"
                         data-size="large">Bear Faced</a>
                 </div>
             </div>

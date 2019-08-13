@@ -184,7 +184,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         Uses facial and emotion detection to paste a picture of an emotive bear's face over the same emotion on your face. 
                         Try it out <a href="https://bearfaced.brianfu.me" target="_blank">here</a> via repl.it! (may take a minute to load)
                         <div class="github-button-div">
-                            <a class="github-button" href="https://github.com/brianfu9/refrigerator"
+                            <a class="github-button" href="https://github.com/brianfu9/bearfaced"
                             data-size="large">Bear Faced</a>
                         </div></p>`
                     );
