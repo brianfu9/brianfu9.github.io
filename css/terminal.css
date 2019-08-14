@@ -156,3 +156,31 @@ a:not([href]):not([tabindex]):hover {
   border-radius: 15px;
   overflow-x: auto;
 }
+
+.copybox {
+  position: relative;
+  display: inline-block;
+  opacity: 1;
+}
+
+.copyboxtext {
+  visibility: hidden;
+  width: 200px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 140%;
+  margin-left: -70px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.copybox:hover .copyboxtext {
+  visibility: visible;
+  opacity: 1;
+}
