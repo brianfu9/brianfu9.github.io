@@ -157,13 +157,13 @@ a:not([href]):not([tabindex]):hover {
   overflow-x: auto;
 }
 
-.copybox {
+.hintbox {
   position: relative;
   display: inline-block;
   opacity: 1;
 }
 
-.copyboxtext {
+.hintboxtext {
   visibility: hidden;
   width: 200px;
   background-color: #555;
@@ -180,7 +180,7 @@ a:not([href]):not([tabindex]):hover {
   transition: opacity 0.3s;
 }
 
-.copybox:hover .copyboxtext {
+.hintbox:hover .hintboxtext {
   visibility: visible;
   opacity: 1;
 }

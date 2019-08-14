@@ -200,10 +200,10 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         <ul>
                             <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu-449881128/" target="_blank">https://www.linkedin.com/in/brian-fu-449881128/</a></li>
                             <li>Email: 
-                            <div class="copybox">
+                            <div class="hintbox">
                                 <a id="email${history_.length}" tabindex="0" onclick="copyToClipboard(\'brianfu9@gmail.com\');">
                                 brianfu9@gmail.com </a>
-                                <span class="copyboxtext">copy to clipboard</span>
+                                <span class="hintboxtext">copy to clipboard</span>
                             </div>
                             </li>
                         </ul>
