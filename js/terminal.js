@@ -199,12 +199,13 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         `You can contact me here!
                         <ul>
                             <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu-449881128/" target="_blank">https://www.linkedin.com/in/brian-fu-449881128/</a></li>
-                            <li>Email: <a id="email${history_.length}" tabindex="0"
-                                onclick="copyToClipboard(\'brianfu9@gmail.com\');
-                                $('#email${history_.length}').popover('show');
-                                setTimeout(function(){ $('#email${history_.length}').popover('hide'); }, 1500);" 
-                                data-container="body" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="copied to clipboard">
-                                brianfu9@gmail.com</a></li>
+                            <li>Email: 
+                            <div class="hintbox">
+                                <a id="email${history_.length}" tabindex="0" onclick="copyToClipboard(\'brianfu9@gmail.com\');">
+                                brianfu9@gmail.com </a>
+                                <span class="hintboxtext">copy to clipboard</span>
+                            </div>
+                            </li>
                         </ul>
                         Email probably works best.`
 
