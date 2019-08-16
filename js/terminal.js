@@ -30,12 +30,16 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var output_ = document.querySelector(outputContainer);
 
     const CMDS_ = [
-        'about', 'bearfaced', 'clear', 'contact', 'github', 'menu', 'portfolio', 'resume'
+        'about', 'bearfaced', 'clear', 'contact', 'github', 'menu', 'projects', 'resume'
     ];
 
     const CMDS_ADVANCED = [
-        'date', 'echo', 'emacs', 'ifconfig', 'man', 'ping', 'su', 'vim'
+        'date', 'echo', 'emacs', 'man', 'ping', 'su', 'vim'
     ];
+
+    const CMDS_ALIAS = [
+        'ls', 'dir', 'help', 'ifconfig', 'portfolio', 'sudo'
+    ]
 
     var cmds_to_trie = [];
     CMDS_.forEach((a) => {
@@ -44,6 +48,11 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
         })
     });
     CMDS_ADVANCED.forEach((a) => {
+        cmds_to_trie.push({
+            cmd: a
+        })
+    });
+    CMDS_ALIAS.forEach((a) => {
         cmds_to_trie.push({
             cmd: a
         })
@@ -59,10 +68,6 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var history_ = [];
     var histpos_ = 0;
     var histtemp_ = 0;
-
-    // window.addEventListener('click', function (e) {
-    //     cmdLine_.focus();
-    // }, false);
 
     cmdLine_.addEventListener('click', inputTextClick_, false);
     cmdLine_.addEventListener('keydown', historyHandler_, true);
@@ -167,7 +172,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             `<p>Hello there, welcome to my terminal! 
                             You may have seen one before in a 90's hacker movie with green scrolling text and lots of progress bars. 
                             Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
-                            Feel free to hack around or take a look at my <a onclick="term.triggerCommand(this.textContent);">portfolio</a>. 
+                            Feel free to hack around or take a look at some of my <a onclick="term.triggerCommand(this.textContent);">projects</a>. 
                             If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">menu</a>.</p> 
                             <p>I'm Brian Fu, a third year Computer Science student at the University of California, Berkeley. Go Bears!</p>
                             <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.city + ' 😉': 'spend most of my time in the Bay Area'}. 
@@ -198,7 +203,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     output(
                         `You can contact me here!
                         <ul>
-                            <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu-449881128/" target="_blank">https://www.linkedin.com/in/brian-fu-449881128/</a></li>
+                            <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu" target="_blank">linkedin/brian-fu</a></li>
                             <li>Email: 
                             <div class="hintbox">
                                 <a id="email${history_.length}" tabindex="0" onclick="copyToClipboard(\'brianfu9@gmail.com\');">
@@ -246,6 +251,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         }
                     });
                     break;
+                case 'project':
                 case 'projects':
                 case 'portfolio':
                     proj = new Projects(output_);
