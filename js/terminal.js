@@ -158,7 +158,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     cmd = args[0]
                 }
             }
-            process_command(args)
+            process_command(cmd, args)
 
             window.scrollTo(0, getDocHeight_());
             this.value = ''; // Clear/setup line for next input.
@@ -166,7 +166,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
         }
     }
 
-    function process_command(args) {
+    function process_command(cmd, args) {
         switch (cmd) {
             case 'about':
                 if (args[0] == '-t' || args[0] == '-terminal') {
