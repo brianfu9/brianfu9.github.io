@@ -168,6 +168,15 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
     function process_command(cmd, args) {
         switch (cmd) {
+            case 'welcome':
+                output(
+                    `<p>Hello there, welcome to my terminal! 
+                    You may have seen one before in a 90's hacker movie with green scrolling text and lots of progress bars. 
+                    Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
+                    Feel free to hack around or take a look at some of my <a onclick="term.triggerCommand(this.textContent);">projects</a>. 
+                    If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">menu</a>.</p> `
+                );
+                break;
             case 'about':
                 if (args[0] == '-t' || args[0] == '-terminal') {
                     output(
@@ -442,6 +451,6 @@ $(function () {
     if (window.location.hash) {
         var command = window.location.hash;
         term.init(command.slice(1));
-    } else term.init('about');
+    } else term.init('welcome');
 
 });

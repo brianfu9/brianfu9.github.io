@@ -13,16 +13,12 @@ html, body {
 body {
   font-size: 14pt;
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-  color: #c9d3d6;
-  background-color: #0e1628;
+  color: #000000;
+  background-color: #f9f9f9;
 }
 
-p {
-  color: #c9d3d6;
-}
-
-pre {
-  color: #c9d3d6;
+p, pre {
+  color: #000000;
 }
 
 a {
@@ -37,11 +33,11 @@ a:hover {
 }
 
 a:not([href]):not([tabindex]) {
-  color: #EDED65;
+  color: #fccf17;
 }
 
 a:not([href]):not([tabindex]):hover {
-  color: #EDED65;
+  color: #fccf17;
   background-color: transparent;
   cursor: pointer;
 }
@@ -54,6 +50,10 @@ a:not([href]):not([tabindex]):hover {
   margin: 0px 10px 20px 0px;
   border-radius: 50px;
   float: left;
+}
+
+#content {
+  background-color: #f9f9f9;
 }
 
 #container {
@@ -95,7 +95,7 @@ a:not([href]):not([tabindex]):hover {
 }
 
 .user {
-  color: #42F44B;
+  color: #000;
   /* 
   teal #33CCCC 
   yellow #EDED65
@@ -110,7 +110,7 @@ a:not([href]):not([tabindex]):hover {
 
 .prompt {
   white-space: nowrap;
-  color: #42F44B;
+  color: #000;
   margin-right: 7px;
   display: -webkit-box;
   -webkit-box-pack: center;
