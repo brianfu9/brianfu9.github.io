@@ -158,193 +158,202 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     cmd = args[0]
                 }
             }
-            switch (cmd) {
-                case 'about':
-                    if (args[0] == '-t' || args[0] == '-terminal') {
-                        output(
-                            `<p>So, you're interested in learing more about this website! 
-                            brianfu.me is hosted as a static page on Github Pages so every terminal command is executed as a browser-side script. 
-                            This includes each implemented command, the up and down arrow keys to navigate the commands history, tab for autocompletion and the animated typing sequence. 
-                            Since there isn't a backend server to do the heavy lifting, many of these scripts are optimized for speed and efficency to improve browser performance.</p>`
-                        )
-                    } else {
-                        output(
-                            `<p>Hello there, welcome to my terminal! 
-                            You may have seen one before in a 90's hacker movie with green scrolling text and lots of progress bars. 
-                            Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
-                            Feel free to hack around or take a look at some of my <a onclick="term.triggerCommand(this.textContent);">projects</a>. 
-                            If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">menu</a>.</p> 
-                            <p>I'm Brian Fu, a third year Computer Science student at the University of California, Berkeley. Go Bears!</p>
-                            <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.city + ' 😉': 'spend most of my time in the Bay Area'}. 
-                            My hobbies include attending hackathons and listening to music. 
-                            I am a classical pianist of 13 years but dream of improv jazz riffs and anime ost's. 
-                            If you've got any music, food or travel recommendations, please shoot me a message at <a onclick="term.triggerCommand(this.textContent);">contact</a>!</p>`
-                        );
-                    }
-                    break;
-                case 'bearfaced':
-                    window.open('https://bearfaced.brianfu.me', '_blank');
-                    output(
-                        `<p>ʕ •ᴥ•ʔ</br>Bear Faced is the CalHacks 2018 project by Brian Fu and Bryant Bettencourt. 
-                        Uses facial and emotion detection to paste a picture of an emotive bear's face over the same emotion on your face. 
-                        Try it out <a href="https://bearfaced.brianfu.me" target="_blank">here</a> via repl.it! (may take a minute to load)
-                        <div class="github-button-div">
-                            <a class="github-button" href="https://github.com/brianfu9/bearfaced"
-                            data-size="large">Bear Faced</a>
-                        </div></p>`
-                    );
-                    buttonify();
-                    break;
-                case 'clear':
-                    output_.innerHTML = '';
-                    this.value = '';
-                    return;
-                case 'contact':
-                    output(
-                        `You can contact me here!
-                        <ul>
-                            <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu" target="_blank">linkedin/brian-fu</a></li>
-                            <li>Email: 
-                            <div class="hintbox">
-                                <a id="email${history_.length}" tabindex="0" onclick="copyToClipboard(\'brianfu9@gmail.com\');">
-                                brianfu9@gmail.com </a>
-                                <span class="hintboxtext">copy to clipboard</span>
-                            </div>
-                            </li>
-                        </ul>
-                        Email probably works best.`
+            process_command(cmd, args)
 
-                    );
-                    break;
-                case 'github':
-                    window.open('https://github.com/brianfu9', '_blank');
-                    output('<p><a href="https://github.com/brianfu9" target="_blank">https://github.com/brianfu9</a></p>');
-                    break;
-                case 'ls':
-                case 'dir':
-                case 'help':
-                case 'menu':
-                    var cmdslst = '<a onclick="term.triggerCommand(this.textContent);">' + CMDS_.join('</a><br><a onclick="term.triggerCommand(this.textContent);">') + '</a>';
-                    if (args[0] && args[0].toLowerCase() == '-all') {
-                        cmdslst += '</div><br><p>many secret. much hidden. wow:</p><div class="ls-files">' +
-                            '<a onclick="term.triggerCommand(this.textContent);">' +
-                            CMDS_ADVANCED.join('</a><br><a onclick="term.triggerCommand(this.textContent);">') + '</a>';
-                        output(`<p>Wow you\'re an advanced user! If you want to learn what each command does, use <a onclick="term.triggerCommand(this.textContent);">man</a> followed by a command.</p>
-                        <div class="ls-files">` + cmdslst + '</div>');
-                    } else {
-                        output('<p>Here is a list of commands:</p><div class="ls-files">' + cmdslst +
-                            '</div><p>If you\'d like to see the complete list, try out "<a onclick="term.triggerCommand(this.textContent);">menu -all</a>"</p>');
-                    }
-                    break;
-                case 'ping':
-                case 'ifconfig':
-                    output_.insertAdjacentHTML('beforeEnd', `<div id="loading${history_.length}" style="width:90%;margin-left:40px;"></div>`);
-                    var typed = new Typed(`#loading${history_.length}`, {
-                        strings: ['ping ... ping?^300', 'ping ... pong?^300', 'ping ... ^300pung!^700'],
-                        typeSpeed: 50,
-                        showCursor: false,
-                        backSpeed: 50,
-                        onComplete: () => {
-                            delete ipinfo.success;
-                            $(`#loading${history_.length}`).html(JSON.stringify(ipinfo).slice(1, -1).replace(/,"/g, '<br>"').replace(/"/g, ' '));
-                            window.scrollTo(0, getDocHeight_());
-                        }
-                    });
-                    break;
-                case 'project':
-                case 'projects':
-                case 'portfolio':
-                    proj = new Projects(output_);
-                    output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
-                    break;
-                case 'resume':
-                    window.open('assets/documents/BrianFu_resume.pdf', '_blank');
-                    output(`<p><a href="assets/documents/BrianFu_resume.pdf" target="_blank">Resumé</a><p>`);
-                    break;
-                case 'date':
-                    output(new Date());
-                    break;
-                case 'echo':
-                    output(args.join(' '));
-                    break;
-                case 'su':
-                    var root = 'root';
-                    if (args[0]) root = args[0];
-                    if (root.match(/[-[\]'"`{}()<>*+?%,\\^$|#]/g)) {
-                        output(`<p>THAT'S NOT SANITARY >:(</p>`);
-                    } else {
-                        $('#input-line .prompt').html(`[<span class="user">${root}</span>@brianfu.me] > `);
-                    }
-                    break;
-                case 'vim':
-                    output(`try > <a onclick="term.triggerCommand(this.textContent);">emacs</a> instead`);
-                    break;
-                case 'emacs':
-                    output(`try > <a onclick="term.triggerCommand(this.textContent);">vim</a> instead`);
-                    break;
-                case 'sudo':
-                    output(`sudo: permission denied`);
-                    break;
-                case 'man':
-                    switch (args[0]) {
-                        case 'about':
-                            output('usage: <br> > about <br> displays the about me introduction message. <br> > about -terminal <br> displays information about how the terminal works.');
-                            break;
-                        case 'clear':
-                            output('usage: <br> > clear <br> clears the terminal.');
-                            break;
-                        case 'contact':
-                            output('usage: <br> > contact <br> displays my contact info. Clicking the email copies it to clipboard.');
-                            break;
-                        case 'github':
-                            output('usage: <br> > github <br> Opens my github profile in a new tab.');
-                            break;
-                        case 'ls':
-                        case 'dir':
-                        case 'help':
-                        case 'menu':
-                            output(`usage: <br> > ${args[0]} <br> shows a list of simple commands <br> > ${args[0]} -all <br> shows a list of all commands`);
-                            break;
-                        case 'portfolio':
-                            output('usage: <br> > portfolio <br> shows my portfolio.');
-                            break;
-                        case 'ping':
-                        case 'ifconfig':
-                            output(`usage: <br> > ${args[0]} <br> displays the user's ip information`);
-                            break;
-                        case 'resume':
-                            output('usage: <br> > resume <br> Opens my resume in a new tab.');
-                            break;
-                        case 'date':
-                            output('usage: <br> > date <br> Displays the date');
-                            break;
-                        case 'echo':
-                            output('usage: <br> > echo [text] <br> prints out the [text] in the terminal');
-                            break;
-                        case 'man':
-                            output(`usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> 
-                            <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">ERROR STACK OVERFLOW</div></div></div></div><br>
-                            jk man explains what [command] does`);
-                            break;
-                        case 'su':
-                            output(`usage: <br> > su <br> > su [name] <br> changes the user's name`);
-                            break;
-                        case 'cd':
-                            output(`usage: <br> > cd [command] <br> runs the [command] <br> yeah I know this one doesn't really make sense but I don't have a file system either`);
-                            break;
-                        default:
-                            if (args[0]) output(args[0] + ': command not found');
-                            else output('man: no arguments found');
-                    }
-                    break;
-                default:
-                    if (cmd) {
-                        output(cmd + ': command not found');
-                    }
-            }
             window.scrollTo(0, getDocHeight_());
             this.value = ''; // Clear/setup line for next input.
             console.log(`${history_.length} : executed > [${history_[history_.length - 1]}]`);
+        }
+    }
+
+    function process_command(cmd, args) {
+        switch (cmd) {
+            case 'about':
+                if (args[0] == '-t' || args[0] == '-terminal') {
+                    output(
+                        `<p>So, you're interested in learing more about this website! 
+                        brianfu.me is hosted as a static page on Github Pages so every terminal command is executed as a browser-side script. 
+                        This includes each implemented command, the up and down arrow keys to navigate the commands history, tab for autocompletion and the animated typing sequence. 
+                        Since there isn't a backend server to do the heavy lifting, many of these scripts are optimized for speed and efficency to improve browser performance.</p>`
+                    )
+                } else {
+                    output(
+                        `<p>Hello there, welcome to my terminal! 
+                        You may have seen one before in a 90's hacker movie with green scrolling text and lots of progress bars. 
+                        Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
+                        Feel free to hack around or take a look at some of my <a onclick="term.triggerCommand(this.textContent);">projects</a>. 
+                        If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">menu</a>.</p> 
+                        <p>I'm Brian Fu, a third year Computer Science student at the University of California, Berkeley. Go Bears!</p>
+                        <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.city + ' 😉': 'spend most of my time in the Bay Area'}. 
+                        My hobbies include attending hackathons and listening to music. 
+                        I am a classical pianist of 13 years but dream of improv jazz riffs and anime ost's. 
+                        If you've got any music, food or travel recommendations, please shoot me a message at <a onclick="term.triggerCommand(this.textContent);">contact</a>!</p>`
+                    );
+                }
+                break;
+            case 'bearfaced':
+                window.open('https://bearfaced.brianfu.me', '_blank');
+                output(
+                    `<p>ʕ •ᴥ•ʔ</br>Bear Faced is the CalHacks 2018 project by Brian Fu and Bryant Bettencourt. 
+                    Uses facial and emotion detection to paste a picture of an emotive bear's face over the same emotion on your face. 
+                    Try it out <a href="https://bearfaced.brianfu.me" target="_blank">here</a> via repl.it! (may take a minute to load)
+                    <div class="github-button-div">
+                        <a class="github-button" href="https://github.com/brianfu9/bearfaced"
+                        data-size="large">Bear Faced</a>
+                    </div></p>`
+                );
+                buttonify();
+                break;
+            case 'clear':
+                output_.innerHTML = '';
+                this.value = '';
+                return;
+            case 'contact':
+                output(
+                    `You can contact me here!
+                    <ul>
+                        <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu" target="_blank">linkedin/brian-fu</a></li>
+                        <li>Email: 
+                        <div class="hintbox">
+                            <a id="email${history_.length}" tabindex="0" onclick="copyToClipboard(\'brianfu9@gmail.com\');">
+                            brianfu9@gmail.com </a>
+                            <span class="hintboxtext">copy to clipboard</span>
+                        </div>
+                        </li>
+                    </ul>
+                    Email probably works best.`
+
+                );
+                break;
+            case 'github':
+                window.open('https://github.com/brianfu9', '_blank');
+                output('<p><a href="https://github.com/brianfu9" target="_blank">https://github.com/brianfu9</a></p>');
+                break;
+            case 'ls':
+            case 'dir':
+            case 'help':
+            case 'menu':
+                var cmdslst = '<a onclick="term.triggerCommand(this.textContent);">' + CMDS_.join('</a><br><a onclick="term.triggerCommand(this.textContent);">') + '</a>';
+                if (args[0] && args[0].toLowerCase() == '-all') {
+                    cmdslst += '</div><br><p>many secret. much hidden. wow:</p><div class="ls-files">' +
+                        '<a onclick="term.triggerCommand(this.textContent);">' +
+                        CMDS_ADVANCED.join('</a><br><a onclick="term.triggerCommand(this.textContent);">') + '</a>';
+                    output(`<p>Wow you\'re an advanced user! If you want to learn what each command does, use <a onclick="term.triggerCommand(this.textContent);">man</a> followed by a command.</p>
+                    <div class="ls-files">` + cmdslst + '</div>');
+                } else {
+                    output('<p>Here is a list of commands:</p><div class="ls-files">' + cmdslst +
+                        '</div><p>If you\'d like to see the complete list, try out "<a onclick="term.triggerCommand(this.textContent);">menu -all</a>"</p>');
+                }
+                break;
+            case 'ping':
+            case 'ifconfig':
+                output_.insertAdjacentHTML('beforeEnd', `<div id="loading${history_.length}" style="width:90%;margin-left:40px;"></div>`);
+                var typed = new Typed(`#loading${history_.length}`, {
+                    strings: ['ping ... ping?^300', 'ping ... pong?^300', 'ping ... ^300pung!^700'],
+                    typeSpeed: 50,
+                    showCursor: false,
+                    backSpeed: 50,
+                    onComplete: () => {
+                        delete ipinfo.success;
+                        $(`#loading${history_.length}`).html(JSON.stringify(ipinfo).slice(1, -1).replace(/,"/g, '<br>"').replace(/"/g, ' '));
+                        window.scrollTo(0, getDocHeight_());
+                    }
+                });
+                break;
+            case 'project':
+            case 'projects':
+            case 'portfolio':
+                proj = new Projects(output_);
+                output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
+                break;
+            case 'resume':
+                window.open('assets/documents/BrianFu_resume.pdf', '_blank');
+                output(`<p><a href="assets/documents/BrianFu_resume.pdf" target="_blank">Resumé</a><p>`);
+                break;
+            case 'date':
+                output(new Date());
+                break;
+            case 'echo':
+                output(args.join(' '));
+                break;
+            case 'su':
+                var root = 'root';
+                if (args[0]) root = args[0];
+                if (root.match(/[-[\]'"`{}()<>*+?%,\\^$|#]/g)) {
+                    output(`<p>THAT'S NOT SANITARY >:(</p>`);
+                } else {
+                    $('#input-line .prompt').html(`[<span class="user">${root}</span>@brianfu.me] > `);
+                }
+                break;
+            case 'vim':
+                output(`try > <a onclick="term.triggerCommand(this.textContent);">emacs</a> instead`);
+                break;
+            case 'emacs':
+                output(`try > <a onclick="term.triggerCommand(this.textContent);">vim</a> instead`);
+                break;
+            case 'sudo':
+                output(`sudo: permission denied`);
+                break;
+            case 'man':
+                man_command(args);
+                break;
+            default:
+                if (cmd) {
+                    output(cmd + ': command not found');
+                }
+        }
+    }
+
+    function man_command(args) {
+        switch (args[0]) {
+            case 'about':
+                output('usage: <br> > about <br> displays the about me introduction message. <br> > about -terminal <br> displays information about how the terminal works.');
+                break;
+            case 'clear':
+                output('usage: <br> > clear <br> clears the terminal.');
+                break;
+            case 'contact':
+                output('usage: <br> > contact <br> displays my contact info. Clicking the email copies it to clipboard.');
+                break;
+            case 'github':
+                output('usage: <br> > github <br> Opens my github profile in a new tab.');
+                break;
+            case 'ls':
+            case 'dir':
+            case 'help':
+            case 'menu':
+                output(`usage: <br> > ${args[0]} <br> shows a list of simple commands <br> > ${args[0]} -all <br> shows a list of all commands`);
+                break;
+            case 'portfolio':
+                output('usage: <br> > portfolio <br> shows my portfolio.');
+                break;
+            case 'ping':
+            case 'ifconfig':
+                output(`usage: <br> > ${args[0]} <br> displays the user's ip information`);
+                break;
+            case 'resume':
+                output('usage: <br> > resume <br> Opens my resume in a new tab.');
+                break;
+            case 'date':
+                output('usage: <br> > date <br> Displays the date');
+                break;
+            case 'echo':
+                output('usage: <br> > echo [text] <br> prints out the [text] in the terminal');
+                break;
+            case 'man':
+                output(`usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> 
+                <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">ERROR STACK OVERFLOW</div></div></div></div><br>
+                jk man explains what [command] does`);
+                break;
+            case 'su':
+                output(`usage: <br> > su <br> > su [name] <br> changes the user's name`);
+                break;
+            case 'cd':
+                output(`usage: <br> > cd [command] <br> runs the [command] <br> yeah I know this one doesn't really make sense but I don't have a file system either`);
+                break;
+            default:
+                if (args[0]) output(args[0] + ': command not found');
+                else output('man: no arguments found');
         }
     }
 
