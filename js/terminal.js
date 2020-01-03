@@ -30,7 +30,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var output_ = document.querySelector(outputContainer);
 
     const CMDS_ = [
-        'about', 'bearfaced', 'clear', 'contact', 'github', 'menu', 'projects', 'resume'
+        'about', 'bearfaced', 'clear', 'contact', 'github', 'menu', 'projects', 'resume', 'welcome'
     ];
 
     const CMDS_ADVANCED = [
@@ -168,6 +168,15 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
     function process_command(cmd, args) {
         switch (cmd) {
+            case 'welcome':
+                output(
+                    `<p>Hello there, welcome to my terminal! 
+                    You may have seen one before in a 90's hacker movie with green scrolling text and lots of progress bars. 
+                    Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
+                    Feel free to hack around or take a look at some of my <a onclick="term.triggerCommand(this.textContent);">projects</a>. 
+                    If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">menu</a>.</p>`
+                );
+                break;
             case 'about':
                 if (args[0] == '-t' || args[0] == '-terminal') {
                     output(
@@ -178,12 +187,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     )
                 } else {
                     output(
-                        `<p>Hello there, welcome to my terminal! 
-                        You may have seen one before in a 90's hacker movie with green scrolling text and lots of progress bars. 
-                        Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
-                        Feel free to hack around or take a look at some of my <a onclick="term.triggerCommand(this.textContent);">projects</a>. 
-                        If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">menu</a>.</p> 
-                        <p>I'm Brian Fu, a third year Computer Science student at the University of California, Berkeley. Go Bears!</p>
+                        `<p>Hi! I'm Brian Fu, a third year Computer Science student at the University of California, Berkeley. Go Bears!</p>
                         <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.city + ' 😉': 'spend most of my time in the Bay Area'}. 
                         My hobbies include attending hackathons and listening to music. 
                         I am a classical pianist of 13 years but dream of improv jazz riffs and anime ost's. 
@@ -271,6 +275,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 output(`<p><a href="assets/documents/BrianFu_resume.pdf" target="_blank">Resumé</a><p>`);
                 break;
             case 'date':
+            case 'time':
                 output(new Date());
                 break;
             case 'echo':
@@ -442,6 +447,6 @@ $(function () {
     if (window.location.hash) {
         var command = window.location.hash;
         term.init(command.slice(1));
-    } else term.init('about');
+    } else term.init('welcome');
 
 });
