@@ -30,7 +30,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var output_ = document.querySelector(outputContainer);
 
     const CMDS_ = [
-        'about', 'bearfaced', 'clear', 'contact', 'github', 'menu', 'projects', 'resume', 'welcome'
+        'about', 'clear', 'contact', 'github', 'menu', 'projects', 'resume', 'welcome'
     ];
 
     const CMDS_ADVANCED = [
