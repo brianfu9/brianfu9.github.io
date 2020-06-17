@@ -1,10 +1,3 @@
-/*!
- *   modified from:
- *      HTML5 Web Terminal
- *      Author: Andrew M Barfield
- *      Url: https://codepen.io/AndrewBarfield/pen/LEbPJx.js
- *      License(s): MIT
- */
 
 var term;
 var util = util || {};
@@ -30,7 +23,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var output_ = document.querySelector(outputContainer);
 
     const CMDS_ = [
-        'about', 'bearfaced', 'clear', 'contact', 'github', 'menu', 'projects', 'resume', 'welcome'
+        'about', 'clear', 'contact', 'github', 'menu', 'projects', 'resume', 'welcome'
     ];
 
     const CMDS_ADVANCED = [
@@ -173,6 +166,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     `<p>Hello there, welcome to my terminal! 
                     You may have seen one before in a 90's hacker movie with green scrolling text and lots of progress bars. 
                     Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
+                    </br>
                     Feel free to hack around or take a look at some of my <a onclick="term.triggerCommand(this.textContent);">projects</a>. 
                     If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">menu</a>.</p>`
                 );
@@ -181,14 +175,13 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 if (args[0] == '-t' || args[0] == '-terminal') {
                     output(
                         `<p>So, you're interested in learing more about this website! 
-                        brianfu.me is hosted as a static page on Github Pages so every terminal command is executed as a browser-side script. 
-                        This includes each implemented command, the up and down arrow keys to navigate the commands history, tab for autocompletion and the animated typing sequence. 
-                        Since there isn't a backend server to do the heavy lifting, many of these scripts are optimized for speed and efficency to improve browser performance.</p>`
+                        brianfu.me is hosted as a static page on Github Pages. It is a personal website designed to emulate the feel of a computer terminal.
+                        Try out the up and down arrow keys to navigate the commands history, tab for autocompletion and the animated typing sequence.</p>`
                     )
                 } else {
                     output(
-                        `<p>Hi! I'm Brian Fu, a third year Computer Science student at the University of California, Berkeley. Go Bears!</p>
-                        <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.city + ' 😉': 'spend most of my time in the Bay Area'}. 
+                        `<p>Hi there! I'm Brian Fu, a fourth year Computer Science student at the University of California, Berkeley. Go Bears!</p>
+                        <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.district + ' 😉': 'spend most of my time in the Bay Area'}. 
                         My hobbies include attending hackathons and listening to music. 
                         I am a classical pianist of 13 years but dream of improv jazz riffs and anime ost's. 
                         If you've got any music, food or travel recommendations, please shoot me a message at <a onclick="term.triggerCommand(this.textContent);">contact</a>!</p>`
@@ -207,6 +200,15 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     </div></p>`
                 );
                 buttonify();
+                break;
+            case 'hangman':
+                window.open('http://hangman.brianfu.me', '_blank');
+                output(
+                    `<p>Hangman is a school project exhibiting the use of Ruby and Heroku. 
+                    Unfortunately, due to being a school project, the source code is not published.
+                    Try it out <a href="http://hangman.brianfu.me" target="_blank">here</a>!
+                    </p>`
+                );
                 break;
             case 'clear':
                 output_.innerHTML = '';
@@ -423,7 +425,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
         init: function (command) {
             document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Click "<a onclick="term.triggerCommand(this.textContent);">about</a>" for more information or "<a onclick="term.triggerCommand(this.textContent);">menu</a>" for a list of commands.</p>');
             // setTimeout(() => {term.triggerCommand('about')}, 400);
-            term.triggerCommand(command)
+            term.triggerCommand(command);
 
         },
         triggerCommand: triggerCommand,
