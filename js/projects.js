@@ -1,12 +1,18 @@
 (function() {
 
     var slidersContainer = document.querySelector('.sliders-container');
-
+    var titles = [
+        'Grow.ai',
+        'Kinesis.ai',
+        'Sub-AR',
+        'Man Maps',
+        'Bear Faced',
+    ];
     // Initializing the numbers slider
     var msNumbers = new MomentumSlider({
         el: slidersContainer,
         cssClass: 'ms--numbers',
-        range: [1, 4],
+        range: [1, 5],
         rangeContent: function (i) {
             return '0' + i;
         },
@@ -18,16 +24,10 @@
     });
 
     // Initializing the titles slider
-    var titles = [
-        'King of the Ring Fight',
-        'Sound of Streets',
-        'Urban Fashion',
-        'Windy Sunset'
-    ];
     var msTitles = new MomentumSlider({
         el: slidersContainer,
         cssClass: 'ms--titles',
-        range: [0, 3],
+        range: [0, 4],
         rangeContent: function (i) {
             return '<h3>'+ titles[i] +'</h3>';
         },
@@ -39,13 +39,20 @@
         interactive: false
     });
 
+    var links = [
+        '<a class="ms-slide__link" href="https://github.com/grow-ai/KM-1">GitHub</a>',
+        '<a class="ms-slide__link" href="https://github.com/brianfu9/DataX_general">GitHub</a>',
+        '<a class="ms-slide__link" href="https://github.com/alexwyao/sub-AR">GitHub</a>',
+        '<a class="ms-slide__link" href="https://github.com/brianfu9/manmaps">GitHub</a>',
+        '<a class="ms-slide__link" href="https://github.com/brianfu9/bearfaced">GitHub</a>',
+    ]
     // Initializing the links slider
     var msLinks = new MomentumSlider({
         el: slidersContainer,
         cssClass: 'ms--links',
-        range: [0, 3],
-        rangeContent: function () {
-            return '<a class="ms-slide__link">View Case</a>';
+        range: [0, 4],
+        rangeContent: function (i) {
+            return links[i];
         },
         vertical: true,
         interactive: false
@@ -62,7 +69,7 @@
         // CSS class to reference the slider
         cssClass: 'ms--images',
         // Generate the 4 slides required
-        range: [0, 3],
+        range: [0, 4],
         rangeContent: function () {
             return '<div class="ms-slide__image-container"><div class="ms-slide__image"></div></div>';
         },
