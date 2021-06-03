@@ -434,14 +434,14 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
 $(function () {
 
+    // Set the command-line prompt to include the user's IP Address
+    $('.prompt').html(`[<span class="user">user</span>@brianfu.me] > `);
     $.getJSON('https://json.geoiplookup.io/', function (data) {
         delete data.premium;
         delete data.cached;
         ipinfo = data;
         $('.prompt').html(`[<span class="user">${ipinfo.ip.length < 16 ? ipinfo.ip : 'user'}</span>@brianfu.me] > `);
     });
-    // Set the command-line prompt to include the user's IP Address
-    $('.prompt').html(`[<span class="user">user</span>@brianfu.me] > `);
 
     // Initialize a new terminal object
     term = new Terminal('#input-line .cmdline', '#container output');
