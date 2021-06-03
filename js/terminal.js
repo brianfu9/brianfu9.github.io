@@ -426,7 +426,6 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Click "<a onclick="term.triggerCommand(this.textContent);">about</a>" for more information or "<a onclick="term.triggerCommand(this.textContent);">menu</a>" for a list of commands.  <a href="https://github.com/brianfu9" target="_blank"><i class="fab fa-github" style="color:#EDED65"></i></a> <a href="https://www.linkedin.com/in/brian-fu/" target="_blank"><i class="fab fa-linkedin" style="color:#EDED65"></i></a></p>');
             // setTimeout(() => {term.triggerCommand('about')}, 400);
             term.triggerCommand(command);
-
         },
         triggerCommand: triggerCommand,
         output: output
