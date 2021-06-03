@@ -43,6 +43,10 @@ h3 {
   float: left;
 }
 
+.projects-content {
+  justify-content: space-evenly;
+}
+
 .bio {
   padding: 8px;
   padding-bottom: 0;

@@ -1,0 +1,1296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0064)https://cal-cs184-student.github.io/p1-rasterizer-sp20-brianfu9/ -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+        body {
+            padding: 100px;
+            width: 1000px;
+            margin: auto;
+            text-align: left;
+            font-weight: 300;
+            font-family: 'Open Sans', sans-serif;
+            color: #121212;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+    </style>
+    <title>CS 184 Rasterizer</title>
+    <link href="./assets/css" rel="stylesheet">
+</head>
+
+
+<body>
+
+    <h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2020</h1>
+    <h1 align="middle">Project 1: Rasterizer</h1>
+    <h2 align="middle">Brian Fu, CS184</h2>
+
+    <br><br>
+
+    <div>
+
+        <h2 align="middle">Overview</h2>
+        <p>This project is an engine for rendering SVG files with color interpolation or texture mapping.
+            On a high level, it functions by rasterizing meshes of triangles where each triangle is sampled
+            over individually and placed into a supersample buffer. The sampling level determines the number
+            of samples per pixel and takes the average color of the samples in each pixel to determine its
+            color. <br> <br>
+            I implemented two methods to determining what color to make each triangle. The first method is
+            color interpolation where the color of each corner of each triangle is determined. Then each
+            pixel within the triangle is colored by a weighted average from those three corners. The second
+            method is texture mapping. Given a mesh of triangles and an image, I mapped each triangle in the
+            mesh to an area in the image and sampled across from each. These triangles could be stretched and
+            transformed to fit 3d objects. </p>
+
+        <h2 align="middle">Section I: Rasterization</h2>
+
+        <h3 align="middle">Part 1: Rasterizing single-color triangles</h3>
+
+        <p>Rasterizing single-color triangles centers on efficiently determining whether a pixel is inside
+            or outside a triangle for every triangle in the image. Since this operation is performed so many
+            times, it is especially important for it to have a fast runtime complexity. My rasterizing
+            algorithm works by determining the x and y domains for each triangle to reduce the number of
+            pixels to iterate over. Then for each pixel, I used Barycentric coordinates to determine whether
+            it is inside a triangle or not. I then colored the pixels that are inside the triangle. </p>
+
+        <div align="middle">
+            <img src="./assets/t1-2.png" align="middle" width="600px">
+            <figcaption align="middle">Rendering triangles. <br>
+                Note that there are floating pixels due to low sampling rate even though the triangles are
+                continuous in the svg file. <br>
+                This is fixed in Part 2 </figcaption>
+        </div>
+
+
+        <!-- <div align="middle">
+  <table style="width=100%">
+    <tr>
+      <td>
+        <img src="images/t1-2.png" align="middle" width="600px"/>
+        <figcaption align="middle">Rendering triangles. Note that due to samplin</figcaption>
+      </td>
+      <td>
+        <img src="images/t1-1.png" align="middle" width="600px"/>
+        <figcaption align="middle">Caption goes here.</figcaption>
+      </td>
+    </tr>
+  </table>
+</div> -->
+
+
+        <h3 align="middle">Part 2: Antialiasing triangles</h3>
+
+        <p>This rendering engine handles antialiasing through supersampling. Supersampling takes multiple
+            samples within each pixel and averages their colors instead of using a single sample. This is
+            useful if an object intersects part of a pixel but does not cross the center where the sample is
+            taken. A low sample rate would leave the pixel empty where a high sample rate would give the
+            pixel a light shading. <br><br> </p>
+
+        <div align="middle">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td>
+                            <img src="./assets/t1-2.png" width="400px">
+                            <figcaption align="middle">Sample Rate: 1</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/t2-2.png" width="400px">
+                            <figcaption align="middle">Sample Rate: 4</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/t2-3.png" width="400px">
+                            <figcaption align="middle">Sample Rate: 16</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>In order to implement this, I added a supersample buffer to the triangle rasterization process.
+            This buffer is a one-dimentional vector of size: <code> width * height * sample_rate</code> so
+            that the supersamples in pixel <code>(x, y)</code> can be found at indicies
+            <code> (y * width + x) * sample_rate + s  </code> where s is the index of each supersample within
+            each pixel. After every triangle has been sampled, every super sample index within each pixel is
+            down sampled (averaged) to determine what color that pixel will be.
+        </p>
+
+
+        <h3 align="middle">Part 3: Transforms</h3>
+
+        <p>Greater control over objects can be given using transform matrices. Each transform is a 3x3
+            matrix that translates, scales, or rotates an object by a specified amount. </p>
+
+        <div align="middle">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td>
+                            <img src="./assets/t3-1.png" width="400px">
+                            <figcaption align="middle">robot</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/t3-2.png" width="400px">
+                            <figcaption align="middle">robot pop a squat</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2 align="middle">Section II: Sampling</h2>
+
+        <h3 align="middle">Part 4: Barycentric coordinates</h3>
+
+        <p>The barycentric coordinate system uses the proportionate distance a point is from each of the
+            three vertices of its triangle to determine its position. This gives three values: alpha, beta,
+            and gamma to label each point. If the point is inside the triangle,
+            <code> alpha + beta + gamma = 1 </code>. We can set each vertex to red, green, and blue and color
+            each pixel as the weighted average of the distance to each vertex given by the alpha, beta and
+            gamma value of that pixel.
+        </p>
+
+        <div align="middle">
+            <img src="./assets/t4-1.png" width="400px">
+            <figcaption align="middle">Pixels closest to each vertex represent that color strongest. Pixels
+                in the middle are the average of the colors of the vertices due to their distance.
+            </figcaption>
+        </div>
+
+        <p>We can sequence a number of triangles into a circle with similar border colors to generate a
+            smooth gradient. </p>
+
+        <div align="middle">
+            <img src="./assets/t4-2.png" width="400px">
+            <figcaption align="middle">Circle</figcaption>
+        </div>
+
+        <h3 align="middle">Part 5: "Pixel sampling" for texture mapping</h3>
+
+        <p>Pixel mapping from textures differs from color interpolation in that the colors are not set by
+            the svg file but rather by a separate image. The two types of texture sampling for this project
+            were sample nearest and sample bilinear. <br><br>
+            Sample nearest works by sampling the center of the texture pixel closest to the texture
+            coordinates <code> (tx, ty) </code> converted from linear (rasterization) coordinates
+            <code> (x, y) </code> described by a vector <code> [u, v] </code>. <br><br>
+            Sample bilinear works by sampling the four texture pixels closest to the texture coordinate and
+            returning the color that is the weighted average of those four texture pixels based on distance.
+            This should supply a smoother texture palate due to its more continuous nature.
+        </p>
+
+        <div align="middle">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td>
+                            <img src="./assets/t5-1.png" width="400px">
+                            <figcaption align="middle">Sample Nearest, 1 sample/pixel</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/t5-2.png" width="400px">
+                            <figcaption align="middle">Sample Nearest, 16 samples/pixel</figcaption>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="./assets/t5-3.png" width="400px">
+                            <figcaption align="middle">Sample Bilinear, 1 sample/pixel</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/t5-4.png" width="400px">
+                            <figcaption align="middle">Sample Bilinear, 16 samples/pixel</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>Sample bilinear will often have softer edges compared to sample nearest especially with low
+            sample rates because edges will not be antialiased. Tiny details will also be softly captured
+            better by bilinear as sample nearest may skip over specific texels.
+        </p>
+
+        <h3 align="middle">Part 6: "Level sampling" with mipmaps for texture mapping</h3>
+
+        <p>
+            Mipmaps are pre-scaled texture maps that save important details of an image when rendering at
+            various magnifications. An very zoomed out image without mipmaps may lose important details due
+            to the averaging of pixel colors. For instance, a zoomed out face might lose its eyes since the
+            average space is filled by the skin colors. I implemented 3 functions for determining the level
+            of mipmap to use when sampling a texture: zero level, nearest level, and linear level. <br><br>
+            Level zero picks the 0th level. This is essentially no mipmap. This is the fastest option but may
+            lose details. This also has the lowest memory usage because extra mipmaps do not need to be
+            stored.<br><br>
+            Nearest level determines the closest fit level by comparing the change in texel distance covered
+            by each change in pixel distance. If an image is zoomed in, there will be a small texel distance
+            between pixel distances and if an image is zoomed out, there will be a large texel distance
+            between pixels. This method is strongest when there is a large number of mipmap levels, but takes
+            more memory because of it. However, it performs fewer samples than linear leveling. <br><br>
+            Linear level samples from both of the two discrete levels closest to the calculated level and
+            returns a weighted average of each sample based on level distance. This interpolation requires
+            twice the number of samples and functions well when mipmap levels are far apart. Thus it is the
+            slowest of the three methods but could potentially be less memory expensive than nearest level.
+        </p>
+
+        <div align="middle">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td>
+                            <img src="./assets/t6-1.png" width="400px">
+                            <figcaption align="middle">Level Zero, Sample Nearest</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/t6-2.png" width="400px">
+                            <figcaption align="middle">Level Zero, Sample Bilinear</figcaption>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="./assets/t6-3.png" width="400px">
+                            <figcaption align="middle">Nearest Level, Sample Nearest</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/t6-4.png" width="400px">
+                            <figcaption align="middle">Sample Bilinear, Sample Bilinear</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+    </div>
+
+
+    <h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2020</h1>
+    <h1 align="middle">Project 2: Mesh Editor</h1>
+    <h2 align="middle">Brian Fu, CS184</h2>
+
+    <div>
+
+        <div align="middle">
+            <img src="./assets/cow.png" align="middle" width="400px">
+        </div>
+
+        <h2 align="middle">Overview</h2>
+        <p>This project is a three dimentional mesh rendering engine. It renders three dimensional objects
+            using Bezier surfaces and uses loop subdivision to smooth surfaces. Each 3-D model is built up
+            from control points that determine the points along a Bezier surface that combine to form a
+            Bezier plane. The planes are then smoothed by splitting their component triangles into sub-planes
+            to increase granularity. Lighting is determined by the normal vector of each face. This project
+            relies heavily on the half-edge data structure that defines one side of an edge of a triangle.
+            The half edges are directioned so that going iterating through a chain of half-edges will follow
+            the internal edges of a polygon.
+        </p>
+
+        <h2 align="middle">Section I: Bezier Curves and Surfaces</h2>
+
+        <h3 align="middle">Part 1: Bezier curves with 1D de Casteljau subdivision</h3>
+
+        <p>De Casteljau's algorithm takes a set of control points and returns a subset of interpolated
+            points along its corresponding Bezier curve. It is implemented by running a lerp on each pair of
+            consecutive points so that a list of <code>n</code> control points returns a list of
+            <code> n - 1</code> interpolated points. Given a parameter <code> t </code> , it is possible to
+            determine the continuous Bezier curve by linearly shifting <code> t </code>.
+        </p>
+
+        <div align="middle">
+            <br>
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td>
+                            <img src="./assets/pt1-1.png" width="200px">
+                            <figcaption align="middle">6 control points</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/pt1-2.png" width="200px">
+                            <figcaption align="middle">5 control points</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/pt1-3.png" width="200px">
+                            <figcaption align="middle">4 control points</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/pt1-4.png" width="200px">
+                            <figcaption align="middle">3 control points</figcaption>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <img src="./assets/pt1-5.png" width="200px">
+                            <figcaption align="middle">2 control points</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/pt1-6.png" width="200px">
+                            <figcaption align="middle">1 control point</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/pt1-7.png" width="200px">
+                            <figcaption align="middle">Curve following points</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/pt1-8.png" width="200px">
+                            <figcaption align="middle">another point down the line</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div align="middle">
+            <img src="./assets/pt1-9.png" align="middle" width="400px">
+            <figcaption align="middle">A different Bezier Curve</figcaption>
+        </div>
+
+
+        <h3 align="middle">Part 2: Bezier surfaces with separable 1D de Casteljau subdivision</h3>
+
+        <p>
+            The de Casteljau algorithm can be extended to function over multiple dimensions as well. Given
+            a 3-dimensional plane of control points, the point in the Bezier surface at parameters
+            <code> u, v </code> can be determined by running the de Casteljau algorithm on each row using
+            parameter <code> u </code> to singularity, then running the algorithm over those points using
+            parameter <code> v </code>.
+        </p>
+        <div align="middle">
+            <img src="./assets/pt2-1.png" align="middle" width="400px">
+            <figcaption align="middle">Teapot made from Bezier surfaces</figcaption>
+        </div>
+
+
+        <h2 align="middle">Section II: Sampling</h2>
+
+        <h3 align="middle">Part 3: Average normals for half-edge meshes</h3>
+
+        <p>
+            Area-weighted vertex normals can be used to smooth the shading for polygons of a mesh when
+            rendering them. When using Phong shading, each pixel is colored as opposed to each vertex or each
+            face. This increases the granularity and smooths out the image.
+        </p>
+
+        <div align="middle">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td>
+                            <img src="./assets/pt3-1.png" width="500px">
+                            <figcaption align="middle">Triangle Shading</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/pt3-2.png" width="500px">
+                            <figcaption align="middle">Pixel Shading</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <h3 align="middle">Part 4: Half-edge flip</h3>
+
+        <p>
+            The edge flip operation is used to manipulate the geometry of the mesh by flipping a pair of
+            triangles along their shared edge. This is implemented by setting every pointer in that pair of
+            triangles to point in the new configuration. If a pointer points at the wrong face or edge, that
+            face will not be rendered leaving a hole in the mesh. If an edge points at the wrong vertex, it
+            stretches the mesh and deforms it at that location. We debugged by diagraming every single
+            pointer. There were a lot of pointers.
+        </p>
+
+        <div align="middle">
+            <img src="./assets/pt4-3.png" align="middle" width="700px">
+            <figcaption align="middle">Pointer labels</figcaption>
+        </div>
+        <br>
+        <div align="middle">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td>
+                            <img src="./assets/pt4-1.png" width="500px">
+                            <figcaption align="middle">Before flip</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/pt4-2.png" width="500px">
+                            <figcaption align="middle">After flip</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <h3 align="middle">Part 5: Half-edge split</h3>
+
+        <p>
+            The edge split operation is used to divide two triangles into four triangles across their shared
+            edge. This was implemented by creating a new vertex in the middle and connecting four edges from
+            the bordering vertices to the central vertex. This involved creating new instances of objects and
+            setting every pointer similarly to part 4.
+        </p>
+
+        <div align="middle">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td>
+                            <img src="./assets/pt4-1.png" width="350px">
+                            <figcaption align="middle">Before split</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/pt5-2.png" width="350px">
+                            <figcaption align="middle">After split</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/pt5-3.png" width="350px">
+                            <figcaption align="middle">After multiple flips and splits</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <h3 align="middle">Part 6: Loop subdivision for mesh upsampling</h3>
+
+        <p>Loop subdivision is a process that takes an existing mesh and splits each of its triangles into
+            four sub-triangles to increase the true granularity of the mesh. This operation increases the
+            total number of triangles by performing a sequence of flips and splits. First, every original
+            edge is split. Then if an edge touches both a new vertex and an old vertex, it is flipped. This
+            set of operations breaks each triangle into a four sub-triangle geometry. Sharp corners and edges
+            become smooth and rounded. However, if an edge is a border, it remains sharp because the loop
+            does not subdivide borders.
+        </p>
+
+        <div align="middle">
+            <br>
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td>
+                            <img src="./assets/pt6-1.png" width="350px">
+                            <figcaption align="middle">Original Cube</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/pt6-2.png" width="350px">
+                            <figcaption align="middle">After upsample</figcaption>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <img src="./assets/pt6-3.png" width="350px">
+                            <figcaption align="middle">Cube pre-split</figcaption>
+                        </td>
+                        <td>
+                            <img src="./assets/pt6-4.png" width="350px">
+                            <figcaption align="middle">Upsample after splits</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>
+            In the first two images, when the cube is upsampled, it becomes lopsided and asymetrical.
+            However, by pre-splitting each face, the loop subdivision is symmetrical across each face thus
+            making the end result symmetrical as well.
+        </p>
+
+
+
+    </div>
+
+    <br>
+    <h1 align="middle">Assignment 3: PathTracer</h1>
+    <h2 align="middle">Brian Fu</h2>
+
+    <div class="padded">
+        <p>This assignment is an extension of the previous rendering engine to implement microfacet
+            materials (part 2) and depth of field (part 4).
+        </p>
+
+        <h2 align="middle">Part 2: Microfacet Materials</h2>
+        <h3 align="middle">Various α levels</h3>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/CBdragon_mf_au_a0.5.png" width="480px">
+                            <figcaption align="middle">CBdragon_microfacet_au: α = 0.5</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/CBdragon_mf_au_a0.25.png" width="480px">
+                            <figcaption align="middle">CBdragon_microfacet_au: α = 0.25</figcaption>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/CBdragon_mf_au_a0.05.png" width="480px">
+                            <figcaption align="middle">CBdragon_microfacet_au: α = 0.05</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/CBdragon_mf_au_a0.005.png" width="480px">
+                            <figcaption align="middle">CBdragon_microfacet_au: α = 0.005</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>
+            As the alpha (α) value gets smaller, the material becomes shinier and more reflective.
+            From α = 0.5 to α = 0.25, the shadows along the horn become more pronounced and in
+            α = 0.05, the shadows along the front of the dragon's body appear. At α = 0.5, the dragon
+            has a matte appearance.
+        </p>
+
+        <h3 align="middle">Hemisphere vs Importance Sampling</h3>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/CBbunny_mf_cu_h.png" width="480px">
+                            <figcaption align="middle">Hemisphere Sampling</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/CBbunny_mf_cu.png" width="480px">
+                            <figcaption align="middle">Importance Sampling</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p>
+            Given the same sample rate, light rays, and number of ray bounces, hemisphere sampling
+            results in a much noisier image than improtance sampling. The image would probably need
+            a greater number of samples and bounces to reach the same result as importance sampling.
+        </p>
+
+        <h3 align="middle">Different Conductor Materials</h3>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/CBbunny_mf_BFO.png" width="480px">
+                            <figcaption align="middle">Bismuth Ferrite Bunny!</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <h2 align="middle">Part 4: Microfacet Materials</h2>
+
+        <p>
+            A pinhole camera model differs from a thin-lens camera model in that the pinhole
+            camera model has an infinitely small aperture resulting in straight light rays traveling
+            directly onto the sensor plane.
+        </p>
+
+        <h3 align="center">Focal Length Stack</h3>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/CBdragon_microfacet_au_fd_1.57.png" width="480px">
+                            <figcaption align="middle">CBdragon_microfacet_au: Focal Length = 1.57</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/CBdragon_microfacet_au_fd_1.67.png" width="480px">
+                            <figcaption align="middle">CBdragon_microfacet_au: Focal Length = 1.67</figcaption>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/CBdragon_microfacet_au_fd_1.97.png" width="480px">
+                            <figcaption align="middle">CBdragon_microfacet_au: Focal Length = 1.97</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/CBdragon_microfacet_au_fd_2.17.png" width="480px">
+                            <figcaption align="middle">CBdragon_microfacet_au: Focal Length = 2.17</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 align="center">Lens Radius Stack</h3>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/CBdragon_microfacet_au_ap_0.0.png" width="480px">
+                            <figcaption align="middle">CBdragon_microfacet_au: Focal Length = 1.57</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/CBdragon_microfacet_au_ap_0.05.png" width="480px">
+                            <figcaption align="middle">CBdragon_microfacet_au: Focal Length = 1.67</figcaption>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/CBdragon_microfacet_au_ap_0.1.png" width="480px">
+                            <figcaption align="middle">CBdragon_microfacet_au: Focal Length = 1.97</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/CBdragon_microfacet_au_ap_0.15.png" width="480px">
+                            <figcaption align="middle">CBdragon_microfacet_au: Focal Length = 2.17</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+
+
+
+
+    <h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2020</h1>
+    <h1 align="middle">Project 4: Cloth Simulator</h1>
+    <h2 align="middle">Brian Fu, CS184</h2>
+
+    <br><br>
+
+    <div>
+
+        <h2 align="middle">Overview</h2>
+        <p>This project is a physics simulation engine that utilizes vector math and force distribution to
+            simulate the behavior of cloths and objects. We were also able to add shaders to change the
+            appearance of the objects in the simulation.
+        </p>
+
+        <h2 align="middle">Part I: Masses and springs</h2>
+
+        <div align="center">
+            <img src="./assets/part1-1.png" width="480px">
+            <figcaption align="middle">Structure of masses and springs</figcaption>
+        </div>
+
+        <h3 align="middle">Various constraints</h3>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/part1-2-shearing.png" width="300px">
+                            <figcaption align="middle">Without Shearing constraints</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part1-2-structbending.png" width="300px">
+                            <figcaption align="middle">With only shearing constraints</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part1-1.png" width="300px">
+                            <figcaption align="middle">With All constraints</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2 align="middle">Part II: Simulation via numerical integration</h2>
+        <h4 align="middle">Spring Constant</h4>
+        <p>
+            The spring constant, <code>ks</code>, changes the amount of force necessary to move a spring
+            a certain length. Increasing this value would make a larger amount of force necessary to move
+            the same ammount. When the ks is low, the cloth dangles lower is more fluid as it falls. When
+            the ks is high, the cloth is more rigid and holds a blockier structure.
+        </p>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/part2-ks-low.png" width="300px">
+                            <figcaption align="middle">Low spring constant</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part2-1ks.png" width="300px">
+                            <figcaption align="middle">High spring constant</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h4 align="middle">Density</h4>
+        <p>
+            The density of the cloth changes its mass per area. When the density is very low, the force of
+            the springs is greater than the affect of gravity on each point causing the cloth to contort on
+            itself in the resting position. When the density is very high, the cloth is more affected by
+            gravity than its own internal springs.
+        </p>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/part2-2densitylow.png" width="300px">
+                            <figcaption align="middle">Low Density</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part2-2densityhigh.png" width="300px">
+                            <figcaption align="middle">High Density</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h4 align="middle">Damping</h4>
+        <p>
+            The damping in the simulation affects the distance each point travels in each time step
+            simulating the affects of friction or air resistance. As the damping increases, the cloth
+            falls slower and arrives at its final resting state faster. A low damping allows the cloth
+            to swing further.
+        </p>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/part2-3dampinglow.png" width="300px">
+                            <figcaption align="middle">Low Damping: cloth swings past equilibrium</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part2-3dampinghigh.png" width="300px">
+                            <figcaption align="middle">High Damping: cloth takes long time to reach equilibrium
+                            </figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h4 align="middle">Pinned 4</h4>
+        <div align="center">
+            <img src="./assets/part2-4.png" width="480px">
+            <figcaption align="middle">Default Settings</figcaption>
+        </div>
+
+        <h2 align="middle">Part III: Handling collisions with other objects</h2>
+
+        <h3 align="middle">Various Spring Constants</h3>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/part3-1ks500.png" width="300px">
+                            <figcaption align="middle">ks = 500</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part3-1ks5000.png" width="300px">
+                            <figcaption align="middle">ks = 5,000</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part3-1ks50000.png" width="300px">
+                            <figcaption align="middle">ks = 50,000</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>
+            As the spring constant increases, the cloth hugs the sphere less tightly. When the spring
+            constant is 500N/m, the cloth dangles straight down and it is easy to tell the contour of
+            the sphere. When the spring constant is 50,000N/m, the cloth resists conforming to the sphere
+            and bulges out in certain areas.
+        </p>
+
+        <h4 align="middle">Plane Collision</h4>
+        <div align="center">
+            <img src="./assets/part3-2.png" width="480px">
+            <figcaption align="middle">Textured cloth lying on a flat plane</figcaption>
+        </div>
+
+
+
+        <h2 align="middle">Part IV: Handling self-collisions</h2>
+
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/part4-1-0.png" width="300px">
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part4-1-1.png" width="300px">
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part4-1-2.png" width="300px">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>
+            When the density is very low, the cloth folds in on itself before it is very affected by
+            gravity. Once it has collapsed, it writhes on the ground instead of staying still.
+        </p>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/part4-2densitylow.png" width="300px">
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part4-2densitylow-2.png" width="300px">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>
+            When the density is high, the cloth can still clip through itself because gravity is greater
+            than the repulsing force of the cloth.
+        </p>
+        <div align="center">
+            <img src="./assets/part4-2densityhigh.png" width="480px">
+            <figcaption align="middle">High Density clipping</figcaption>
+        </div>
+
+
+        <h2 align="middle">Part V: Shaders</h2>
+
+        <p>
+            A shader is a program that "shades in" a surface and tells the renderer what colors to draw
+            and the effects to add to that drawing. For instance, a texture shader can put an image on
+            the cloth.
+        </p>
+        <p>
+            A vertex shader is a shader that transforms the vertices of an object to give it depth or
+            height. This changes the physical topography of the object being rendered.
+        </p>
+        <p>
+            A fragment shader applies transforms to fragments rather than vertices. They can be used to assign
+            colors to various parts of a plane and change the reflectivity of other areas. Fragment shaders
+            can affect color, lighting, shadows, reflectivity and even artificially place physical textures without
+            affecting the physical geometry of the object.
+        </p>
+        <p>
+            Blinn-Phong shading adds the ambient, diffuse, and specular components of an image together to immitate
+            the highlights, fills, and darkeness in real photography.
+        </p>
+        <h4 align="middle">Blinn-Phong shading parts</h4>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/part5-2amb.png" width="300px">
+                            <figcaption align="middle">Ambient Filter</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part5-2dif.png" width="300px">
+                            <figcaption align="middle">Diffuse Filter</figcaption>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/part5-2spec.png" width="300px">
+                            <figcaption align="middle">Specular Filter</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part5-2-all.png" width="300px">
+                            <figcaption align="middle">All Together</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 align="middle">Different Textures</h4>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/part5-3-before.png" width="300px">
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part5-3-after.png" width="300px">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 align="middle">Bump mapped clock texture</h4>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/part5-4-1.png" width="600px">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h4 align="middle">Displacement mapped clock texture</h4>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/part5-4-2.png" width="480px">
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part5-4-3.png" width="480px">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>
+            The bump mapped texture is a fragment shader which does not affect the physical geometry of the
+            object. It only takes the brightness of a texture at each point and makes it appear as if the
+            surface has depth. On the other hand, the displacement texture is a vertex shader so it manipulates
+            the physical location of vertices. This can be seen at the edges of the objects showing that the
+            sphere is no longer perfectly round and the cloth no longer has straight edges as the bump map did.
+        </p>
+
+        <h4 align="middle">Coarseness</h4>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/part5-4-coarse.png" width="480px">
+                            <figcaption align="middle">Coarseness: 16</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part5-4-fine.png" width="480px">
+                            <figcaption align="middle">Coarseness: 128</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 align="middle">Mirror Shading</h4>
+        <div align="center">
+            <table style="width=100%">
+                <tbody>
+                    <tr>
+                        <td align="middle">
+                            <img src="./assets/part5-5-cloth.png" width="480px">
+                            <figcaption align="middle">Cloth</figcaption>
+                        </td>
+                        <td align="middle">
+                            <img src="./assets/part-5-5-sphere.png" width="480px">
+                            <figcaption align="middle">Sphere</figcaption>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+    </div>
+
+
+
+    <!-- Add your content of header -->
+    <div class="background-color-layer" style="background-image: url(&#39;assets/images/img-01.jpg&#39;)"></div>
+    <main class="content-wrapper">
+        <header class="white-text-container section-container">
+            <div class="text-center">
+                <h1>CS 184: Computer Graphics and Imaging, Spring 2020</h1>
+                <h1>Final Project: Point Cloud to Mesh</h1>
+                <p>Jordan Knox, Brian Fu, Mickey Matiss, Kendall Choy</p>
+            </div>
+        </header>
+
+
+
+        <!-- Add your site or app content here -->
+
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+
+                    <div class="card" data-sr-id="2"
+                        style="; visibility: visible;  -webkit-transform: translateY(0) scale(1); opacity: 1;transform: translateY(0) scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ">
+                        <div class="card-block">
+                            <h2>Abstract</h2>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p><img src="./assets/image1.png" class="img-responsive" alt="">
+                                    </p>
+                                </div>
+                                <div class="col-md-8">
+
+                                    <p>Our goal for this project is to create a program that is capable of taking in a
+                                        .ply file of
+                                        vertices that will then
+                                        convert it into a mesh and then rendering the mesh. The .ply file is a point
+                                        cloud, which is usually
+                                        the output produced
+                                        by 3D scanners. Our first step is reading the .ply file and computing the
+                                        normals for each vertex in
+                                        the cloud. The next
+                                        step is to run the ball pivot algorithm on the points and normals together in
+                                        order to generate the
+                                        faces. Finally, we
+                                        put together the vertices edges and faces in order to render the mesh. We used
+                                        the browser
+                                        application threeJS in order
+                                        to render our finished mesh.</p>
+
+                                    <p>Our Project submission video is linked in our references section</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" data-sr-id="3"
+                        style="; visibility: visible;  -webkit-transform: translateY(0) scale(1); opacity: 1;transform: translateY(0) scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ">
+                        <div class="card-block">
+                            <h2>Technical Approach</h2>
+
+                            <div class="work-experience">
+                                <h3 class="h5 date-title">Starting With Project 2</h3>
+                                <p>We had originally intended to use our project 2 code as the starter code for this
+                                    project. It made sense, as this project's
+                                    last step is to render a mesh, and that's what the project 2 end product was. But,
+                                    we hit a few snags in that plan. The first
+                                    snag was the format of the point cloud data we could find. All of the point clouds
+                                    we could find were in .ply file format.
+                                    But the meshedit starter code took in meshes in .dae file format. We tried a few
+                                    solutions to the conversion of .ply to .dae
+                                    but none of them worked very well and we did not want to spend hours learning to
+                                    write our own .dae files, so we decided to
+                                    move away from the project 2 code as the base for our renderer. We looked at a few
+                                    other ways to render the meshes we were
+                                    going to generate. Our first thought was to use a program called Blender, but upon
+                                    further investigation, we realized that
+                                    blender was a bit too advanced than we needed for our render, and the finished
+                                    products looked somewhat odd. Next we turned
+                                    to a program called ThreeJS and that's what we eventually used to render our
+                                    finished mesh.
+                                </p>
+                            </div>
+
+                            <div class="work-experience">
+                                <h3 class="h5 date-title">.ply Files</h3>
+                                <p>The first issue we had to tackle was dealing with the format of the point clouds.
+                                    Most point clouds are found in
+                                    .ply files. The .ply files are fairly easy to read and understand. We decided to use
+                                    a repository from Stanford as our
+                                    source for the majority of our point clouds. The .ply files on that repository were
+                                    comprised of vertices and faces.
+                                    We needed the vertices and the vertex normals in order to run our ball pivot
+                                    algorithm. Then we erased the original
+                                    faces from the .ply file. This gave us a .ply file that we could use the ball pivot
+                                    algorithm on to generate a triangle
+                                    mesh.
+                                </p>
+                            </div>
+
+                            <div class="work-experience">
+                                <h3 class="h5 date-title">The Ball Pivot Algorithm</h3>
+                                <p>The Ball-Pivoting Algorithm is named for the simulated use of a virtual ball to help
+                                    reconstruct a mesh from a
+                                    point cloud. To construct the mesh from the point cloud, you first assume that the
+                                    cloud consists of points from the surface
+                                    of the object we are trying to make a mesh for.</p>
+                                <br>
+                                <p>The algorithm then works by simulatimng a tiny ball rolling across the points in the
+                                    cloud. The ball's size is dependant
+                                    on the scale of the mesh. It is typically slightly larger than the average space
+                                    between points. From there, you drop the
+                                    ball onto the points. It will end up settling on three points and that will be the
+                                    "seed triangle". This is where we will
+                                    start our algorithm. From the seed triangle, we then roll the ball outwards in any
+                                    direction over one of the edges formed
+                                    between two of the three points. The ball will then come to rest between the two
+                                    starting points and one new one. This new
+                                    triangle will then be added to the mesh. This process will be repeated until all of
+                                    the points have been touched and the
+                                    mesh is fully formed.
+                                </p>
+                                <img src="./assets/image2.png" class="img-responsive" alt="">
+                                <p>Here is a 2D visual for how the ball moves along the points.</p>
+
+                            </div>
+
+                            <div class="work-experience">
+                                <h3 class="h5 date-title">Small Problems</h3>
+                                <p>There were a few minor issues that prevented us from fully finishing our
+                                    implementation. The first of which was that when we wrote
+                                    the faces to the .ply file, the file would always somehow end up corrupted and
+                                    unusable. We were close to fixing this bug when we
+                                    ran out of time. Our second bug was in our implementation of the ball pivot
+                                    algorithm. Our issue was that when we were calculating
+                                    the theta for our algorithm, the values we got were so small that they always
+                                    appeared as 0, so we could not accurately compare
+                                    points and create realistic faces. We were able to create a few files though, just
+                                    they just arent perfect.
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="card" data-sr-id="4"
+                        style="; visibility: visible;  -webkit-transform: translateY(0) scale(1); opacity: 1;transform: translateY(0) scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ">
+                        <div class="card-block">
+                            <h2>Results</h2>
+                            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+
+
+                                <!-- Wrapper for slides -->
+                                <div class="carousel-inner" role="listbox">
+                                    <div class="item">
+                                        <img src="./assets/image3.png" class="img-responsive"
+                                            alt="...">
+                                        <div class="carousel-caption">
+                                            <h3 class="h5">Intended result of converting point cloud to mesh</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="item active">
+                                        <img src="./assets/image4.png" class="img-responsive"
+                                            alt="...">
+                                        <div class="carousel-caption">
+                                            <h3 class="h5">Part of a pointcloud rendered</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="item">
+                                        <img src="./assets/image5.png" class="img-responsive"
+                                            alt="...">
+                                        <div class="carousel-caption">
+                                            <h3 class="h5">Our terminal output while running the Ball Pivot Algorithm
+                                            </h3>
+                                            <p>This shows how our values when running the algorithm were slightly off
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" data-sr-id="5"
+                        style="; visibility: visible;  -webkit-transform: translateY(0) scale(1); opacity: 1;transform: translateY(0) scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ">
+                        <div class="card-block">
+                            <h2>References</h2>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="education-experience">
+                                        <h3 class="h5 date-title"><a
+                                                href="https://lidarwidgets.com/samples/bpa_tvcg.pdf"
+                                                title="Create professionnal website">Ball Pivot Algorithim Paper</a>
+                                        </h3>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="education-experience">
+                                        <h3 class="h5 date-title"><a href="http://graphics.stanford.edu/data/3Dscanrep/"
+                                                title="Create professionnal website">Stanford Point Cloud Repository</a>
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="education-experience">
+                                        <h3 class="h5 date-title"><a href="https://threejs.org/editor/"
+                                                title="Create professionnal website">ThreeJS</a></h3>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="education-experience">
+                                        <h3 class="h5 date-title"><a href="https://www.youtube.com/watch?v=7vGeC2Gqlro"
+                                                title="Create professionnal website">Project Submission Video</a>
+                                        </h3>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" data-sr-id="6"
+                        style="; visibility: visible;  -webkit-transform: translateY(0) scale(1); opacity: 1;transform: translateY(0) scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ">
+                        <div class="card-block">
+                            <h2>Contributions</h2>
+                            <p>We all worked on the project together, had significant inputs during all parts of the
+                                project, and were
+                                contributing intellectually to the code.</p>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="education-experience">
+                                        <h3 class="h5 date-title">Mickey Matiss: </h3>
+                                        <p>Wrote the majority of the code for the point cloud manipulation and
+                                            contributed heavily to the Ball Point Algorithm implementation.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="education-experience">
+                                        <h3 class="h5 date-title">Brian Fu: </h3>
+                                        <p>Wrote the majority of the coding for the .ply file parsing and contributed
+                                            heavily to the Ball Point Algorithm.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="education-experience">
+                                        <h3 class="h5 date-title">Jordan Knox</h3>
+                                        <p>Wrote and formatted all of the websites, videos, and presentations. Also
+                                            contributed to integrating the different parts</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="education-experience">
+                                        <h3 class="h5 date-title">Kendall Choy</h3>
+                                        <p>Majority of the debugging and wrote the slides for the milestone powerpoint
+                                            as well as research into algorithms and solutions to issues.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+
+</body>
+
+</html>

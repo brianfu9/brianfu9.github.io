@@ -151,7 +151,7 @@ a:not([href]):not([tabindex]):hover {
 .projects-card {
   margin: 10px 10% 10px 10px;
   width: 100%;
-  background-color: #eee8d5;
+  background-color: #c9d3d6;
   padding: 15px 15px 15px 0px;
   border-radius: 15px;
   overflow-x: auto;

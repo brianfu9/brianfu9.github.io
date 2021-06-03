@@ -12,11 +12,11 @@ var Projects = Projects || function (output_) {
 
     // var last_known_scroll_position = 0;
     // var ticking = false;
-    
+
     // function doSomething(scroll_pos) {
     //     nav.setAttribute("data_overflowing", determineOverflow(content, nav));
     // }
-    
+
     // nav.addEventListener("scroll", function() {
     //     last_known_scroll_position = window.scrollY;
     //     if (!ticking) {
@@ -45,7 +45,7 @@ var Projects = Projects || function (output_) {
     //         return "none";
     //     }
     // }
-    
+
 }
 
 const projectsHtmlString =
@@ -53,11 +53,99 @@ const projectsHtmlString =
         <div class="row" id="projects-content">
             <div class="col-sm-">
                 <figure class="tile">
-                    <img src="assets/images/map.png" width="310" height="394" alt="GCWeb" />
+                    <img src="./assets/images/grow.jpeg" width="310" height="394" alt="grow" />
+                    <div class="date"><span class="year">2021</span><span class="month">Spring</span></div>
+                    <figcaption>
+                        <h3>Grow.ai</h3>
+                        <h5>Cannabis Grow Box</h5>
+                        <p>Uplift the cannabis industry by providing insights to the health of every
+                            cannabis plant, removing the ambiguity of giving a plant what it needs, and
+                            radically improving the ecological impact that cannabis grow operations have on
+                            the planet.</p>
+                        <button class="tags">Start-Up</button>
+                        <button class="tags">Electron</button>
+                        <button class="tags">Cordova</button>
+                        <button class="tags">Javascript</button>
+                        <button class="tags">Machine Learning</button>
+                        <button class="tags">Computer Vision</button>
+                        <button class="tags">Rekognition</button>
+                    </figcaption>
+                    <a href="https://github.com/grow-ai/KM-1" target="_blank"></a>
+                </figure>
+                <div class="github-button-div">
+                    <a class="github-button" href="https://github.com/grow-ai/KM-1"
+                        data-size="large">Grow.ai</a>
+                </div>
+            </div>
+            <div class="col-sm-">
+                <figure class="tile">
+                    <img src="./assets/images/kinesis.png" width="310" height="394" alt="Kinesis" />
+                    <div class="date"><span class="year">2020</span><span class="month">Fall</span></div>
+                    <figcaption>
+                        <h3>Kinesis.ai</h3>
+                        <h5>AI for physical rehabilitation</h5>
+                        <p>Uses computer vision to accurately identify body movements and exercises
+                            performed by patients in real-time. An early-stage start-up spun out of UC
+                            Berkeley in association with OST Switzerland.</p>
+                        <button class="tags">Start-Up</button>
+                        <button class="tags">Machine Learning</button>
+                        <button class="tags">Manifold Learning</button>
+                        <button class="tags">Computer Vision</button>
+                        <button class="tags">Python</button>
+                        
+                    </figcaption>
+                    <a href="https://youtu.be/iFwAElI6CTI?t=3194" target="_blank"></a>
+                </figure>
+                <div class="github-button-div">
+                    <a class="github-button" href="https://github.com/brianfu9/DataX_general"
+                        data-size="large">Kinesis.ai</a>
+                </div>
+            </div>
+            <div class="col-sm-">
+                <figure class="tile">
+                    <img src="./assets/images/cs184.png" width="310" height="394" alt="cs184" />
+                    <div class="date"><span class="year">2020</span><span class="month">Spring</span></div>
+                    <figcaption>
+                        <h3>CS 184</h3>
+                        <h5>Foundations of Computer Graphics</h5>
+                        <p>Implemented various rendering engines from physics simulations to ray tracing and shaders.</p>
+                        <button class="tags">C#</button>
+                        <button class="tags">Rendering</button>
+                        <button class="tags">Berkeley</button>
+                        <button class="tags">Coursework</button>
+                    </figcaption>
+                    <a href="https://brianfu.me/html/graphics" target="_blank"></a>
+                </figure>
+            </div>
+            <div class="col-sm-">
+                <figure class="tile">
+                    <img src="./assets/images/subar.jpeg" width="310" height="394" alt="SubAR" />
+                    <div class="date"><span class="year">2019</span><span class="month">Sept</span>
+                    </div>
+                    <figcaption>
+                        <h3>Sub-AR</h3>
+                        <h5>HackMIT</h5>
+                        <p>Generates subtitles in augmented reality that follow the people speaking
+                            utilizing multiple-microphone triangulation and facial detection.</p>
+                        <button class="tags">Waveform Analysis</button>
+                        <button class="tags">Python</button>
+                        <button class="tags">Rev.ai</button>
+                        <button class="tags">OpenCV2</button>
+                    </figcaption>
+                    <a href="https://devpost.com/software/subtitles-irl" target="_blank"></a>
+                </figure>
+                <div class="github-button-div">
+                    <a class="github-button" href="https://github.com/alexwyao/sub-AR"
+                        data-size="large">Sub-AR</a>
+                </div>
+            </div>
+            <div class="col-sm-">
+                <figure class="tile">
+                    <img src="./assets/images/map.png" width="310" height="394" alt="GCWeb" />
                     <div class="date"><span class="year">2019</span><span class="month">May</span></div>
                     <figcaption>
                         <h3>Man Maps</h3>
-                        <h6>Minimal Navigation App</h6>
+                        <h5>Minimal Navigation App</h5>
                         <p>A minimalist navigation platform that doesn't show you where your
                             destination is, where you are, or anything in between. Man maps simply points
                             you in the right direction and tells you how far you need to go.</p>
@@ -75,77 +163,11 @@ const projectsHtmlString =
             </div>
             <div class="col-sm-">
                 <figure class="tile">
-                    <img src="assets/images/gcweb.png" width="310" height="394" alt="GCWeb" />
-                    <div class="date"><span class="year">2018</span><span class="year">2019</span></div>
-                    <figcaption>
-                        <h3>Gamesman Web</h3>
-                        <h6>Undergraduate Research</h6>
-                        <p>Combinatorial game theory led by Dr. Dan Garcia. Strongly solving
-                            perfect-information abstract strategy games.</p>
-                        <button class="tags">Game Theory</button>
-                        <button class="tags">C</button>
-                        <button class="tags">Hashing</button>
-                        <button class="tags">Unix</button>
-                    </figcaption>
-                    <a href="http://gamescrafters.berkeley.edu/" target="_blank"></a>
-                </figure>
-                <div class="github-button-div">
-                    <a class="github-button" href="https://github.com/GamesCrafters"
-                        data-size="large">Gamescrafters</a>
-                </div>
-            </div>
-            <div class="col-sm-">
-                <figure class="tile">
-                    <img src="assets/images/slowly.png" width="310" height="394" alt="$lowly" />
-                    <div class="date"><span class="year">2019</span><span class="month">Mar</span></div>
-                    <figcaption>
-                        <h3>$lowly</h3>
-                        <h6>LA Hacks</h6>
-                        <p>Gamification of driving to encourage safe driving behavior. Utilizes Smartcar API
-                            to extrapolate driving characteristics and intelligently assign a driving score.
-                        </p>
-                        <button class="tags">Smartcar API</button>
-                        <button class="tags">OAuth 2</button>
-                        <button class="tags">Node</button>
-                        <button class="tags">Express</button>
-                        <button class="tags">Bootstrap</button>
-                    </figcaption>
-                    <a href="https://devpost.com/software/lowly" target="_blank"></a>
-                </figure>
-                <div class="github-button-div">
-                    <a class="github-button" href="https://github.com/brianfu9/slowly"
-                        data-size="large">Slowly</a>
-                </div>
-            </div>
-            <div class="col-sm-">
-                <figure class="tile">
-                    <img src="assets/images/lifework.png" width="310" height="394" alt="LifeworkOnline" />
-                    <div class="date"><span class="year">2019</span><span class="month">Mar</span></div>
-                    <figcaption>
-                        <h3>Lifework Online</h3>
-                        <h6>Launchathon</h6>
-                        <p>Developed MVP escrow service for guarteeing payments to freelance workers though
-                            the Stripe api.</p>
-                        <button class="tags">Node</button>
-                        <button class="tags">Express</button>
-                        <button class="tags">Sessions</button>
-                        <button class="tags">Stripe API</button>
-                        <button class="tags">Bootstrap</button>
-                    </figcaption>
-                    <a href="https://www.lifeworkonline.com/" target="_blank"></a>
-                </figure>
-                <div class="github-button-div">
-                    <a class="github-button" href="https://github.com/brianfu9/lifework"
-                        data-size="large">Lifework</a>
-                </div>
-            </div>
-            <div class="col-sm-">
-                <figure class="tile">
-                    <img src="assets/images/bear.png" width="310" height="394" alt="Bear Faced" />
+                    <img src="./assets/images/bear.png" width="310" height="394" alt="Bear Faced" />
                     <div class="date"><span class="year">2018</span><span class="month">Nov</span></div>
                     <figcaption>
                         <h3>Bear Faced</h3>
-                        <h6>Cal Hacks</h6>
+                        <h5>Cal Hacks</h5>
                         <p>Utilizes emotion detection and image labeling neural networks to paste an image
                             of a bear's face with your emotion on your face.</p>
                         <button class="tags">Flask</button>
@@ -161,84 +183,6 @@ const projectsHtmlString =
                 <div class="github-button-div">
                     <a class="github-button" href="https://github.com/brianfu9/bearfaced"
                         data-size="large">Bear Faced</a>
-                </div>
-            </div>
-            <div class="col-sm-">
-                <figure class="tile"><img src="assets/images/isho.png" width="310" height="394" alt="iSho" />
-                    <div class="date"><span class="year">2018</span><span class="month">Sep</span></div>
-                    <figcaption>
-                        <h3>iSho</h3>
-                        <h6>HackMIT</h6>
-                        <p>Interactive force graph of interconnected global financial markets.</p>
-                        <button class="tags">Kensho</button>
-                        <button class="tags">Javascript</button>
-                        <button class="tags">D3JS</button>
-                        <button class="tags">Flask</button>
-                        <button class="tags">Beautiful Soup</button>
-                    </figcaption>
-                    <a href="https://devpost.com/software/isho-2mv59n" target="_blank"></a>
-                </figure>
-                <div class="github-button-div">
-                    <a class="github-button" href="https://github.com/magittan/iSho"
-                        data-size="large">iSho</a>
-                </div>
-            </div>
-            <div class="col-sm-">
-                <figure class="tile"><img src="assets/images/briefly.jpg" width="310" height="394" alt="Briefly" />
-                    <div class="date"><span class="year">2018</span><span class="month">Sep</span></div>
-                    <figcaption>
-                        <h3>Briefly</h3>
-                        <h6>HackMIT</h6>
-                        <p>Summarizes a lecture or podcast in written form.</p>
-                        <button class="tags">Rev.ai</button>
-                        <button class="tags">Algorithmia</button>
-                        <button class="tags">REST API</button>
-                        <button class="tags">MySQL</button>
-                        <button class="tags">Natural language processing</button>
-                    </figcaption>
-                    <a href="https://devpost.com/software/briefly-wpbi0u" target="_blank"></a>
-                </figure>
-                <div class="github-button-div">
-                    <a class="github-button" href="https://github.com/joeb15/mithacks2018"
-                        data-size="large">Briefly</a>
-                </div>
-            </div>
-            <div class="col-sm-">
-                <figure class="tile"><img src="assets/images/calamp.jpg" width="310" height="394" alt="CalAmp" />
-                    <div class="date"><span class="year">2018</span><span class="other">SUMMER</span></div>
-                    <figcaption>
-                        <h3>Software Engineering Internship</h3>
-                        <h6>CalAmp Corp.</h6>
-                        <p>Used deep learning neural networks to classify make/model/year of vehicles.
-                            Developed microservice to snap geocoordinates to mapped streets.</p>
-                        <button class="tags">Tensorflow</button>
-                        <button class="tags">REST API</button>
-                        <button class="tags">AWS</button>
-                        <button class="tags">Lambda</button>
-                        <button class="tags">DynamoDB</button>
-                        <button class="tags">A* Graph Search</button>
-                    </figcaption>
-                    <a href="https://www.calamp.com/" target="_blank"></a>
-                </figure>
-            </div>
-            <div class="col-sm-">
-                <figure class="tile">
-                    <img src="assets/images/bibo.png" width="310" height="394" alt="BiBo" />
-                    <div class="date"><span class="year">2018</span><span class="month">Apr</span></div>
-                    <figcaption>
-                        <h3>BiBo</h3>
-                        <h6>LA Hacks</h6>
-                        <p>Scans for numbers or text and automatically creates a phone contact.</p>
-                        <button class="tags">Mobile</button>
-                        <button class="tags">Android</button>
-                        <button class="tags">Java</button>
-                        <button class="tags">Google mobile vision</button>
-                    </figcaption>
-                    <a href="https://devpost.com/software/bibo" target="_blank"></a>
-                </figure>
-                <div class="github-button-div">
-                    <a class="github-button" href="https://github.com/DanielTatarkin/BiBo2/tree/Janky"
-                        data-size="large">BiBo</a>
                 </div>
             </div>
         </div>
