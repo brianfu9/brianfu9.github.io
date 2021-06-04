@@ -180,10 +180,10 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     )
                 } else {
                     output(
-                        `<p>Hi there! I'm Brian Fu, a fourth year Computer Science student at the University of California, Berkeley. Go Bears!</p>
+                        `<p>Hi there! I'm Brian Fu, a recent graduate of the University of California, Berkeley Go Bears!</p>
                         <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.district : 'spend most of my time in the Bay Area'}. 
-                        My hobbies include attending hackathons and listening to music. 
-                        I am a classical pianist of 13 years but dream of improv jazz riffs and anime ost's. 
+                        My hobbies include music, video games, great food, and losing money on the stock market.
+                        Looking for housing and food recs in San Jose.
                         If you've got any music, food or travel recommendations, please shoot me a message at <a onclick="term.triggerCommand(this.textContent);">contact</a>!</p>`
                     );
                 }
@@ -270,7 +270,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             case 'projects':
             case 'portfolio':
                 proj = new Projects(output_);
-                output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
+                output(`If you're interested in seeing a fully list of my projects, please contact me or check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
                 break;
             case 'resume':
                 window.open('assets/documents/BrianFu_resume.pdf', '_blank');
