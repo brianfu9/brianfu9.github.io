@@ -180,7 +180,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     )
                 } else {
                     output(
-                        `<p>Hi there! I'm Brian Fu, a recent graduate of the University of California, Berkeley Go Bears!</p>
+                        `<p>Hi there! I'm Brian Fu, a recent CS graduate of the University of California, Berkeley. Go Bears!</p>
                         <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.district : 'spend most of my time in the Bay Area'}. 
                         My hobbies include music, video games, great food, and losing money on the stock market.
                         Looking for housing and food recs in San Jose.
