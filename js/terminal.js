@@ -270,7 +270,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             case 'projects':
             case 'portfolio':
                 proj = new Projects(output_);
-                output(`If you're interested in seeing a fully list of my projects, please contact me or check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
+                output(`If you're interested in seeing more projects or commisioning some work, please contact me or check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
                 break;
             case 'resume':
                 window.open('assets/documents/BrianFu_resume.pdf', '_blank');
