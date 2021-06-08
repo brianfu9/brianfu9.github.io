@@ -27,7 +27,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     ];
 
     const CMDS_ADVANCED = [
-        'date', 'echo', 'emacs', 'man', 'ping', 'su', 'vim'
+        'bearfaced', 'date', 'echo', 'emacs', 'man', 'ping', 'su', 'vim'
     ];
 
     const CMDS_ALIAS = [
@@ -175,8 +175,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 if (args[0] == '-t' || args[0] == '-terminal') {
                     output(
                         `<p>So, you're interested in learing more about this website! 
-                        brianfu.me is hosted as a static page on Github Pages. It is a personal website designed to emulate the feel of a computer terminal.
-                        Try out the up and down arrow keys to navigate the commands history, tab for autocompletion and the animated typing sequence.</p>`
+                        brianfu.me is hosted as a static site on Github Pages. It is a personal website designed to emulate the feel of a computer terminal.
+                        Try out the up and down arrow keys to navigate the commands history, tab for autocompletion, and clicking colored text for animated typing sequences.</p>`
                     )
                 } else {
                     output(
