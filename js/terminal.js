@@ -27,7 +27,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     ];
 
     const CMDS_ADVANCED = [
-        'date', 'echo', 'emacs', 'man', 'ping', 'su', 'vim'
+        'bearfaced', 'date', 'echo', 'emacs', 'man', 'ping', 'su', 'vim'
     ];
 
     const CMDS_ALIAS = [
@@ -175,15 +175,15 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 if (args[0] == '-t' || args[0] == '-terminal') {
                     output(
                         `<p>So, you're interested in learing more about this website! 
-                        brianfu.me is hosted as a static page on Github Pages. It is a personal website designed to emulate the feel of a computer terminal.
-                        Try out the up and down arrow keys to navigate the commands history, tab for autocompletion and the animated typing sequence.</p>`
+                        brianfu.me is hosted as a static site on Github Pages. It is a personal website designed to emulate the feel of a computer terminal.
+                        Try out the up and down arrow keys to navigate the commands history, tab for autocompletion, and clicking colored text for animated typing sequences.</p>`
                     )
                 } else {
                     output(
-                        `<p>Hi there! I'm Brian Fu, a fourth year Computer Science student at the University of California, Berkeley. Go Bears!</p>
+                        `<p>Hi there! I'm Brian Fu, a recent CS graduate of the University of California, Berkeley. Go Bears!</p>
                         <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.district : 'spend most of my time in the Bay Area'}. 
-                        My hobbies include attending hackathons and listening to music. 
-                        I am a classical pianist of 13 years but dream of improv jazz riffs and anime ost's. 
+                        My hobbies include music, video games, great food, and losing money on the stock market.
+                        Looking for housing and food recs in San Jose.
                         If you've got any music, food or travel recommendations, please shoot me a message at <a onclick="term.triggerCommand(this.textContent);">contact</a>!</p>`
                     );
                 }
@@ -270,7 +270,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             case 'projects':
             case 'portfolio':
                 proj = new Projects(output_);
-                output(`If you're interested in seeing the source code for any of these projects, check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
+                output(`If you're interested in seeing more projects or commisioning some work, please contact me or check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
                 break;
             case 'resume':
                 window.open('assets/documents/BrianFu_resume.pdf', '_blank');
@@ -434,14 +434,14 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
 $(function () {
 
+    // Set the command-line prompt to include the user's IP Address
+    $('.prompt').html(`[<span class="user">user</span>@brianfu.me] > `);
     $.getJSON('https://json.geoiplookup.io/', function (data) {
         delete data.premium;
         delete data.cached;
         ipinfo = data;
         $('.prompt').html(`[<span class="user">${ipinfo.ip.length < 16 ? ipinfo.ip : 'user'}</span>@brianfu.me] > `);
     });
-    // Set the command-line prompt to include the user's IP Address
-    $('.prompt').html(`[<span class="user">user</span>@brianfu.me] > `);
 
     // Initialize a new terminal object
     term = new Terminal('#input-line .cmdline', '#container output');
