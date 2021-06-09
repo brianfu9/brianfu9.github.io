@@ -1,7 +1,14 @@
 var Projects = Projects || function (output_) {
+    $.ajax({
+        url: 'https://brianfu.me/html/projects.html', 
+        success: function (data) {
+            output_.insertAdjacentHTML('beforeEnd', data);
+            buttonify();
+        }
+    });
 
-    output_.insertAdjacentHTML('beforeEnd', projectsHtmlString);
-    buttonify();
+    // output_.insertAdjacentHTML('beforeEnd', projectsHtmlString);
+    // buttonify();
 
     // ~~~~~ scrolling implementation ~~~~~
     // var nav = document.getElementById('projects-card');
@@ -177,7 +184,7 @@ const projectsHtmlString =
                         <button class="tags">Pillow</button>
                         <button class="tags">Google CSE</button>
                     </figcaption>
-                    <a href="https://calhacks5.hackerearth.com/sprints/cal-hacks-50/dashboard/96567fd/submission/"
+                    <a href="https://www.hackerearth.com/challenges/hackathon/cal-hacks-50/dashboard/96567fd/submission/bear-faced/"
                         target="_blank"></a>
                 </figure>
                 <div class="github-button-div">
