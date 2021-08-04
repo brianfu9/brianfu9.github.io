@@ -451,5 +451,3 @@ $(function () {
     } else term.init('welcome');
 
 });
-
-// arbitrary change 2
