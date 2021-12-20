@@ -161,6 +161,9 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
     function process_command(cmd, args) {
         switch (cmd) {
+            case 'hi':
+            case 'hello':
+            case 'hey':
             case 'welcome':
                 output(
                     `<p>Hello there, welcome to my terminal! 
@@ -233,7 +236,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 break;
             case 'github':
                 window.open('https://github.com/brianfu9', '_blank');
-                output('<p><a href="https://github.com/brianfu9" target="_blank">https://github.com/brianfu9</a></p>');
+                output('<p><a href="https://github.com/brianfu9" target="_blank"><i class="fab fa-github"></i> https://github.com/brianfu9</a></p>');
                 break;
             case 'ls':
             case 'dir':
@@ -260,8 +263,12 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     showCursor: false,
                     backSpeed: 50,
                     onComplete: () => {
-                        delete ipinfo.success;
-                        $(`#loading${history_.length}`).html(JSON.stringify(ipinfo).slice(1, -1).replace(/,"/g, '<br>"').replace(/"/g, ' '));
+                        if (ipinfo) {
+                            delete ipinfo.success;
+                            $(`#loading${history_.length}`).html(JSON.stringify(ipinfo).slice(1, -1).replace(/,"/g, '<br>"').replace(/"/g, ' '));
+                        } else {
+                            $(`#loading${history_.length}`).html(`ping has been foiled by adblock!`);
+                        }
                         window.scrollTo(0, getDocHeight_());
                     }
                 });
@@ -299,7 +306,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 output(`try > <a onclick="term.triggerCommand(this.textContent);">vim</a> instead`);
                 break;
             case 'sudo':
-                output(`sudo: permission denied`);
+                output(`sudo: permission denied. This incident will be <a href="https://xkcd.com/838/" target="_blank">reported</a>.`);
                 break;
             case 'man':
                 man_command(args);
