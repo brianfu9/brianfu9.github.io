@@ -62,6 +62,9 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var histpos_ = 0;
     var histtemp_ = 0;
 
+    var user = 'user';
+    var sudoers = ['brian', 'root']
+
     cmdLine_.addEventListener('click', inputTextClick_, false);
     cmdLine_.addEventListener('keydown', historyHandler_, true);
     cmdLine_.addEventListener('keydown', processNewCommand_, true);
@@ -130,10 +133,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             output_.appendChild(line);
 
             if (this.value.match(/['"`{}<>\\]/g)) {
-                output(`<p>THAT'S NOT SANITARY >:(</p>`);
+                output(`<p>this doesn't seem sanitary (ಠ_ಠ)</p>`);
                 window.scrollTo(0, getDocHeight_());
-                this.value = ''; // Clear/setup line for next input.
-                return;
             }
 
             if (this.value) {
@@ -294,9 +295,19 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 var root = 'root';
                 if (args[0]) root = args[0];
                 if (root.match(/[-[\]'"`{}()<>*+?%,\\^$|#]/g)) {
-                    output(`<p>THAT'S NOT SANITARY >:(</p>`);
+                    output(`<p>character not allowed.</p>`);
                 } else {
                     $('#input-line .prompt').html(`[<span class="user">${root}</span>@brianfu.me] > `);
+                    user = root;
+                    output_.insertAdjacentHTML('beforeEnd', `<div id="loading${history_.length}" style="width:90%;margin-left:40px;"></div>`);
+                    var typed = new Typed(`#loading${history_.length}`, {
+                        strings: ['(•_•)</br>( •_•)>⌐■-■</br>(⌐■_■)'],
+                        typeSpeed: 100,
+                        showCursor: false,
+                        onComplete: () => {
+                            window.scrollTo(0, getDocHeight_());
+                        }
+                    });
                 }
                 break;
             case 'vim':
@@ -306,7 +317,12 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 output(`try > <a onclick="term.triggerCommand(this.textContent);">vim</a> instead`);
                 break;
             case 'sudo':
-                output(`sudo: permission denied. This incident will be <a href="https://xkcd.com/838/" target="_blank">reported</a>.`);
+                if (sudoers.includes(user)) {
+                    output(`(⌐■_■) ${user} says:`);
+                    process_command(args[0], args.slice(1));
+                } else {
+                    output(`sudo: '${user}' is not in the sudoers file. This incident will be <a href="https://xkcd.com/838/" target="_blank">reported</a>.`);
+                }
                 break;
             case 'man':
                 man_command(args);
