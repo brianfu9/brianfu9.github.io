@@ -332,6 +332,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     <a class="github-button" href="https://github.com/brianfu9/irl-shaders"
                     data-size="large">irl-shaders</a>
                 </div></p>`);
+                buttonify();
                 break;
             default:
                 if (cmd) {
