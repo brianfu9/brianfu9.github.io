@@ -27,7 +27,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     ];
 
     const CMDS_ADVANCED = [
-        'bearfaced', 'date', 'echo', 'emacs', 'ping', 'su', 'vim'
+        'bearfaced', 'date', 'echo', 'emacs', 'ping', 'shader', 'su', 'vim'
     ];
 
     const CMDS_ALIAS = [
@@ -323,6 +323,15 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 } else {
                     output(`sudo: '${user}' is not in the sudoers file. This incident will be <a href="https://xkcd.com/838/" target="_blank">reported</a>.`);
                 }
+                break;
+            case 'shader':
+            case 'shaders':
+                output(`<p>IRL Shaders is an Augmented Reality project to apply a live daltonization filter to your webcam feed. 
+                Try it out <a href="https://brianfu.me/irl-shaders/index.html" target="_blank">here</a>!
+                <div class="github-button-div">
+                    <a class="github-button" href="https://github.com/brianfu9/irl-shaders"
+                    data-size="large">irl-shaders</a>
+                </div></p>`);
                 break;
             default:
                 if (cmd) {
