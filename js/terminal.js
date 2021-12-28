@@ -27,7 +27,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     ];
 
     const CMDS_ADVANCED = [
-        'bearfaced', 'date', 'echo', 'emacs', 'man', 'ping', 'su', 'vim'
+        'bearfaced', 'date', 'echo', 'emacs', 'ping', 'su', 'vim'
     ];
 
     const CMDS_ALIAS = [
@@ -179,16 +179,16 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 if (args[0] == '-t' || args[0] == '-terminal') {
                     output(
                         `<p>So, you're interested in learing more about this website! 
-                        brianfu.me is hosted as a static site on Github Pages. It is a personal website designed to emulate the feel of a computer terminal.
+                        brianfu.me is an ongoing portfolio/personal website designed to emulate the feel of a computer terminal.
                         Try out the up and down arrow keys to navigate the commands history, tab for autocompletion, and clicking colored text for animated typing sequences.</p>`
                     )
                 } else {
                     output(
                         `<p>Hi there! I'm Brian Fu, a recent CS graduate of the University of California, Berkeley. Go Bears!</p>
                         <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.district : 'spend most of my time in the Bay Area'}. 
-                        My hobbies include music, video games, great food, and losing money on the stock market.
-                        Looking for housing and food recs in San Jose.
-                        If you've got any music, food or travel recommendations, please shoot me a message at <a onclick="term.triggerCommand(this.textContent);">contact</a>!</p>`
+                        My hobbies include music, video games, great food, and wheeling options on the stock market.
+                        Would love to make friends and get food recs in San Jose.
+                        If you've got any music, food, or travel recommendations, please connect with me at <a onclick="term.triggerCommand(this.textContent);">contact</a>!</p>`
                     );
                 }
                 break;
@@ -248,7 +248,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     cmdslst += '</div><br><p>many secret. much hidden. wow:</p><div class="ls-files">' +
                         '<a onclick="term.triggerCommand(this.textContent);">' +
                         CMDS_ADVANCED.join('</a><br><a onclick="term.triggerCommand(this.textContent);">') + '</a>';
-                    output(`<p>Wow you\'re an advanced user! If you want to learn what each command does, use <a onclick="term.triggerCommand(this.textContent);">man</a> followed by a command.</p>
+                    output(`<p>Wow you\'re an advanced user!
                     <div class="ls-files">` + cmdslst + '</div>');
                 } else {
                     output('<p>Here is a list of commands:</p><div class="ls-files">' + cmdslst +
@@ -324,66 +324,10 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     output(`sudo: '${user}' is not in the sudoers file. This incident will be <a href="https://xkcd.com/838/" target="_blank">reported</a>.`);
                 }
                 break;
-            case 'man':
-                man_command(args);
-                break;
             default:
                 if (cmd) {
                     output(cmd + ': command not found');
                 }
-        }
-    }
-
-    function man_command(args) {
-        switch (args[0]) {
-            case 'about':
-                output('usage: <br> > about <br> displays the about me introduction message. <br> > about -terminal <br> displays information about how the terminal works.');
-                break;
-            case 'clear':
-                output('usage: <br> > clear <br> clears the terminal.');
-                break;
-            case 'contact':
-                output('usage: <br> > contact <br> displays my contact info. Clicking the email copies it to clipboard.');
-                break;
-            case 'github':
-                output('usage: <br> > github <br> Opens my github profile in a new tab.');
-                break;
-            case 'ls':
-            case 'dir':
-            case 'help':
-            case 'menu':
-                output(`usage: <br> > ${args[0]} <br> shows a list of simple commands <br> > ${args[0]} -all <br> shows a list of all commands`);
-                break;
-            case 'portfolio':
-                output('usage: <br> > portfolio <br> shows my portfolio.');
-                break;
-            case 'ping':
-            case 'ifconfig':
-                output(`usage: <br> > ${args[0]} <br> displays the user's ip information`);
-                break;
-            case 'resume':
-                output('usage: <br> > resume <br> Opens my resume in a new tab.');
-                break;
-            case 'date':
-                output('usage: <br> > date <br> Displays the date');
-                break;
-            case 'echo':
-                output('usage: <br> > echo [text] <br> prints out the [text] in the terminal');
-                break;
-            case 'man':
-                output(`usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">usage: <br> > man [command] <br> 
-                <div style="margin-left:20px">usage: <br> > man [command] <br> <div style="margin-left:20px">ERROR STACK OVERFLOW</div></div></div></div><br>
-                jk man explains what [command] does`);
-                break;
-            case 'su':
-                output(`usage: <br> > su <br> > su [name] <br> changes the user's name`);
-                break;
-            case 'cd':
-                output(`usage: <br> > cd [command] <br> runs the [command] <br> yeah I know this one doesn't really make sense but I don't have a file system either`);
-                break;
-            default:
-                if (args[0]) output(args[0] + ': command not found');
-                else output('man: no arguments found');
         }
     }
 
@@ -432,6 +376,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     //
     function output(html) {
         output_.insertAdjacentHTML('beforeEnd', '<div style="width:90%;margin-left:40px;"><p>' + html + '</p></div>');
+        window.scrollTo(0, getDocHeight_());
     }
 
     // Cross-browser impl to get document's height.
