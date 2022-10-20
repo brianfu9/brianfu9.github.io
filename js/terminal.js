@@ -168,7 +168,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             case 'welcome':
                 output(
                     `<p>Hello there, welcome to my terminal! 
-                    You may have seen one before in a 90's hacker movie with green scrolling text and lots of progress bars. 
+                    You may have seen one before in a hacker movie with green scrolling text and lots of progress bars. 
                     Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
                     </br>
                     Feel free to hack around or take a look at some of my <a onclick="term.triggerCommand(this.textContent);">projects</a>. 
@@ -334,6 +334,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 </div></p>`);
                 buttonify();
                 break;
+            case 'rm':
+                output(`rm: Permission denied`);
             default:
                 if (cmd) {
                     output(cmd + ': command not found');
