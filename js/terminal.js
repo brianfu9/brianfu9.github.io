@@ -278,7 +278,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             case 'projects':
             case 'portfolio':
                 proj = new Projects(output_);
-                output(`If you're interested in seeing more projects or commisioning some work, please <a onclick="term.triggerCommand(this.textContent);">contact</a> me or check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
+                output(`If you're interested in seeing more projects, please <a onclick="term.triggerCommand(this.textContent);">contact</a> me or check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
                 break;
             case 'resume':
                 window.open('assets/documents/BrianFu_resume.pdf', '_blank');
@@ -336,6 +336,10 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 break;
             case 'rm':
                 output(`rm: Permission denied`);
+            case 'blog':
+            case 'blogs':
+                blog = Blogs.run(args[0], output_);
+                break;
             default:
                 if (cmd) {
                     output(cmd + ': command not found');
