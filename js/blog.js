@@ -18,10 +18,10 @@ var Blogs = Blogs || {
     },
 
     blogs: {
-        'distance': `
+        'distance': `</br>
         <p>Distance is empowering.&nbsp;</p>
 
-        <p>&nbsp;</p>
+        </br>
         
         <p>Running cross country in highschool, we would average 300 miles per season. To put that in context, the distance from LA to the Bay Area is just over 300 miles; a seemingly impossible distance to run, yet step by step we overcame. Over those 12 weeks, I grew an emotional attachment to my beat-up adidas flyknit sneakers, refusing to replace them until the soles grew holes. But more than that, I developed an unhealthy disrespect for the gargantuan effort that is distance.</p>
         

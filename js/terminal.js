@@ -170,7 +170,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     `<p>Hello there, welcome to my terminal! 
                     You may have seen one before in a hacker movie with green scrolling text and lots of progress bars. 
                     Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
-                    </br>
+                    </br></br>
                     Feel free to hack around or take a look at some of my <a onclick="term.triggerCommand(this.textContent);">projects</a>. 
                     If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">menu</a>.</p>`
                 );
