@@ -23,7 +23,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var output_ = document.querySelector(outputContainer);
 
     const CMDS_ = [
-        'about', 'blog', 'clear', 'contact', 'github', 'menu', 'projects', 'resume'
+        'about', 'clear', 'contact', 'github', 'menu', 'projects', 'resume'
     ];
 
     const CMDS_ADVANCED = [
@@ -336,10 +336,10 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 break;
             case 'rm':
                 output(`rm: Permission denied`);
-            case 'blog':
-            case 'blogs':
-                blog = Blogs.run(args[0], output_);
-                break;
+            // case 'blog':
+            // case 'blogs':
+            //     blog = Blogs.run(args[0], output_);
+            //     break;
             default:
                 if (cmd) {
                     output(cmd + ': command not found');
