@@ -1,3 +1,6 @@
 [submodule "irl-shaders"]
 	path = irl-shaders
 	url = https://github.com/brianfu9/irl-shaders.git
+[submodule "maps"]
+	path = maps
+	url = https://github.com/brianfu9/maps
