@@ -23,7 +23,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var output_ = document.querySelector(outputContainer);
 
     const CMDS_ = [
-        'about', 'clear', 'contact', 'github', 'menu', 'projects', 'resume', 'welcome'
+        'about', 'clear', 'contact', 'github', 'menu', 'projects', 'resume'
     ];
 
     const CMDS_ADVANCED = [
@@ -170,7 +170,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     `<p>Hello there, welcome to my terminal! 
                     You may have seen one before in a hacker movie with green scrolling text and lots of progress bars. 
                     Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
-                    </br>
+                    </br></br>
                     Feel free to hack around or take a look at some of my <a onclick="term.triggerCommand(this.textContent);">projects</a>. 
                     If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">menu</a>.</p>`
                 );
@@ -278,7 +278,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             case 'projects':
             case 'portfolio':
                 proj = new Projects(output_);
-                output(`If you're interested in seeing more projects or commisioning some work, please <a onclick="term.triggerCommand(this.textContent);">contact</a> me or check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
+                output(`If you're interested in seeing more projects, please <a onclick="term.triggerCommand(this.textContent);">contact</a> me or check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
                 break;
             case 'resume':
                 window.open('assets/documents/BrianFu_resume.pdf', '_blank');
@@ -336,6 +336,10 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 break;
             case 'rm':
                 output(`rm: Permission denied`);
+            // case 'blog':
+            // case 'blogs':
+            //     blog = Blogs.run(args[0], output_);
+            //     break;
             default:
                 if (cmd) {
                     output(cmd + ': command not found');
