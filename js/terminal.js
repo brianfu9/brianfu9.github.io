@@ -186,8 +186,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         `<p>Hello! I'm Brian Fu, a software engineer with a focus on cybersecurity, cloud infrastructure, and distributed systems.</p>
                         <p>
                         I've built scalable, secure systems at high-growth startups including AppDynamics and Lacework
-                        (acquired by Cisco and Fortinet) and am currently based in San Francisco
-                        ${ipinfo ? ' but would love to visit ' + ipinfo.district : ''}.
+                        (acquired by Cisco and Fortinet) and am currently based in San Francisco${ipinfo ? ' but would love to visit ' + ipinfo.district : ''}.
                         </p>
                         <p>
                         If you have recommendations for food, music, travel, or work please connect with me at
