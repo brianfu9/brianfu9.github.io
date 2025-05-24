@@ -1,4 +1,3 @@
-
 var term;
 var util = util || {};
 util.toArray = function (list) {
@@ -184,11 +183,16 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     )
                 } else {
                     output(
-                        `<p>Hi there! I'm Brian Fu, a recent CS graduate of the University of California, Berkeley. Go Bears!</p>
-                        <p>I grew up in the sunny suburbia of Orange County but ${ipinfo ? 'have always wanted to visit ' + ipinfo.district : 'spend most of my time in the Bay Area'}. 
-                        My hobbies include music, video games, great food, and wheeling options on the stock market.
-                        Would love to make friends and get food recs in San Jose.
-                        If you've got any music, food, or travel recommendations, please connect with me at <a onclick="term.triggerCommand(this.textContent);">contact</a>!</p>`
+                        `<p>Hello! I'm Brian Fu, a software engineer with a focus on cybersecurity, cloud infrastructure, and distributed systems.</p>
+                        <p>
+                        I've built scalable, secure systems at high-growth startups including AppDynamics and Lacework
+                        (acquired by Cisco and Fortinet) and am currently based in San Francisco
+                        ${ipinfo ? ' but would love to visit ' + ipinfo.district : ''}.
+                        </p>
+                        <p>
+                        If you have recommendations for food, music, travel, or work please connect with me at
+                        <a onclick="term.triggerCommand(this.textContent);">contact</a>!
+                        </p>`
                     );
                 }
                 break;
