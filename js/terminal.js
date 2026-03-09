@@ -13,6 +13,7 @@ function copyToClipboard(element) {
 }
 
 var ipinfo;
+var TERMINAL_API_URL = 'https://m1s.dolphin-vector.ts.net';
 
 var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     window.URL = window.URL || window.webkitURL;
@@ -339,13 +340,10 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 break;
             case 'rm':
                 output(`rm: Permission denied`);
-            // case 'blog':
-            // case 'blogs':
-            //     blog = Blogs.run(args[0], output_);
-            //     break;
+                break;
             default:
                 if (cmd) {
-                    output(cmd + ': command not found');
+                    askLLM_(cmd, args);
                 }
         }
     }
@@ -396,6 +394,66 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     function output(html) {
         output_.insertAdjacentHTML('beforeEnd', '<div style="width:90%;margin-left:40px;"><p>' + html + '</p></div>');
         window.scrollTo(0, getDocHeight_());
+    }
+
+    function askLLM_(cmd, args) {
+        var fullInput = cmd + (args.length ? ' ' + args.join(' ') : '');
+        var loadingId = 'llm-loading-' + history_.length;
+
+        // Show thinking animation
+        output_.insertAdjacentHTML('beforeEnd', '<div id="' + loadingId + '" style="width:90%;margin-left:40px;"><p style="color:#EDED65;">thinking...</p></div>');
+        window.scrollTo(0, getDocHeight_());
+
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function () { controller.abort(); }, 10000);
+
+        fetch(TERMINAL_API_URL + '/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: fullInput }),
+            signal: controller.signal
+        })
+            .then(function (resp) {
+                clearTimeout(timeoutId);
+                if (resp.status === 429) {
+                    throw { type: 'ratelimit' };
+                }
+                if (!resp.ok) {
+                    throw { type: 'server', status: resp.status };
+                }
+                return resp.json();
+            })
+            .then(function (data) {
+                var el = document.getElementById(loadingId);
+                if (el) {
+                    // Escape HTML in response but preserve line breaks
+                    var escaped = data.response
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/\n/g, '<br>');
+                    el.innerHTML = '<p>' + escaped + '</p>';
+                }
+                window.scrollTo(0, getDocHeight_());
+            })
+            .catch(function (err) {
+                clearTimeout(timeoutId);
+                var el = document.getElementById(loadingId);
+                var msg;
+                if (err && err.type === 'ratelimit') {
+                    msg = '[RATE_LIMIT] Slow down, try again in 60s.';
+                } else if (err && err.name === 'AbortError') {
+                    msg = '[TIMEOUT] Request timed out.';
+                } else if (err && err.type === 'server') {
+                    msg = '[ERROR] Server returned status ' + err.status + '.';
+                } else {
+                    msg = '[OFFLINE] AI service is currently unavailable.';
+                }
+                if (el) {
+                    el.innerHTML = '<p style="color:#FF6B6B;">' + msg + '</p>';
+                }
+                window.scrollTo(0, getDocHeight_());
+            });
     }
 
     // Cross-browser impl to get document's height.
