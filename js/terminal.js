@@ -427,12 +427,12 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 var el = document.getElementById(loadingId);
                 if (el) {
                     // Escape HTML in response but preserve line breaks
-                    var escaped = data.response
-                        .replace(/&/g, '&amp;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;')
-                        .replace(/\n/g, '<br>');
-                    el.innerHTML = '<p>' + escaped + '</p>';
+                    // var escaped = data.response
+                    //     .replace(/&/g, '&amp;')
+                    //     .replace(/</g, '&lt;')
+                    //     .replace(/>/g, '&gt;')
+                    //     .replace(/\n/g, '<br>');
+                    el.innerHTML = '<p>' + data.response + '</p>';
                 }
                 window.scrollTo(0, getDocHeight_());
             })
