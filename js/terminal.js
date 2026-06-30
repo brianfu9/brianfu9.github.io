@@ -396,6 +396,24 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
         window.scrollTo(0, getDocHeight_());
     }
 
+    // The 1B model often ignores "plain text only" and emits markdown. Strip the
+    // common markup client-side so the terminal stays plain text. Applied to the
+    // whole accumulated buffer each chunk, so markers split across tokens resolve.
+    function stripMarkdown_(s) {
+        return s
+            .replace(/```[a-zA-Z0-9]*\n?/g, '')      // code fences
+            .replace(/`([^`]*)`/g, '$1')              // inline code
+            .replace(/`/g, '')                         // stray backticks
+            .replace(/\\([\\_*`#~\-])/g, '$1')         // escaped md chars: \_ \* etc.
+            .replace(/\*\*([^*]+)\*\*/g, '$1')         // **bold**
+            .replace(/\*([^*\n]+)\*/g, '$1')           // *italic*
+            .replace(/(^|[\s(])__([^_]+)__/g, '$1$2')  // __bold__
+            .replace(/(^|[\s(])_([^_\n]+)_/g, '$1$2')  // _italic_
+            .replace(/^#{1,6}\s+/gm, '')               // # headings
+            .replace(/^\s*[*+\-]\s+/gm, '• ')     // bullet markers -> •
+            .replace(/^\s*>\s?/gm, '');                // blockquotes
+    }
+
     function askLLM_(cmd, args) {
         var fullInput = cmd + (args.length ? ' ' + args.join(' ') : '');
         var loadingId = 'llm-loading-' + history_.length;
@@ -442,7 +460,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             }
                             // textContent keeps it injection-safe as tokens stream in.
                             buffer += decoder.decode(result.value, { stream: true });
-                            p.textContent = buffer;
+                            p.textContent = stripMarkdown_(buffer);
                             window.scrollTo(0, getDocHeight_());
                         }
                         if (result.done) { return; }
