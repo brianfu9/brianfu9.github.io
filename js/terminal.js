@@ -404,8 +404,13 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
         output_.insertAdjacentHTML('beforeEnd', '<div id="' + loadingId + '" style="width:90%;margin-left:40px;"><p style="color:#EDED65;">thinking...</p></div>');
         window.scrollTo(0, getDocHeight_());
 
+        var container = document.getElementById(loadingId);
+
+        // The gateway streams tokens as text/plain. Abort only if the FIRST byte
+        // is slow (the board is weak; a cold model can take ~10-15s). The timer
+        // is cleared as soon as streaming begins, so a long full answer is fine.
         var controller = new AbortController();
-        var timeoutId = setTimeout(function () { controller.abort(); }, 10000);
+        var firstByteTimer = setTimeout(function () { controller.abort(); }, 20000);
 
         fetch(TERMINAL_API_URL + '/api/chat', {
             method: 'POST',
@@ -414,34 +419,43 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             signal: controller.signal
         })
             .then(function (resp) {
-                clearTimeout(timeoutId);
                 if (resp.status === 429) {
                     throw { type: 'ratelimit' };
                 }
-                if (!resp.ok) {
+                if (!resp.ok || !resp.body) {
                     throw { type: 'server', status: resp.status };
                 }
-                return resp.json();
-            })
-            .then(function (data) {
-                var el = document.getElementById(loadingId);
-                if (el) {
-                    // Escape HTML in response but preserve line breaks
-                    // var escaped = data.response
-                    //     .replace(/&/g, '&amp;')
-                    //     .replace(/</g, '&lt;')
-                    //     .replace(/>/g, '&gt;')
-                    //     .replace(/\n/g, '<br>');
-                    el.innerHTML = '<p>' + data.response + '</p>';
+
+                var reader = resp.body.getReader();
+                var decoder = new TextDecoder();
+                var buffer = '';
+                var p = null;
+
+                function pump() {
+                    return reader.read().then(function (result) {
+                        if (result.value) {
+                            if (firstByteTimer) { clearTimeout(firstByteTimer); firstByteTimer = null; }
+                            if (!p) {
+                                // Replace "thinking..." with a fresh paragraph on first token.
+                                container.innerHTML = '<p></p>';
+                                p = container.querySelector('p');
+                            }
+                            // textContent keeps it injection-safe as tokens stream in.
+                            buffer += decoder.decode(result.value, { stream: true });
+                            p.textContent = buffer;
+                            window.scrollTo(0, getDocHeight_());
+                        }
+                        if (result.done) { return; }
+                        return pump();
+                    });
                 }
-                window.scrollTo(0, getDocHeight_());
+                return pump();
             })
             .catch(function (err) {
-                clearTimeout(timeoutId);
-                var el = document.getElementById(loadingId);
+                if (firstByteTimer) { clearTimeout(firstByteTimer); firstByteTimer = null; }
                 var msg;
                 if (err && err.type === 'ratelimit') {
-                    msg = '[RATE_LIMIT] Slow down, try again in 60s.';
+                    msg = '[RATE_LIMIT] Slow down, try again in a moment.';
                 } else if (err && err.name === 'AbortError') {
                     msg = '[TIMEOUT] Request timed out.';
                 } else if (err && err.type === 'server') {
@@ -449,8 +463,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 } else {
                     msg = '[OFFLINE] AI service is currently unavailable.';
                 }
-                if (el) {
-                    el.innerHTML = '<p style="color:#FF6B6B;">' + msg + '</p>';
+                if (container) {
+                    container.innerHTML = '<p style="color:#FF6B6B;">' + msg + '</p>';
                 }
                 window.scrollTo(0, getDocHeight_());
             });
