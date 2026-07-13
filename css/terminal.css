@@ -77,22 +77,14 @@ a:not([href]):not([tabindex]):hover {
 /* Command line */
 
 .input-line {
-  display: -webkit-box;
-  -webkit-box-orient: horizontal;
-  -webkit-box-align: stretch;
-  display: -moz-box;
-  -moz-box-orient: horizontal;
-  -moz-box-align: stretch;
-  display: box;
-  box-orient: horizontal;
-  box-align: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
   clear: both;
 }
 
 .input-line>div:nth-child(2) {
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  box-flex: 1;
+  flex: 1;
 }
 
 .user {
@@ -113,17 +105,10 @@ a:not([href]):not([tabindex]):hover {
   white-space: nowrap;
   color: #42F44B;
   margin-right: 7px;
-  display: -webkit-box;
-  -webkit-box-pack: center;
-  -webkit-box-orient: vertical;
-  display: -moz-box;
-  -moz-box-pack: center;
-  -moz-box-orient: vertical;
-  display: box;
-  box-pack: center;
-  box-orient: vertical;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   -webkit-user-select: none;
-  -moz-user-select: none;
   user-select: none;
 }
 
