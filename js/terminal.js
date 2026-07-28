@@ -4,12 +4,29 @@ util.toArray = function (list) {
     return Array.prototype.slice.call(list || [], 0);
 };
 
-function copyToClipboard(element) {
-    var $temp = $("<input>");
-    $("body").append($temp);
-    $temp.val(element).select();
-    document.execCommand("copy");
-    $temp.remove();
+function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(function(err) {
+            fallbackCopy(text);
+        });
+    } else {
+        fallbackCopy(text);
+    }
+}
+
+function fallbackCopy(text) {
+    var textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+        document.execCommand('copy');
+    } catch (e) {
+        console.warn('Copy failed', e);
+    }
+    document.body.removeChild(textarea);
 }
 
 var ipinfo;
@@ -23,7 +40,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var output_ = document.querySelector(outputContainer);
 
     const CMDS_ = [
-        'about', 'clear', 'contact', 'github', 'menu', 'projects', 'resume'
+        'about', 'blog', 'clear', 'contact', 'github', 'menu', 'projects', 'resume'
     ];
 
     const CMDS_ADVANCED = [
@@ -68,6 +85,18 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     cmdLine_.addEventListener('click', inputTextClick_, false);
     cmdLine_.addEventListener('keydown', historyHandler_, true);
     cmdLine_.addEventListener('keydown', processNewCommand_, true);
+
+    // Event delegation for clickable links in output
+    output_.addEventListener('click', function (e) {
+        var target = e.target.closest('.cmd-link, .blog-link, .email-copy');
+        if (!target) return;
+        e.preventDefault();
+        if (target.classList.contains('cmd-link') || target.classList.contains('blog-link')) {
+            term.triggerCommand(target.textContent.trim());
+        } else if (target.classList.contains('email-copy')) {
+            copyToClipboard('brianfu9@gmail.com');
+        }
+    }, false);
 
     function inputTextClick_(e) {
         this.value = this.value;
@@ -134,7 +163,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
             if (this.value.match(/['"`{}<>\\]/g)) {
                 output(`<p>this doesn't seem sanitary (ಠ_ಠ)</p>`);
-                window.scrollTo(0, getDocHeight_());
+                window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
             }
 
             if (this.value) {
@@ -154,7 +183,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             }
             process_command(cmd, args)
 
-            window.scrollTo(0, getDocHeight_());
+            window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
             this.value = ''; // Clear/setup line for next input.
             console.log(`${history_.length} : executed > [${history_[history_.length - 1]}]`);
         }
@@ -171,8 +200,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     You may have seen one before in a hacker movie with green scrolling text and lots of progress bars. 
                     Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
                     </br></br>
-                    Feel free to hack around or take a look at some of my <a onclick="term.triggerCommand(this.textContent);">projects</a>. 
-                    If you're looking for somewhere to start, click <a onclick="term.triggerCommand(this.textContent);">menu</a>.</p>`
+                    Feel free to hack around or take a look at some of my <a class="cmd-link">projects</a>. 
+                    If you're looking for somewhere to start, click <a class="cmd-link">menu</a>.</p>`
                 );
                 break;
             case 'about':
@@ -191,7 +220,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         </p>
                         <p>
                         If you have recommendations for food, music, travel, or work please connect with me at
-                        <a onclick="term.triggerCommand(this.textContent);">contact</a>!
+                        <a class="cmd-link">contact</a>!
                         </p>`
                     );
                 }
@@ -201,7 +230,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 output(
                     `<p>ʕ •ᴥ•ʔ</br>Bear Faced is the CalHacks 2018 project by Brian Fu and Bryant Bettencourt. 
                     Uses facial and emotion detection to paste a picture of an emotive bear's face over the same emotion on your face. 
-                    Try it out <a href="https://bearfaced.brianfu.me" target="_blank">here</a> via repl.it! (may take a minute to load)
+                    Try it out <a href="https://bearfaced.brianfu.me" target="_blank" rel="noopener noreferrer">here</a> via repl.it! (may take a minute to load)
                     <div class="github-button-div">
                         <a class="github-button" href="https://github.com/brianfu9/bearfaced"
                         data-size="large">Bear Faced</a>
@@ -210,11 +239,11 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 buttonify();
                 break;
             case 'hangman':
-                window.open('http://hangman.brianfu.me', '_blank');
+                window.open('https://hangman.brianfu.me', '_blank');
                 output(
                     `<p>Hangman is a school project exhibiting the use of Ruby and Heroku. 
                     Unfortunately, due to being a school project, the source code is not published.
-                    Try it out <a href="http://hangman.brianfu.me" target="_blank">here</a>!
+                    Try it out <a href="https://hangman.brianfu.me" target="_blank" rel="noopener noreferrer">here</a>!
                     </p>`
                 );
                 break;
@@ -226,10 +255,10 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 output(
                     `You can contact me here!
                     <ul>
-                        <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu" target="_blank">linkedin/brian-fu</a></li>
+                        <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu" target="_blank" rel="noopener noreferrer">linkedin/brian-fu</a></li>
                         <li>Email: 
                         <div class="hintbox">
-                            <a id="email${history_.length}" tabindex="0" onclick="copyToClipboard(\'brianfu9@gmail.com\');">
+                            <a id="email${history_.length}" tabindex="0" class="email-copy" >
                             brianfu9@gmail.com </a>
                             <span class="hintboxtext">copy to clipboard</span>
                         </div>
@@ -241,22 +270,22 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 break;
             case 'github':
                 window.open('https://github.com/brianfu9', '_blank');
-                output('<p><a href="https://github.com/brianfu9" target="_blank"><i class="fab fa-github"></i> https://github.com/brianfu9</a></p>');
+                output('<p><a href="https://github.com/brianfu9" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> https://github.com/brianfu9</a></p>');
                 break;
             case 'ls':
             case 'dir':
             case 'help':
             case 'menu':
-                var cmdslst = '<a onclick="term.triggerCommand(this.textContent);">' + CMDS_.join('</a><br><a onclick="term.triggerCommand(this.textContent);">') + '</a>';
+                var cmdslst = '<a class="cmd-link">' + CMDS_.join('</a><br><a class="cmd-link">') + '</a>';
                 if (args[0] && args[0].toLowerCase() == '-all') {
                     cmdslst += '</div><br><p>many secret. much hidden. wow:</p><div class="ls-files">' +
-                        '<a onclick="term.triggerCommand(this.textContent);">' +
-                        CMDS_ADVANCED.join('</a><br><a onclick="term.triggerCommand(this.textContent);">') + '</a>';
+                        '<a class="cmd-link">' +
+                        CMDS_ADVANCED.join('</a><br><a class="cmd-link">') + '</a>';
                     output(`<p>Wow you\'re an advanced user!
                     <div class="ls-files">` + cmdslst + '</div>');
                 } else {
                     output('<p>Here is a list of commands:</p><div class="ls-files">' + cmdslst +
-                        '</div><p>If you\'d like to see the complete list, try out "<a onclick="term.triggerCommand(this.textContent);">menu -all</a>"</p>');
+                        '</div><p>If you\'d like to see the complete list, try out "<a class="cmd-link">menu -all</a>"</p>');
                 }
                 break;
             case 'ping':
@@ -274,7 +303,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         } else {
                             $(`#loading${history_.length}`).html(`ping has been foiled by adblock!`);
                         }
-                        window.scrollTo(0, getDocHeight_());
+                        window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
                     }
                 });
                 break;
@@ -282,11 +311,11 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             case 'projects':
             case 'portfolio':
                 proj = new Projects(output_);
-                output(`If you're interested in seeing more projects, please <a onclick="term.triggerCommand(this.textContent);">contact</a> me or check out my <a onclick="term.triggerCommand(this.textContent);">github</a>! `)
+                output(`If you're interested in seeing more projects, please <a class="cmd-link">contact</a> me or check out my <a class="cmd-link">github</a>! `)
                 break;
             case 'resume':
                 window.open('assets/documents/BrianFu_resume.pdf', '_blank');
-                output(`<p><a href="assets/documents/BrianFu_resume.pdf" target="_blank">Resumé</a><p>`);
+                output(`<p><a href="assets/documents/BrianFu_resume.pdf" target="_blank" rel="noopener noreferrer">Resumé</a><p>`);
                 break;
             case 'date':
             case 'time':
@@ -309,29 +338,29 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         typeSpeed: 100,
                         showCursor: false,
                         onComplete: () => {
-                            window.scrollTo(0, getDocHeight_());
+                            window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
                         }
                     });
                 }
                 break;
             case 'vim':
-                output(`try > <a onclick="term.triggerCommand(this.textContent);">emacs</a> instead`);
+                output(`try > <a class="cmd-link">emacs</a> instead`);
                 break;
             case 'emacs':
-                output(`try > <a onclick="term.triggerCommand(this.textContent);">vim</a> instead`);
+                output(`try > <a class="cmd-link">vim</a> instead`);
                 break;
             case 'sudo':
                 if (sudoers.includes(user)) {
                     output(`(⌐■_■) ${user} says:`);
                     process_command(args[0], args.slice(1));
                 } else {
-                    output(`sudo: '${user}' is not in the sudoers file. This incident will be <a href="https://xkcd.com/838/" target="_blank">reported</a>.`);
+                    output(`sudo: '${user}' is not in the sudoers file. This incident will be <a href="https://xkcd.com/838/" target="_blank" rel="noopener noreferrer">reported</a>.`);
                 }
                 break;
             case 'shader':
             case 'shaders':
                 output(`<p>IRL Shaders is an Augmented Reality project to apply a live daltonization filter to your webcam feed. 
-                Try it out <a href="https://brianfu.me/irl-shaders/index.html" target="_blank">here</a>!
+                Try it out <a href="https://brianfu.me/irl-shaders/index.html" target="_blank" rel="noopener noreferrer">here</a>!
                 <div class="github-button-div">
                     <a class="github-button" href="https://github.com/brianfu9/irl-shaders"
                     data-size="large">irl-shaders</a>
@@ -340,6 +369,9 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 break;
             case 'rm':
                 output(`rm: Permission denied`);
+                break;
+            case 'blog':
+                Blogs.menu(output_);
                 break;
             default:
                 if (cmd) {
@@ -393,7 +425,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     //
     function output(html) {
         output_.insertAdjacentHTML('beforeEnd', '<div style="width:90%;margin-left:40px;"><p>' + html + '</p></div>');
-        window.scrollTo(0, getDocHeight_());
+        window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
     }
 
     // The 1B model often ignores "plain text only" and emits markdown. Strip the
@@ -420,7 +452,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
         // Show thinking animation
         output_.insertAdjacentHTML('beforeEnd', '<div id="' + loadingId + '" style="width:90%;margin-left:40px;"><p style="color:#EDED65;">thinking...</p></div>');
-        window.scrollTo(0, getDocHeight_());
+        window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
 
         var container = document.getElementById(loadingId);
 
@@ -461,7 +493,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             // textContent keeps it injection-safe as tokens stream in.
                             buffer += decoder.decode(result.value, { stream: true });
                             p.textContent = stripMarkdown_(buffer);
-                            window.scrollTo(0, getDocHeight_());
+                            window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
                         }
                         if (result.done) { return; }
                         return pump();
@@ -484,7 +516,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 if (container) {
                     container.innerHTML = '<p style="color:#FF6B6B;">' + msg + '</p>';
                 }
-                window.scrollTo(0, getDocHeight_());
+                window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
             });
     }
 
@@ -500,7 +532,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
     return {
         init: function (command) {
-            document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Click "<a onclick="term.triggerCommand(this.textContent);">about</a>" for more information or "<a onclick="term.triggerCommand(this.textContent);">menu</a>" for a list of commands.  <a href="https://github.com/brianfu9" target="_blank"><i class="fab fa-github" style="color:#EDED65"></i></a> <a href="https://www.linkedin.com/in/brian-fu/" target="_blank"><i class="fab fa-linkedin" style="color:#EDED65"></i></a></p>');
+            document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Click "<a class="cmd-link">about</a>" for more information or "<a class="cmd-link">menu</a>" for a list of commands.  <a href="https://github.com/brianfu9" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" style="color:#EDED65"></i></a> <a href="https://www.linkedin.com/in/brian-fu/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin" style="color:#EDED65"></i></a></p>');
             // setTimeout(() => {term.triggerCommand('about')}, 400);
             term.triggerCommand(command);
         },

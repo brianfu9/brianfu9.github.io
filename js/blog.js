@@ -13,7 +13,7 @@ var Blogs = Blogs || {
     },
 
     menu: function (output_) {
-        var blogsMenu = `<p>Topics:</p><p><a onclick="term.triggerCommand('blog ' + this.textContent);">` + Object.keys(this.blogs).join(`</a><br><a onclick="term.triggerCommand('blog ' + this.textContent);">`) + `</a></p>`;
+        var blogsMenu = `<p>Topics:</p><p><a class="blog-link">` + Object.keys(this.blogs).join(`</a><br><a class="blog-link">`) + `</a></p>`;
         output_.insertAdjacentHTML('beforeEnd', blogsMenu);
     },
 

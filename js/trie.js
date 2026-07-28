@@ -117,7 +117,7 @@ function createTrie(items, textKey, { comparator, splitRegex = /\s+/ } = {}) {
 };
 
 function concatAndRemoveDups(arr1, arr2) {
-    seen = [];
+    const seen = [];
     arr1.concat(arr2).forEach( (a) => {if (!seen.includes(a)) seen.push(a);});
     return seen;
 }

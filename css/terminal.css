@@ -170,3 +170,12 @@ a:not([href]):not([tabindex]):hover {
   visibility: visible;
   opacity: 1;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .hintboxtext {
+    transition: none;
+  }
+  .hintbox:hover .hintboxtext {
+    transition: none;
+  }
+}
