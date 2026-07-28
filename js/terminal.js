@@ -6,7 +6,7 @@ util.toArray = function (list) {
 
 function copyToClipboard(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).catch(function(err) {
+        navigator.clipboard.writeText(text).catch(function () {
             fallbackCopy(text);
         });
     } else {
@@ -40,7 +40,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     var output_ = document.querySelector(outputContainer);
 
     const CMDS_ = [
-        'about', 'blog', 'clear', 'contact', 'github', 'menu', 'projects', 'resume'
+        'about', 'clear', 'contact', 'github', 'menu', 'projects', 'resume'
     ];
 
     const CMDS_ADVANCED = [
@@ -86,16 +86,47 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     cmdLine_.addEventListener('keydown', historyHandler_, true);
     cmdLine_.addEventListener('keydown', processNewCommand_, true);
 
-    // Event delegation for clickable links in output
-    output_.addEventListener('click', function (e) {
-        var target = e.target.closest('.cmd-link, .blog-link, .email-copy');
-        if (!target) return;
-        e.preventDefault();
-        if (target.classList.contains('cmd-link') || target.classList.contains('blog-link')) {
+    // Honour prefers-reduced-motion for the smooth scrolling and typing animations.
+    var reducedMotionQuery_ = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    function prefersReducedMotion_() {
+        return !!(reducedMotionQuery_ && reducedMotionQuery_.matches);
+    }
+
+    function scrollToBottom_() {
+        window.scrollTo({
+            top: getDocHeight_(),
+            behavior: prefersReducedMotion_() ? 'auto' : 'smooth'
+        });
+    }
+
+    // Event delegation for clickable links. Bound to #container, not output_,
+    // because init() also injects .cmd-link anchors into #top — a sibling of
+    // <output>, so clicks there never reach a listener on the output element.
+    var container_ = document.getElementById('container');
+
+    function activateLink_(target) {
+        if (target.classList.contains('cmd-link')) {
             term.triggerCommand(target.textContent.trim());
         } else if (target.classList.contains('email-copy')) {
             copyToClipboard('brianfu9@gmail.com');
         }
+    }
+
+    container_.addEventListener('click', function (e) {
+        var target = e.target.closest('.cmd-link, .email-copy');
+        if (!target) return;
+        e.preventDefault();
+        activateLink_(target);
+    }, false);
+
+    // These anchors carry no href, so Enter/Space has to be wired up by hand.
+    container_.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
+        var target = e.target.closest('.cmd-link, .email-copy');
+        if (!target) return;
+        e.preventDefault();
+        activateLink_(target);
     }, false);
 
     function inputTextClick_(e) {
@@ -163,7 +194,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
             if (this.value.match(/['"`{}<>\\]/g)) {
                 output(`<p>this doesn't seem sanitary (ಠ_ಠ)</p>`);
-                window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
+                scrollToBottom_();
             }
 
             if (this.value) {
@@ -183,7 +214,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             }
             process_command(cmd, args)
 
-            window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
+            scrollToBottom_();
             this.value = ''; // Clear/setup line for next input.
             console.log(`${history_.length} : executed > [${history_[history_.length - 1]}]`);
         }
@@ -200,8 +231,8 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     You may have seen one before in a hacker movie with green scrolling text and lots of progress bars. 
                     Instead of clicking on links to navigate this site, just type where you want to go and hit enter! 
                     </br></br>
-                    Feel free to hack around or take a look at some of my <a class="cmd-link">projects</a>. 
-                    If you're looking for somewhere to start, click <a class="cmd-link">menu</a>.</p>`
+                    Feel free to hack around or take a look at some of my <a class="cmd-link" tabindex="0" role="button">projects</a>. 
+                    If you're looking for somewhere to start, click <a class="cmd-link" tabindex="0" role="button">menu</a>.</p>`
                 );
                 break;
             case 'about':
@@ -220,7 +251,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         </p>
                         <p>
                         If you have recommendations for food, music, travel, or work please connect with me at
-                        <a class="cmd-link">contact</a>!
+                        <a class="cmd-link" tabindex="0" role="button">contact</a>!
                         </p>`
                     );
                 }
@@ -258,7 +289,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         <li>LinkedIn: <a href="https://www.linkedin.com/in/brian-fu" target="_blank" rel="noopener noreferrer">linkedin/brian-fu</a></li>
                         <li>Email: 
                         <div class="hintbox">
-                            <a id="email${history_.length}" tabindex="0" class="email-copy" >
+                            <a id="email${history_.length}" tabindex="0" role="button" class="email-copy">
                             brianfu9@gmail.com </a>
                             <span class="hintboxtext">copy to clipboard</span>
                         </div>
@@ -276,16 +307,16 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             case 'dir':
             case 'help':
             case 'menu':
-                var cmdslst = '<a class="cmd-link">' + CMDS_.join('</a><br><a class="cmd-link">') + '</a>';
+                var cmdslst = '<a class="cmd-link" tabindex="0" role="button">' + CMDS_.join('</a><br><a class="cmd-link" tabindex="0" role="button">') + '</a>';
                 if (args[0] && args[0].toLowerCase() == '-all') {
                     cmdslst += '</div><br><p>many secret. much hidden. wow:</p><div class="ls-files">' +
-                        '<a class="cmd-link">' +
-                        CMDS_ADVANCED.join('</a><br><a class="cmd-link">') + '</a>';
+                        '<a class="cmd-link" tabindex="0" role="button">' +
+                        CMDS_ADVANCED.join('</a><br><a class="cmd-link" tabindex="0" role="button">') + '</a>';
                     output(`<p>Wow you\'re an advanced user!
                     <div class="ls-files">` + cmdslst + '</div>');
                 } else {
                     output('<p>Here is a list of commands:</p><div class="ls-files">' + cmdslst +
-                        '</div><p>If you\'d like to see the complete list, try out "<a class="cmd-link">menu -all</a>"</p>');
+                        '</div><p>If you\'d like to see the complete list, try out "<a class="cmd-link" tabindex="0" role="button">menu -all</a>"</p>');
                 }
                 break;
             case 'ping':
@@ -303,7 +334,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                         } else {
                             $(`#loading${history_.length}`).html(`ping has been foiled by adblock!`);
                         }
-                        window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
+                        scrollToBottom_();
                     }
                 });
                 break;
@@ -311,7 +342,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             case 'projects':
             case 'portfolio':
                 proj = new Projects(output_);
-                output(`If you're interested in seeing more projects, please <a class="cmd-link">contact</a> me or check out my <a class="cmd-link">github</a>! `)
+                output(`If you're interested in seeing more projects, please <a class="cmd-link" tabindex="0" role="button">contact</a> me or check out my <a class="cmd-link" tabindex="0" role="button">github</a>! `)
                 break;
             case 'resume':
                 window.open('assets/documents/BrianFu_resume.pdf', '_blank');
@@ -333,21 +364,26 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                     $('#input-line .prompt').html(`[<span class="user">${root}</span>@brianfu.me] > `);
                     user = root;
                     output_.insertAdjacentHTML('beforeEnd', `<div id="loading${history_.length}" style="width:90%;margin-left:40px;"></div>`);
-                    var typed = new Typed(`#loading${history_.length}`, {
-                        strings: ['(•_•)</br>( •_•)>⌐■-■</br>(⌐■_■)'],
-                        typeSpeed: 100,
-                        showCursor: false,
-                        onComplete: () => {
-                            window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
-                        }
-                    });
+                    if (prefersReducedMotion_()) {
+                        document.getElementById(`loading${history_.length}`).innerHTML = '(•_•)</br>( •_•)>⌐■-■</br>(⌐■_■)';
+                        scrollToBottom_();
+                    } else {
+                        var typed = new Typed(`#loading${history_.length}`, {
+                            strings: ['(•_•)</br>( •_•)>⌐■-■</br>(⌐■_■)'],
+                            typeSpeed: 100,
+                            showCursor: false,
+                            onComplete: () => {
+                                scrollToBottom_();
+                            }
+                        });
+                    }
                 }
                 break;
             case 'vim':
-                output(`try > <a class="cmd-link">emacs</a> instead`);
+                output(`try > <a class="cmd-link" tabindex="0" role="button">emacs</a> instead`);
                 break;
             case 'emacs':
-                output(`try > <a class="cmd-link">vim</a> instead`);
+                output(`try > <a class="cmd-link" tabindex="0" role="button">vim</a> instead`);
                 break;
             case 'sudo':
                 if (sudoers.includes(user)) {
@@ -370,9 +406,6 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
             case 'rm':
                 output(`rm: Permission denied`);
                 break;
-            case 'blog':
-                Blogs.menu(output_);
-                break;
             default:
                 if (cmd) {
                     askLLM_(cmd, args);
@@ -380,22 +413,30 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
         }
     }
 
+    function submitCommand_(command) {
+        var el = document.querySelector("#input-line .cmdline");
+        el.value = command;
+        var eventObj = document.createEventObject ?
+            document.createEventObject() : document.createEvent("Events");
+        if (eventObj.initEvent) {
+            eventObj.initEvent("keydown", true, true);
+        }
+        eventObj.keyCode = 13;
+        eventObj.which = 13;
+        el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent("onkeydown", eventObj);
+    }
+
     function triggerCommand(command) {
         cmdLine_.focus();
+        if (prefersReducedMotion_()) {
+            submitCommand_(command);
+            return;
+        }
         var typed = new Typed("#input-line .cmdline", {
             strings: [command],
             typeSpeed: 75,
             onDestroy: () => {
-                var el = document.querySelector("#input-line .cmdline");
-                el.value = command;
-                var eventObj = document.createEventObject ?
-                    document.createEventObject() : document.createEvent("Events");
-                if (eventObj.initEvent) {
-                    eventObj.initEvent("keydown", true, true);
-                }
-                eventObj.keyCode = 13;
-                eventObj.which = 13;
-                el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent("onkeydown", eventObj);
+                submitCommand_(command);
             }
         });
         setTimeout(function () {
@@ -425,7 +466,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
     //
     function output(html) {
         output_.insertAdjacentHTML('beforeEnd', '<div style="width:90%;margin-left:40px;"><p>' + html + '</p></div>');
-        window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
+        scrollToBottom_();
     }
 
     // The 1B model often ignores "plain text only" and emits markdown. Strip the
@@ -452,7 +493,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
         // Show thinking animation
         output_.insertAdjacentHTML('beforeEnd', '<div id="' + loadingId + '" style="width:90%;margin-left:40px;"><p style="color:#EDED65;">thinking...</p></div>');
-        window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
+        scrollToBottom_();
 
         var container = document.getElementById(loadingId);
 
@@ -493,7 +534,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                             // textContent keeps it injection-safe as tokens stream in.
                             buffer += decoder.decode(result.value, { stream: true });
                             p.textContent = stripMarkdown_(buffer);
-                            window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
+                            scrollToBottom_();
                         }
                         if (result.done) { return; }
                         return pump();
@@ -516,7 +557,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
                 if (container) {
                     container.innerHTML = '<p style="color:#FF6B6B;">' + msg + '</p>';
                 }
-                window.scrollTo({ top: getDocHeight_(), behavior: 'smooth' });
+                scrollToBottom_();
             });
     }
 
@@ -532,7 +573,7 @@ var Terminal = Terminal || function (cmdLineContainer, outputContainer) {
 
     return {
         init: function (command) {
-            document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Click "<a class="cmd-link">about</a>" for more information or "<a class="cmd-link">menu</a>" for a list of commands.  <a href="https://github.com/brianfu9" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" style="color:#EDED65"></i></a> <a href="https://www.linkedin.com/in/brian-fu/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin" style="color:#EDED65"></i></a></p>');
+            document.getElementById('top').insertAdjacentHTML('beforeEnd', '<p>Click "<a class="cmd-link" tabindex="0" role="button">about</a>" for more information or "<a class="cmd-link" tabindex="0" role="button">menu</a>" for a list of commands.  <a href="https://github.com/brianfu9" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" style="color:#EDED65"></i></a> <a href="https://www.linkedin.com/in/brian-fu/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin" style="color:#EDED65"></i></a></p>');
             // setTimeout(() => {term.triggerCommand('about')}, 400);
             term.triggerCommand(command);
         },

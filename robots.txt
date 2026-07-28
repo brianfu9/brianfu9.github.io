@@ -1,3 +1,5 @@
 User-agent: *
 Allow: /
+# Fragment loaded into the terminal by js/projects.js — not a standalone page.
+Disallow: /html/projects.html
 Sitemap: https://brianfu.me/sitemap.xml

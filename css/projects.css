@@ -1,6 +1,7 @@
+/* No width: 100% — with the 10% right margin that overflowed the output
+   column and widened the whole page. Auto width fills what the margins leave. */
 .projects-card {
   padding: 20px;
-  width: 100%;
   margin: 10px 10% 10px 10px;
   background-color: #0d1117;
   border: 1px solid #30363d;
@@ -14,11 +15,6 @@
   margin-bottom: 16px;
   padding-bottom: 8px;
   border-bottom: 1px solid #21262d;
-}
-
-.projects-header::before {
-  content: "$ projects --list\n";
-  color: #42F44B;
 }
 
 .projects-grid {
@@ -44,13 +40,20 @@
   box-shadow: 0 0 8px rgba(66, 244, 75, 0.1);
 }
 
+/* Full-tile click target. It sits below .tile-footer so the source link and the
+   embedded GitHub button stay clickable. */
 .project-tile a.tile-link {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 10;
+  z-index: 1;
+}
+
+.project-tile a.tile-link:focus-visible {
+  outline: 2px solid #42F44B;
+  outline-offset: -2px;
 }
 
 .project-tile img {
@@ -117,6 +120,8 @@
   border-radius: 3px;
 }
 
+/* Raised above .tile-link so the source link and GitHub button take clicks;
+   the image, title, description and tags stay part of the tile-wide link. */
 .project-tile .tile-footer {
   display: flex;
   align-items: center;
@@ -124,6 +129,8 @@
   padding-top: 8px;
   border-top: 1px solid #21262d;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
 }
 
 .project-tile .tile-footer .footer-label {

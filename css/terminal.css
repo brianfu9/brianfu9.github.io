@@ -47,6 +47,42 @@ a:not([href]):not([tabindex]):hover {
   cursor: pointer;
 }
 
+/* Command links are keyboard-activatable, so they carry a tabindex and fall
+   outside the :not([tabindex]) rule above. */
+.cmd-link,
+.email-copy {
+  color: #EDED65;
+  cursor: pointer;
+}
+
+.cmd-link:hover,
+.cmd-link:focus,
+.email-copy:hover,
+.email-copy:focus {
+  color: #EDED65;
+  background-color: transparent;
+}
+
+.cmd-link:focus-visible,
+.email-copy:focus-visible {
+  outline: 1px dotted #EDED65;
+  outline-offset: 2px;
+}
+
+/* The ASCII banner is decorative and aria-hidden, so the real page heading is
+   carried here — hidden on wide screens where the banner does the job. */
+.site-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* top */
 
 .headshot {
@@ -55,6 +91,45 @@ a:not([href]):not([tabindex]):hover {
   margin: 0px 10px 20px 0px;
   border-radius: 50px;
   float: left;
+}
+
+/* The banner is 59 fixed-width characters. Scale it with the viewport so it
+   fits without the old width=610 viewport hack, and let it scroll internally
+   rather than widening the page if it ever still overflows. */
+#top pre {
+  margin: 0;
+  font-size: clamp(4px, 2.3vw, 14pt);
+  overflow-x: auto;
+}
+
+/* Below this the floated headshot leaves too little room for the banner. */
+@media (max-width: 950px) {
+  .headshot {
+    float: none;
+    display: block;
+    margin: 0px 0px 10px 0px;
+  }
+}
+
+/* Narrower than this the 59-character banner shrinks to an unreadable smudge,
+   so drop it and show the heading it stands in for instead. */
+@media (max-width: 600px) {
+  #top pre {
+    display: none;
+  }
+
+  .site-title {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0 0 12px 0;
+    clip: auto;
+    overflow: visible;
+    white-space: normal;
+    color: #42F44B;
+    font-size: 24pt;
+    letter-spacing: 2px;
+  }
 }
 
 #container {
