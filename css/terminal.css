@@ -134,14 +134,7 @@ a:not([href]):not([tabindex]):hover {
   margin-bottom: 10px;
 }
 
-.projects-card {
-  margin: 10px 10% 10px 10px;
-  width: 100%;
-  background-color: #c9d3d6;
-  padding: 15px 15px 15px 0px;
-  border-radius: 15px;
-  overflow-x: auto;
-}
+/* .projects-card styling moved to css/projects.css */
 
 .hintbox {
   position: relative;
